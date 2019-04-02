@@ -81,7 +81,7 @@ curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/on
 ```
 ##### for the latest (UNSTABLE) features use mage2click develop branch
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- magento2.test 2.3.1
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test 2.3.1
 ```
 
 The `magento2.test` above defines the hostname to use, and the `2.3.1` defines the Magento version to install. Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
