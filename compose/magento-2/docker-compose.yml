@@ -24,7 +24,7 @@ services:
       - app
 
   app:
-    image: markoshust/magento-nginx:1.13-8
+    image: markoshust/magento-nginx:1.13-7
     ports:
       - "8000:8000"
     depends_on:
