@@ -5,7 +5,7 @@ version: "3"
 
 services:
   proxy:
-    image: markoshust/magento-proxy:1.13-0
+    image: mage2click/magento-proxy:1.13-0
     ports:
       - "443:8443"
     depends_on:
@@ -14,7 +14,7 @@ services:
       - varnish
 
   varnish:
-    image: markoshust/magento-varnish:latest
+    image: mage2click/magento-varnish:latest
     ports:
       - "80:80"
       - "6082:6082"
