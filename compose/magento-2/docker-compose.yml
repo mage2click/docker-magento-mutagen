@@ -14,7 +14,7 @@ services:
       - varnish
 
   varnish:
-    image: mage2click/magento-varnish:latest
+    image: mage2click/varnish:latest
     ports:
       - "80:80"
       - "6082:6082"
