@@ -8,20 +8,4 @@ bin/download $VERSION
 echo "Your system password has been requested to add an entry to /etc/hosts..."
 echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
 
-echo ""
-echo ""
-echo -e "\e[92mComposer authentication for private repositories."
-echo ""
-echo -e "\e[92mBefore proceed, make sure that you have placed auth.json file to COMPOSER_HOME directory."
-echo ""
-echo -e "\e[92mInformation about Authentication for repo.magento.com:"
-echo -e "\e[96mhttps://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html"
-echo ""
-echo -e "\e[92mMore information about COMPOSER_HOME directory:"
-echo -e "\e[96mhttps://getcomposer.org/doc/03-cli.md#composer-home"
-echo ""
-echo ""
-echo -e "\e[92mPress any key to continue" && read -n 1 -s -p "";
-echo -e "\e[0m"
-
 bin/setup $DOMAIN
