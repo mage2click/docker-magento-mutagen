@@ -56,9 +56,6 @@ services:
     image: redis:5.0
 
   elasticsearch:
-    build:
-      dockerfile: /path/to/Dockerfile
-      context: /path/to/
     image: elasticsearch:5.6
     ports:
       - "9200:9200"
