@@ -1,36 +1,15 @@
-# Mage2click Docker Configuration for Magento 2 (https://github.com/mage2click/docker-magento)
+# Mark Shust's Docker Configuration for Magento (https://github.com/markshust/docker-magento)
 # Version 23.0.0
 
 version: "3"
 
 services:
-
-  proxy:
-    image: mage2click/magento-nginx:1.13
-    environment:
-      NGINX_TYPE: "proxy"
-    ports:
-      - "443:8443"
-    depends_on:
-      - varnish
-
-  varnish:
-    image: mage2click/magento-varnish:4.1
-    ports:
-      - "80:80"
-      - "6082:6082"
-    depends_on:
-      - app
-
   app:
-    image: mage2click/magento-nginx:1.13
-    environment:
-      NGINX_TYPE: "under-proxy"
+    image: markoshust/magento-nginx:1.13-7
     ports:
-      - "8000:8000"
-#      - "80:8000"
-#      - "443:8443"
-    depends_on:
+      - "80:8000"
+      - "443:8443"
+    links:
       - db
       - phpfpm
     volumes: &appvolumes
@@ -39,8 +18,8 @@ services:
       - sockdata:/sock
 
   phpfpm:
-    image: mage2click/magento-php:7.2-fpm-mailhog
-    depends_on:
+    image: markoshust/magento-php:7.2-fpm-0
+    links:
       - db
     volumes: *appvolumes
 
@@ -56,20 +35,10 @@ services:
     image: redis:5.0
 
   elasticsearch:
-    build:
-      dockerfile: /path/to/Dockerfile
-      context: /path/to/
     image: elasticsearch:5.6
     ports:
       - "9200:9200"
       - "9300:9300"
-
-  mailhog:
-    image: mailhog/mailhog:v1.0.0
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
 
   # Disabling cron by default as it uses higher CPU, enable if needed
   #cron:
