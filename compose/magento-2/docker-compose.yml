@@ -19,7 +19,7 @@ services:
       - sockdata:/sock
 
   phpfpm:
-    image: mage2click/magento-php:7.2-fpm-mailhog
+    image: mage2click/magento-php:7.1-fpm-mailhog
     depends_on:
       - db
     volumes: *appvolumes
