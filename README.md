@@ -85,13 +85,14 @@ curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/on
 curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test 2.3.1
 ```
 
-or 
+or use the following command to install from the zip file downloaded from magento.com :
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test /path/to/magento.zip
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test /path/to/magento.zip lite
 ```
 
 The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive. 
+The `lite` param at the end means that we do not need to execute composer install during the setup because zip version of magento already have all needed files in the vendor folder
 
 Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
 
