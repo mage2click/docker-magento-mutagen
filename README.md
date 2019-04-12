@@ -79,12 +79,21 @@ Run this automated one-liner from the directory you want to install your project
 ```bash
 curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
 ```
-##### for the latest (UNSTABLE) features use mage2click develop branch
+
+##### For the latest (UNSTABLE) features use mage2click develop branch
 ```bash
 curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test 2.3.1
 ```
 
-The `magento2.test` above defines the hostname to use, and the `2.3.1` defines the Magento version to install. Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
+or 
+
+```bash
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test /path/to/magento.zip
+```
+
+The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive. 
+
+Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
 
 After the one-liner above completes running, you should be able to access your site at `https://magento2.test`.
 
