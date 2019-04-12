@@ -1,6 +1,7 @@
 #!/bin/bash
 DOMAIN=${1:-magento2.test}
 VERSION=${2:-2.3.1}
+LITE=${3:-}
 
 curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/template|bash -s - magento-2
 bin/download $VERSION
@@ -8,4 +9,8 @@ bin/download $VERSION
 echo "Your system password has been requested to add an entry to /etc/hosts..."
 echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
 
-bin/setup $DOMAIN
+if [ -z "$LITE" ]; then
+    bin/setup $DOMAIN
+else
+    bin/setup-lite $DOMAIN
+fi
