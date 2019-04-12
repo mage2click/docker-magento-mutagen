@@ -22,6 +22,7 @@ if [ -f $1 ]; then
     (rm -r src && mkdir -p src && unzip -qq $1 -d src) & spinner $!
 
     printf " Done!"
+    echo
 else
     mkdir -p src && curl -L http://pubfiles.nexcess.net/magento/ce-packages/magento2-$1.tar.gz | tar xzf - -o -C src
 fi
