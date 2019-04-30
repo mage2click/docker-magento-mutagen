@@ -76,6 +76,11 @@ This setup assumes you are running Docker on a computer with at least 4GB of all
 
 This configuration has been tested on Mac & Linux.
 
+### This is very unstable version which requires the https://mutagen.io/ to be installed on your system. See the https://mutagen.io/documentation/installation/ or use brew to install it on Mac OS
+```bash
+brew install havoc-io/mutagen/mutagen
+```
+
 > **Windows Configurations**: The Windows configuration does not currently work and is in need of a contributor to get functional once again. Please see [issue 100](https://github.com/markshust/docker-magento/issues/100) to contribute.
 
 ## Quick Setup

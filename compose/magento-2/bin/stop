@@ -1,2 +1,3 @@
 #!/bin/bash
+bin/mutagen-stop
 docker-compose stop

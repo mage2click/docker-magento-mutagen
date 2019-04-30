@@ -1,0 +1,9 @@
+#!/bin/bash
+mutagen daemon start
+
+mutagen create \
+--default-file-mode=0644 \
+--default-directory-mode=0755 \
+--sync-mode=two-way-resolved \
+--ignore=vendor --ignore=pub/static --ignore=.idea --ignore=pub/media/catalog/product --ignore-vcs \
+src docker://$(docker-compose ps|grep phpfpm|awk '{print $1}')/var/www/html

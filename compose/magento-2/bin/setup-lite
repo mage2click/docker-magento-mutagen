@@ -1,13 +1,15 @@
 #!/bin/bash
 BASE_URL=${1:-magento2.test}
 
-bin/stop
+docker-compose stop
 
-docker-compose -f docker-compose.yml up -d
+docker-compose up -d
 sleep 1 #Ensure containers are started...
 
-echo "Copying all files from host to container..."
-bin/copytocontainer --all
+cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
+
+echo "Starting mutagen sync for files from host to container..."
+bin/mutagen-start
 
 bin/clinotty chmod u+x bin/magento
 
@@ -73,12 +75,6 @@ bin/clinotty bin/magento setup:config:set --no-interaction --session-save=redis 
 
 echo "Clearing the cache for good measure..."
 bin/clinotty bin/magento cache:flush
-
-echo "Copying files from container to host after install..."
-bin/copyfromcontainer app
-
-echo "Restarting containers with host bind mounts for dev..."
-bin/restart
 
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at https://${BASE_URL}/"
