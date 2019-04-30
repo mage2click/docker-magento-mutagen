@@ -81,5 +81,8 @@ bin/copyfromcontainer app
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen-start
 
+echo "Restarting app container"
+docker-compose restart app
+
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at https://${BASE_URL}/"
