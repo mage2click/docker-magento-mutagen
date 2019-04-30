@@ -2,8 +2,10 @@
 mutagen daemon start
 
 mutagen create \
-    --default-file-mode=0644 \
-    --default-directory-mode=0755 \
+    --default-file-mode-beta=0644 \
+    --default-directory-mode-beta=0755 \
+    --default-owner-beta=app \
+    --default-group-beta=app \
     --sync-mode=two-way-resolved \
     --ignore=./.idea \
     --ignore=./bin \
