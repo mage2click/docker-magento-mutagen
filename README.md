@@ -95,15 +95,15 @@ Run this automated one-liner from the directory you want to install your project
 curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
 ```
 
-##### For the latest (UNSTABLE) features use mage2click develop branch
+##### For the latest (UNSTABLE) features use mage2click mutagen-sync branch
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test 2.3.1
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/onelinesetup | bash -s -- mage2click.test 2.3.1
 ```
 
 or use the following command to install from the zip file downloaded from magento.com :
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/onelinesetup | bash -s -- mage2click.test /path/to/magento.zip lite
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/onelinesetup | bash -s -- mage2click.test /path/to/magento.zip lite
 ```
 
 The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive. 
@@ -123,8 +123,8 @@ Same result as the one-liner above. Just replace `magento2.test` references with
 # Download the Docker Compose template:
 curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/template | bash -s -- magento-2
 
-## for the latest (UNSTABLE) features use mage2click develop branch 
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develop/lib/template | bash -s -- magento-2
+## for the latest (UNSTABLE) features use mage2click mutagen-sync branch 
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/template | bash -s -- magento-2
 
 # Download the version of Magento you want to use with:
 bin/download 2.3.1
@@ -156,8 +156,8 @@ open https://magento2.test
 # Download the Docker Compose template:
 curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/template | bash -s -- magento-2
 
-## for the latest (UNSTABLE) features use mage2click develop branch
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/develp/lib/template | bash -s -- magento-2
+## for the latest (UNSTABLE) features use mage2click mutagen-sync branch
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/template | bash -s -- magento-2
 
 # Remove existing src directory:
 rm -rf src
