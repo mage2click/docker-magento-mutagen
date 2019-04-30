@@ -17,6 +17,9 @@ sleep 1 #Ensure containers are started...
 rm -rf src/vendor #Clear for step below
 cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
 
+echo "Copying all files from host to container..."
+bin/copytocontainer --all
+
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen-start
 
