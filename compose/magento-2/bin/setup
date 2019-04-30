@@ -20,9 +20,6 @@ cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
 echo "Copying all files from host to container..."
 bin/copytocontainer --all
 
-echo "Starting mutagen sync for files from host to container..."
-bin/mutagen-start
-
 bin/clinotty chmod u+x bin/magento
 
 if hash composer 2>/dev/null; then
@@ -90,6 +87,9 @@ bin/clinotty bin/magento setup:config:set --no-interaction --session-save=redis 
 
 echo "Clearing the cache for good measure..."
 bin/clinotty bin/magento cache:flush
+
+echo "Starting mutagen sync for files from host to container..."
+bin/mutagen-start
 
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at https://${BASE_URL}/"
