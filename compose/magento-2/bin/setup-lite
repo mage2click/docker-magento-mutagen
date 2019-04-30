@@ -10,8 +10,7 @@ cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
 
 echo "Copying all files from host to container..."
 bin/copytocontainer --all
-
-bin/clinotty chmod u+x bin/magento
+bin/fixperms
 
 if hash composer 2>/dev/null; then
     PUBLIC_KEY="$(composer config -gl | grep '\[http-basic.repo.magento.com.username\]' | cut -c40-)"
