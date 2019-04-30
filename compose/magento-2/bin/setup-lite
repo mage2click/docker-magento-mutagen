@@ -77,6 +77,7 @@ bin/clinotty bin/magento cache:flush
 
 echo "Copying files from container to host after install..."
 bin/copyfromcontainer app
+bin/copyfromcontainer vendor
 
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen-start
