@@ -282,8 +282,8 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 <a href="https://twitter.com/u_maxx" target="_blank">@u_maxx</a>  
 <a href="https://maxuroda.pro" target="_blank">maxuroda.pro</a> 
 
-### Dmytro Skoliar
-Software Developer PHP/ZCE, Magento2, Docker, PWA, Varnish, JS, HTML5, Mobile, iOS, Android  
+### Dmitry Shkoliar
+<a href="https://www.zend.com/en/yellow-pages/ZEND026786" target="_blank">Zend Certified PHP Engineer</a>, Magento2, Docker, PWA, Varnish, JS, HTML5, Mobile, iOS, Android  
 <a href="https://twitter.com/shkoliar" target="_blank">@shkoliar</a>  
 <a href="https://shkoliar.com" target="_blank">shkoliar.com</a>  
 
