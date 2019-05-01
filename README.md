@@ -1,12 +1,12 @@
 <h1 align="center">mage2click/docker-magento-mutagen</h1> 
 
 <div align="center">
-  <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
-  <img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true&style=flat-square" alt="Supported Magento Versions" />
+  <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust" target="_blank">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
+  <a href="https://github.com/magento/magento2" target="_blank"><img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true&style=flat-square" alt="Supported Magento Versions" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
-  <a href="https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square" alt="Maintained - Yes" /></a>
-  <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+  <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square" alt="Maintained - Yes" /></a>
+  <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
 </div>
 
 ## Table of contents
@@ -268,7 +268,7 @@ For more information about Redis usage with Magento, <a href="https://devdocs.ma
 ### Mark Shust
 
 <a href="https://u.magento.com/certification/directory/dev/883/" target="_blank">Certified Magento Developer & Architect</a> and <a href="http://www.zend.com/en/yellow-pages/ZEND014633" target="_blank">Zend Certified Engineer</a>, and available for consulting & development of your next project 🤓. You can read technical articles on my blog at <a href="https://markshust.com" target="_blank">markshust.com</a> or contact me directly at <a href="mailto:mark@shust.com">mark@shust.com</a>.  
-[Mark Shust's Free Course about Setup a Magento 2 Development Environment with Docker](https://courses.markshust.com/p/setup-magento-2-development-environment-docker)
+<a href="https://courses.markshust.com/p/setup-magento-2-development-environment-docker" target="_blank">Mark Shust's Free Course about Setup a Magento 2 Development Environment with Docker</a>
 
 ### Nexcess
 
@@ -278,14 +278,14 @@ A special thanks goes out to <a href="https://www.nexcess.net/" target="_blank">
 Implemented Varnish support with https proxy <a href="https://github.com/wigman" target="_blank">Willem Wigman</a>
 
 ### Max Uroda
-Certified #MagentoDeveloper+ #WebDeveloper interested in #Magento #Magento2 #Docker #JS #Varnish #PWA
-[@u_maxx](https://twitter.com/u_maxx)  
-[maxuroda.pro](https://maxuroda.pro) 
+<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1 Developer Plus)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
+<a href="https://twitter.com/u_maxx" target="_blank">@u_maxx</a>  
+<a href="https://maxuroda.pro" target="_blank">maxuroda.pro</a> 
 
 ### Dmytro Skoliar
-Software Developer #PHP/ZCE #Magento2 #Docker #PWA #Varnish #JS #HTML5, Mobile #iOS #Android 
-[@shkoliar](https://twitter.com/shkoliar)  
-[shkoliar.com](https://shkoliar.com/)
+Software Developer PHP/ZCE, Magento2, Docker, PWA, Varnish, JS, HTML5, Mobile, iOS, Android  
+<a href="https://twitter.com/shkoliar" target="_blank">@shkoliar</a>  
+<a href="https://shkoliar.com" target="_blank">shkoliar.com</a>  
 
 
 ## License
