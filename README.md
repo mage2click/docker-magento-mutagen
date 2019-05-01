@@ -19,6 +19,7 @@
 - [Misc Info](#misc-info)
 - [Credits](#credits)
 - [License](#license)
+- [TBD](#tbd)
 
 ## Docker Hub
 
@@ -182,7 +183,8 @@ open https://magento2.test
 - `bin/stop`: Stop all containers.
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`
-
+- `bin/mutagen-start`: Start mutagen daemon & sync.
+- `bin/mutagen-stop`: Stop mutagen daemon & sync. 
 ## Misc Info
 
 ### Database
@@ -288,3 +290,9 @@ Software Developer #PHP/ZCE #Magento2 #Docker #PWA #Varnish #JS #HTML5, Mobile #
 ## License
 
 [MIT](https://opensource.org/licenses/MIT)
+
+## TBD 
+- Easy switch for not using/using Varnish
+- n98-magerun2 tool installed out of the box  
+
+feel free to create new GitHub issue with feature request :) 
