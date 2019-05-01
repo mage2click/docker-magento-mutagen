@@ -31,7 +31,7 @@ View Dockerfiles:
 - [mage2click/magento-php (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php//)
   - 7.2
       - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.2-fpm-mailhog)
-      - [`latest`, `7.2-fpm`](https://github.com/mage2click/magento-php/tree/7.2-fpm) 
+      - [`7.2-fpm`](https://github.com/mage2click/magento-php/tree/7.2-fpm) 
   - 7.1
       - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
       - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
