@@ -1,5 +1,5 @@
-# Mage2click Docker Configuration for Magento 2 (https://github.com/mage2click/docker-magento)
-# Version 23.0.0
+# Mage2click Docker Configuration for Magento 2 with Mutagen.io sync (https://github.com/mage2click/docker-magento-mutagen)
+# Version 1.0.0
 
 version: "3"
 
@@ -46,17 +46,6 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
-
-
-  # Disabling cron by default as it uses higher CPU, enable if needed
-  #cron:
-  #  image: markoshust/magento-php:7.2-fpm-0
-  #  user: root
-  #  command: /usr/local/bin/cronstart
-  #  tty: true
-  #  links:
-  #    - db
-  #  volumes: *appvolumes
 
 volumes:
   appdata:
