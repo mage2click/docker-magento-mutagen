@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2019 Mage2click
+Copyright (c) 2019 Mage2click  
 Copyright (c) 2016 Mage Inferno
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
