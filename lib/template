@@ -1,9 +1,8 @@
 #!/bin/bash
 git init -qqq
-git remote add origin https://github.com/mage2click/docker-magento
+git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
-git checkout origin/mutagen-sync -- compose/$1
+git checkout origin/master -- compose/$1
 mv compose/$1/* ./
-mv compose/$1/.vscode ./
 rm -rf compose .git
 git init

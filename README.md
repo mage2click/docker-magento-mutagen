@@ -1,17 +1,16 @@
-<h1 align="center">markshust/docker-magento</h1> 
+<h1 align="center">mage2click/docker-magento-mutagen</h1> 
 
 <div align="center">
-  <p>Mark Shust's Docker Configuration for Magento</p>
+  <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
   <img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true&style=flat-square" alt="Supported Magento Versions" />
-  <a href="https://hub.docker.com/r/markoshust/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/markoshust/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
-  <a href="https://hub.docker.com/r/markoshust/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/markoshust/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square" alt="Maintained - Yes" /></a>
   <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
 </div>
 
 ## Table of contents
 
-- [Free Course](#free-course)
 - [Docker Hub](#docker-hub)
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
@@ -21,68 +20,40 @@
 - [Credits](#credits)
 - [License](#license)
 
-## Free Course
-
-I created a free course which details the basic usage of this project:
-
-<a href="https://courses.markshust.com/p/setup-magento-2-development-environment-docker" target="_blank">
-<img src="https://raw.githubusercontent.com/markshust/docker-magento/master/docs/course.png" alt="Setup a Magento 2 Development Environment with Docker"><br />
-Setup a Magento 2 Development Environment with Docker
-</a>
-
 ## Docker Hub
 
 View Dockerfiles:
 
-- [markoshust/magento-nginx (Docker Hub)](https://hub.docker.com/r/markoshust/magento-nginx/)
+- [mage2click/magento-nginx (Docker Hub)](https://hub.docker.com/r/mage2click/magento-nginx/)
   - 1.13
-      - [`latest`, `1.13`, `1.13-7`](https://github.com/markshust/docker-magento/tree/master/images/nginx/1.13)
-      - [`1.13-6`](https://github.com/markshust/docker-magento/tree/20.1.1/images/nginx/1.13)
-      - [`1.13-5`](https://github.com/markshust/docker-magento/tree/18.1.1/images/nginx/1.13)
-      - [`1.13-4`](https://github.com/markshust/docker-magento/tree/18.0.1/images/nginx/1.13)
-      - [`1.13-3`](https://github.com/markshust/docker-magento/tree/15.0.1/images/nginx/1.13)
-      - [`1.13-2`](https://github.com/markshust/docker-magento/tree/12.0.0/images/nginx/1.13)
-      - [`1.13-1`](https://github.com/markshust/docker-magento/tree/11.1.5/images/nginx/1.13)
-      - [`1.13-0`](https://github.com/markshust/docker-magento/tree/11.0.0/images/nginx/1.13)
-- [markoshust/magento-php (Docker Hub)](https://hub.docker.com/r/markoshust/magento-php/)
+      - [`latest`, `1.13`](https://github.com/mage2click/magento-nginx/tree/1.13)
+
+- [mage2click/magento-php (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php//)
   - 7.2
-      - [`latest`, `7.2-fpm`, `7.2-fpm-0`](https://github.com/markshust/docker-magento/tree/master/images/php/7.2)
+      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.2-fpm-mailhog)
+      - [`latest`, `7.2-fpm`](https://github.com/mage2click/magento-php/tree/7.2-fpm) 
   - 7.1
-      - [`7.1-fpm`, `7.1-fpm-9`](https://github.com/markshust/docker-magento/tree/master/images/php/7.1)
-      - [`7.1-fpm-8`](https://github.com/markshust/docker-magento/tree/17.0.1/images/php/7.1)
-      - [`7.1-fpm-7`](https://github.com/markshust/docker-magento/tree/16.2.0/images/php/7.1)
-      - [`7.1-fpm-6`](https://github.com/markshust/docker-magento/tree/16.0.0/images/php/7.1)
-      - [`7.1-fpm-5`](https://github.com/markshust/docker-magento/tree/15.0.1/images/php/7.1)
-      - [`7.1-fpm-4`](https://github.com/markshust/docker-magento/tree/15.0.0/images/php/7.1)
-      - [`7.1-fpm-3`](https://github.com/markshust/docker-magento/tree/14.0.1/images/php/7.1)
-      - [`7.1-fpm-2`](https://github.com/markshust/docker-magento/tree/13.0.0/images/php/7.1)
-      - [`7.1-fpm-1`](https://github.com/markshust/docker-magento/tree/11.1.5/images/php/7.1)
-      - [`7.1-fpm-0`](https://github.com/markshust/docker-magento/tree/11.0.0/images/php/7.1)
+      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
+      - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
 
 ## Usage
 
 This configuration is intended to be used as a Docker-based development environment for Magento 2.
 
 Folders:
-
-- `images`: Docker images for nginx and php
 - `compose`: sample setups with Docker Compose
-
-> The Magento 1 version of this development environment has been deprecated and is no longer supported. PHP 5 was used as it's base, and that version has reached end-of-life. If you still wish to use this setup, please reference [compose/magento-1 on tag 20.1.1](https://github.com/markshust/docker-magento/tree/20.1.1/compose/magento-1), but please be aware these images are no longer maintained.
+- `lib`: files used in one line setup scripts
 
 ## Prerequisites
 
 This setup assumes you are running Docker on a computer with at least 4GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
 
-This configuration has been tested on Mac & Linux.
-
-### This is very unstable version which requires the https://mutagen.io/ to be installed on your system. See the https://mutagen.io/documentation/installation/ or use brew to install it on Mac OS
+This configuration has been tested on macOS.
+### Mutagen.io
+This version of dockerized environment is working fine even if it still under development, it requires the https://mutagen.io/ to be installed on your system. See the https://mutagen.io/documentation/installation/ or use brew to install it on macOS
 ```bash
 brew install havoc-io/mutagen/mutagen
 ```
-
-> **Windows Configurations**: The Windows configuration does not currently work and is in need of a contributor to get functional once again. Please see [issue 100](https://github.com/markshust/docker-magento/issues/100) to contribute.
-
 ## Quick Setup
 
 ### Automated Setup (New Project)
@@ -92,21 +63,16 @@ brew install havoc-io/mutagen/mutagen
 Run this automated one-liner from the directory you want to install your project to:
 
 ```bash
-curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
-```
-
-##### For the latest (UNSTABLE) features use mage2click mutagen-sync branch
-```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/onelinesetup | bash -s -- mage2click.test 2.3.1
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
 ```
 
 or use the following command to install from the zip file downloaded from magento.com :
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/onelinesetup | bash -s -- mage2click.test /path/to/magento.zip lite
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
 ```
 
-The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive. 
+The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive.   
 The `lite` param at the end means that we do not need to execute composer install during the setup because zip version of magento already have all needed files in the vendor folder
 
 Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
@@ -121,10 +87,7 @@ Same result as the one-liner above. Just replace `magento2.test` references with
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/template | bash -s -- magento-2
-
-## for the latest (UNSTABLE) features use mage2click mutagen-sync branch 
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
 
 # Download the version of Magento you want to use with:
 bin/download 2.3.1
@@ -154,10 +117,7 @@ open https://magento2.test
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/markshust/docker-magento/master/lib/template | bash -s -- magento-2
-
-## for the latest (UNSTABLE) features use mage2click mutagen-sync branch
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento/mutagen-sync/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
 
 # Remove existing src directory:
 rm -rf src
@@ -192,7 +152,7 @@ bin/restart
 open https://magento2.test
 ```
 
-> For more details on how everything works, see the extended [setup readme](https://github.com/markshust/docker-magento/blob/master/SETUP.md).
+> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/master/SETUP.md).
 
 ## Custom CLI Commands
 
@@ -265,13 +225,9 @@ You may also monitor Redis by running: `bin/redis redis-cli monitor`
 
 For more information about Redis usage with Magento, <a href="https://devdocs.magento.com/guides/v2.3/config-guide/redis/redis-session.html" target="_blank">see the DevDocs</a>.
 
-### Xdebug & VS Code
-
-Install and enable the PHP Debug extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug).
-
-Otherwise, this project now automatically sets up Xdebug support with VS Code. If you wish to set this up manually, please see the [`.vscode/launch.json`](https://github.com/markshust/docker-magento/blame/master/compose/magento-2/.vscode/launch.json) file.
 
 ### Xdebug & PHPStorm
+>not tested yet
 
 1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PHPStorm from the list and click Save.
 
@@ -280,8 +236,8 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
 3.  Then, open `PHPStorm > Preferences > Languages & Frameworks > PHP` and configure:
 
     * `CLI Interpreter`
-        * Create a new interpreter and specify `From Docker`, and name it `markoshust/magento-php:7-2-fpm`.
-        * Choose `Docker`, then select the `markoshust/magento-php:7-2-fpm` image name, and set the `PHP Executable` to `php`.
+        * Create a new interpreter and specify `From Docker`, and name it `mage2click/magento-php:7-2-fpm-mailhog`.
+        * Choose `Docker`, then select the `mage2click/magento-php:7-2-fpm-mailhog` image name, and set the `PHP Executable` to `php`.
 
     * `Path mappings`
         * Don't do anything here as the next `Docker container` step will automatically setup a path mapping from `/var/www/html` to `./src`.
@@ -308,7 +264,8 @@ Otherwise, this project now automatically sets up Xdebug support with VS Code. I
 
 ### Mark Shust
 
-I'm a <a href="https://u.magento.com/certification/directory/dev/883/" target="_blank">Certified Magento Developer & Architect</a> and <a href="http://www.zend.com/en/yellow-pages/ZEND014633" target="_blank">Zend Certified Engineer</a>, and available for consulting & development of your next project 🤓. You can read technical articles on my blog at <a href="https://markshust.com" target="_blank">markshust.com</a> or contact me directly at <a href="mailto:mark@shust.com">mark@shust.com</a>.
+<a href="https://u.magento.com/certification/directory/dev/883/" target="_blank">Certified Magento Developer & Architect</a> and <a href="http://www.zend.com/en/yellow-pages/ZEND014633" target="_blank">Zend Certified Engineer</a>, and available for consulting & development of your next project 🤓. You can read technical articles on my blog at <a href="https://markshust.com" target="_blank">markshust.com</a> or contact me directly at <a href="mailto:mark@shust.com">mark@shust.com</a>.  
+[Mark Shust's Free Course about Setup a Magento 2 Development Environment with Docker](https://courses.markshust.com/p/setup-magento-2-development-environment-docker)
 
 ### Nexcess
 
@@ -316,6 +273,17 @@ A special thanks goes out to <a href="https://www.nexcess.net/" target="_blank">
 
 ### Willem Wigman
 Implemented Varnish support with https proxy <a href="https://github.com/wigman" target="_blank">Willem Wigman</a>
+
+### Max Uroda
+Certified #MagentoDeveloper+ #WebDeveloper interested in #Magento #Magento2 #Docker #JS #Varnish #PWA
+[@u_maxx](https://twitter.com/u_maxx)  
+[maxuroda.pro](https://maxuroda.pro) 
+
+### Dmytro Skoliar
+Software Developer #PHP/ZCE #Magento2 #Docker #PWA #Varnish #JS #HTML5, Mobile #iOS #Android 
+[@shkoliar](https://twitter.com/shkoliar)  
+[shkoliar.com](https://shkoliar.com/)
+
 
 ## License
 
