@@ -289,7 +289,7 @@ Software Developer #PHP/ZCE #Magento2 #Docker #PWA #Varnish #JS #HTML5, Mobile #
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
 
 ## TBD 
 - Easy switch for not using/using Varnish
