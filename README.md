@@ -14,6 +14,7 @@
 - [Docker Hub](#docker-hub)
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
+- [Mutagen.io](#mutagen)
 - [Quick Setup](#quick-setup)
 - [Custom CLI Commands](#custom-cli-commands)
 - [Misc Info](#misc-info)
@@ -50,8 +51,8 @@ Folders:
 This setup assumes you are running Docker on a computer with at least 4GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
 
 This configuration has been tested on macOS.
-### Mutagen.io
-This version of dockerized environment is working fine even if it still under development, it requires the https://mutagen.io/ to be installed on your system. See the https://mutagen.io/documentation/installation/ or use brew to install it on macOS
+### Mutagen
+This version of Docker-based development environment with mutagen sync is working fine even if it still under development, it requires the <a href="https://mutagen.io/" target="_blank">mutagen.io</a> to be installed on your system. See the <a href="https://mutagen.io/documentation/installation/" target="_blank">mutagen.io/documentation/installation</a> or use  <a href="https://brew.sh/" target="_blank">Homebrew</a> to install it on macOS
 ```bash
 brew install havoc-io/mutagen/mutagen
 ```
