@@ -16,6 +16,7 @@ mutagen create \
     --ignore=/pub/static \
     --ignore=/var \
     --ignore=/vendor \
+    --ignore=node_modules \
     --ignore-vcs \
     src docker://$(docker-compose ps|grep phpfpm|awk '{print $1}')/var/www/html
 
