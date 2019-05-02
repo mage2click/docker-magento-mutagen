@@ -1,6 +1,6 @@
 # Setup
 
-## New Magento 2 Project (macOS & Linux)
+## New Magento 2 Project (macOS)
 
 1. Create the project template by going to the place you want the new project (ex. cd ~/Sites/magento2), then run
 	- `curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template|bash -s -- magento-2`
