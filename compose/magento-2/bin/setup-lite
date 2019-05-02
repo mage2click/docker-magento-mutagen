@@ -85,5 +85,8 @@ bin/mutagen-start
 echo "Restarting app container"
 docker-compose restart app
 
+bin/magento info:admin #Show Admin URI
+
 echo "Docker development environment setup complete."
 echo "You may now access your Magento instance at https://${BASE_URL}/"
+echo "Mailhog available at http://${BASE_URL}:8025"
