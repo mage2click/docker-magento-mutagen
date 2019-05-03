@@ -66,7 +66,9 @@ bin/clinotty bin/magento indexer:reindex
 echo "Forcing deploy of static content to speed up initial requests..."
 bin/clinotty bin/magento setup:static-content:deploy -f 
 
-echo "Enabling redis for cache..."
+bin/magento-configure-elasticsearh5
+
+echo "Enabling Redis for cache..."
 bin/clinotty bin/magento setup:config:set --no-interaction --cache-backend=redis --cache-backend-redis-server=redis --cache-backend-redis-db=0
 
 echo "Enabling Redis for session..."
