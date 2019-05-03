@@ -1,3 +1,4 @@
 #!/bin/bash
 bin/clinotty bin/magento config:set --scope=default --scope-code=0 catalog/search/engine elasticsearch5 > /dev/null
 bin/clinotty bin/magento config:set --scope=default --scope-code=0 catalog/search/elasticsearch5_server_hostname elasticsearch > /dev/null
+bin/clinotty bin/magento indexer:reindex
