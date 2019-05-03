@@ -72,6 +72,8 @@ bin/clinotty bin/magento setup:config:set --no-interaction --cache-backend=redis
 echo "Enabling Redis for session..."
 bin/clinotty bin/magento setup:config:set --no-interaction --session-save=redis --session-save-redis-host=redis --session-save-redis-log-level=4 --session-save-redis-db=1
 
+bin/magento-configure-varnish
+
 echo "Clearing the cache for good measure..."
 bin/clinotty bin/magento cache:flush
 

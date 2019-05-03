@@ -186,6 +186,7 @@ open https://magento2.test
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`
 - `bin/mutagen-start`: Start mutagen daemon & sync.
 - `bin/mutagen-stop`: Stop mutagen daemon & sync. 
+- `bin/magento-configure-varnish`: Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
 ## Misc Info
 
 ### Database

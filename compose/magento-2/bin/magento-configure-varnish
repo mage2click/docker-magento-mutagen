@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Enabling Varnish as Caching Application for Full Page Cache..."
+bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/caching_application 2
+bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/varnish/access_list localhost,app
+bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/varnish/backend_port 8000
+bin/magento setup:config:set --http-cache-hosts=varnish:80
