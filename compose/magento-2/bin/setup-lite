@@ -61,6 +61,7 @@ bin/clinotty bin/magento setup:install \
 echo "Turning on developer mode.."
 bin/clinotty bin/magento deploy:mode:set developer
 
+echo "Enabling Elasticsearch 5 as Search Engine..."
 bin/clinotty bin/magento indexer:reindex
 
 echo "Forcing deploy of static content to speed up initial requests..."

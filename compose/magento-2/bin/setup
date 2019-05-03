@@ -79,6 +79,7 @@ bin/clinotty bin/magento indexer:reindex
 echo "Forcing deploy of static content to speed up initial requests..."
 bin/clinotty bin/magento setup:static-content:deploy -f 
 
+echo "Enabling Elasticsearch 5 as Search Engine..."
 bin/magento-configure-elasticsearh5
 
 echo "Enabling Redis for cache..."

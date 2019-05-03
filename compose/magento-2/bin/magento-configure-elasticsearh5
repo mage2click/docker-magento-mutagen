@@ -1,4 +1,3 @@
 #!/bin/bash
-echo "Enabling Elasticsearch 5 as Search Engine..."
-bin/clinotty bin/magento config:set --scope=default --scope-code=0 catalog/search/engine elasticsearch5
-bin/clinotty bin/magento config:set --scope=default --scope-code=0 catalog/search/elasticsearch5_server_hostname elasticsearch
+bin/clinotty bin/magento config:set --scope=default --scope-code=0 catalog/search/engine elasticsearch5 > /dev/null
+bin/clinotty bin/magento config:set --scope=default --scope-code=0 catalog/search/elasticsearch5_server_hostname elasticsearch > /dev/null
