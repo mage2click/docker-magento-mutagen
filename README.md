@@ -6,7 +6,7 @@
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square" alt="Maintained - Yes" /></a>
-  <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+  <a href="https://github.com/mage2click/docker-magento-mutagen/blob/feature/develop-varnish/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
 </div>
 
 ## Table of contents
@@ -65,13 +65,13 @@ brew install havoc-io/mutagen/mutagen
 Run this automated one-liner from the directory you want to install your project to:
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/onelinesetup | bash -s -- magento2.test 2.3.1
 ```
 
 or use the following command to install from the zip file downloaded from magento.com :
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
 ```
 
 The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive.   
@@ -89,7 +89,7 @@ Same result as the one-liner above. Just replace `magento2.test` references with
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/template | bash -s -- magento-2
 
 # Download the version of Magento you want to use with:
 bin/download 2.3.1
@@ -119,7 +119,7 @@ open https://magento2.test
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/template | bash -s -- magento-2
 
 # Remove existing src directory:
 rm -rf src
@@ -154,7 +154,7 @@ bin/restart
 open https://magento2.test
 ```
 
-> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/master/SETUP.md).
+> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/feature/develop-varnish/SETUP.md).
 
 ## Custom CLI Commands
 
@@ -292,7 +292,7 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 
 ## License
 
-[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
+[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/feature/develop-varnish/LICENSE.md)
 
 ## TBD 
 - Easy switch for not using/using Varnish
