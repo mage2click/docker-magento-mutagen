@@ -61,13 +61,11 @@ bin/clinotty bin/magento setup:install \
 echo "Turning on developer mode.."
 bin/clinotty bin/magento deploy:mode:set developer
 
-bin/clinotty bin/magento indexer:reindex
-
-echo "Forcing deploy of static content to speed up initial requests..."
-bin/clinotty bin/magento setup:static-content:deploy -f 
-
 echo "Enabling Elasticsearch 5 as Search Engine..."
 bin/magento-configure-elasticsearh5
+
+echo "Forcing deploy of static content to speed up initial requests..."
+bin/clinotty bin/magento setup:static-content:deploy -f
 
 echo "Enabling Redis for cache..."
 bin/clinotty bin/magento setup:config:set --no-interaction --cache-backend=redis --cache-backend-redis-server=redis --cache-backend-redis-db=0
