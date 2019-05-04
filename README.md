@@ -293,7 +293,7 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 [MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
 
 ## TBD 
-- Easy switch for not using/using Varnish
+- Easy switch between using or not using Varnish - currently you can use fully automated Varnish setup from our [feature/develop-varnish](https://github.com/mage2click/docker-magento-mutagen/tree/feature/develop-varnish) branch
 - n98-magerun2 tool installed out of the box  
 
 feel free to create new GitHub issue with feature request :) 
