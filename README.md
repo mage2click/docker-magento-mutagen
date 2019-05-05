@@ -184,6 +184,7 @@ open https://magento2.test
 - `bin/stop`: Stop all containers.
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`
+- `bin/magento-configure-elasticsearch5`: Enabling Elasticsearch 5 as Search Engine...
 - `bin/mutagen-start`: Start mutagen daemon & sync.
 - `bin/mutagen-stop`: Stop mutagen daemon & sync. 
 - `bin/magento-configure-varnish`: Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
@@ -221,9 +222,12 @@ Use the following lines to enable Redis on existing installs:
 
 `bin/magento setup:config:set --cache-backend=redis --cache-backend-redis-server=redis --cache-backend-redis-db=0`
 
+**Enable for Full Page Cache:**
+`bin/magento setup:config:set --page-cache=redis --page-cache-redis-server=redis --page-cache-redis-db=1`
+
 **Enable for Session:**
 
-`bin/magento setup:config:set --session-save=redis --session-save-redis-host=redis --session-save-redis-log-level=4 --session-save-redis-db=1`
+`bin/magento setup:config:set --session-save=redis --session-save-redis-host=redis --session-save-redis-log-level=4 --session-save-redis-db=2`
 
 You may also monitor Redis by running: `bin/redis redis-cli monitor`
 
