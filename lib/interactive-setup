@@ -36,21 +36,21 @@ read -p "Specify desired domain for project [magento2.test]: " DOMAIN
 DOMAIN=${DOMAIN:-magento2.test}
 
 RES=
-while grep -qw "$DOMAIN" /etc/hosts || [ -z "$DOMAIN" ]; do
-    if [ -z "$DOMAIN" ]; then
+while grep -qw "$DOMAIN" /etc/hosts || [[ -z "$DOMAIN" ]]; do
+    if [[ -z "$DOMAIN" ]]; then
         echo "Domain cannot be empty!"
     else
         echo
         echo "Domain $DOMAIN is already existed in /etc/hosts! Choose an option:"
-        select opts in "Proceed with this domain" "Specify new domain"; do
-            case $opts in
+        select OPTS in "Proceed with this domain" "Specify new domain"; do
+            case ${OPTS} in
                 "Specify new domain" ) RES=1; break;;
                 "Proceed with this domain" ) break;;
             esac
         done
     fi
 
-    if [[ -z $RES ]]; then
+    if [[ -z ${RES} ]]; then
         break
     else
         echo
@@ -67,23 +67,24 @@ fi
 RES=
 echo
 echo "Download Magento archive from official repo or use local downloaded Magento zip archive?"
-select opts in "Download archive" "Use local zip archive"; do
-    case $opts in
+select OPTS in "Download archive" "Use local zip archive"; do
+    case ${OPTS} in
         "Download archive" ) RES=1; break;;
         "Use local zip archive" ) break;;
     esac
 done
 
 echo
-if [[ -z $RES ]]; then
+if [[ -z ${RES} ]]; then
     read -p "Full path to local Magento zip archive: " ARCHIVE
 
-    while ! [ -f "$ARCHIVE" ]; do
+    while ! [[ -f "$ARCHIVE" ]]; do
         echo "Specified path does not exists!"
         read -p "Full path to local Magento zip archive: " ARCHIVE
     done
 else
     read -p "Magento version to download? [2.3.1]: " VERSION
+    VERSION=${VERSION:-2.3.1}
 fi
 
 echo
@@ -91,17 +92,17 @@ echo "Select optional features for development environment:"
 
 echo
 echo "Use Varnish cache?"
-select opts in "Yes" "No"; do
-    case $opts in
-        "Yes" ) MAILHOG=1; break;;
+select OPTS in "Yes" "No"; do
+    case ${OPTS} in
+        "Yes" ) VARNISH=1; break;;
         "No" ) break;;
     esac
 done
 
 echo
 echo "Use MailHog email testing tool?"
-select opts in "Yes" "No"; do
-    case $opts in
+select OPTS in "Yes" "No"; do
+    case ${OPTS} in
         "Yes" ) MAILHOG=1; break;;
         "No" ) break;;
     esac
@@ -109,8 +110,8 @@ done
 
 echo
 echo "Use RabbitMQ message-broker?"
-select opts in "Yes" "No"; do
-    case $opts in
+select OPTS in "Yes" "No"; do
+    case ${OPTS} in
         "Yes" ) RABBITMQ=1; break;;
         "No" ) break;;
     esac
@@ -118,8 +119,8 @@ done
 
 echo
 echo "Use cron service?"
-select opts in "Yes" "No"; do
-    case $opts in
+select OPTS in "Yes" "No"; do
+    case ${OPTS} in
         "Yes" ) CRON=1; break;;
         "No" ) break;;
     esac
@@ -127,18 +128,20 @@ done
 
 echo
 echo "What PHP version to use?"
-select opts in "7.1" "7.2" "7.3"; do
-    case $opts in
+select OPTS in "7.1" "7.2" "7.3"; do
+    case ${OPTS} in
         "7.1" ) PHPVER='7.1'; break;;
         "7.2" ) PHPVER='7.2'; break;;
         "7.3" ) PHPVER='7.3'; break;;
     esac
 done
 
+PHPVER=${PHPVER:-7.1}
+
 echo
 echo "Run composer install prior to Magento bin/magento setup:install?"
-select opts in "Yes" "No"; do
-    case $opts in
+select OPTS in "Yes" "No"; do
+    case ${OPTS} in
         "Yes" ) COMPOSER=1; break;;
         "No" ) break;;
     esac
@@ -146,20 +149,24 @@ done
 
 echo
 echo "Save installation log into file?"
-select opts in "Yes" "No"; do
-    case $opts in
+select OPTS in "Yes" "No"; do
+    case ${OPTS} in
         "Yes" ) LOG=1; break;;
         "No" ) break;;
     esac
 done
 
+echo "Starting setup..."
+
 bin/setup \
-    $DOMAIN \
-    $ARCHIVE \
-    $VERSION \
-    $MAILHOG \
-    $RABBITMQ \
-    $CRON \
-    $PHPVER \
-    $LOG \
-    $COMPOSER
+    DOMAIN \
+    ARCHIVE \
+    VERSION \
+    VARNISH \
+    MAILHOG \
+    RABBITMQ \
+    CRON \
+    PHPVER \
+    COMPOSER \
+    LOG
+
