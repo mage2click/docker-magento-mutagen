@@ -1,0 +1,281 @@
+#!/bin/bash
+
+function print_header()
+{
+    local s=("$@") b w
+    for l in "${s[@]}"; do
+        ((w<${#l})) && { b="$l"; w="${#l}"; }
+    done
+    tput setaf 3
+
+    echo "+-${b//?/-}-+"
+    echo "| ${b//?/ } |"
+
+    for l in "${s[@]}"; do
+        printf '| %s%*s%s |\n' "$(tput setaf 4)" "-$w" "$l" "$(tput setaf 3)"
+    done
+
+    echo "| ${b//?/ } |"
+    echo "+-${b//?/-}-+"
+
+    tput sgr 0
+}
+
+for i in "$@"
+    do
+        case $i in
+            -h|--help) HELP=1; break;;
+            -i|--interactive) INTERACTIVE=1; break;;
+
+            --domain=*) DOMAIN="${i#*=}"; shift;;
+            --zip-archive=*) ARCHIVE="${i#*=}"; shift;;
+            --magento-version=*) VERSION="${i#*=}"; shift;;
+            --php-version=*) PHPVER="${i#*=}"; shift;;
+
+            --varnish) VARNISH=1; shift;;
+            --mailhog) MAILHOG=1; shift;;
+            --rabbitmq) RABBITMQ=1; shift;;
+            --cron) CRON=1; shift;;
+            --composer) COMPOSER=1; shift;;
+            --composer-auth) AUTH=1; shift;;
+            --log) LOG=1; shift;;
+
+            *) ;;
+        esac
+    done
+
+if [[ "${HELP}" == "1" ]]; then
+
+    USAGE="
+Arguments:
+
+  [-i|--interactive]            Start interactive setup
+  [-h|--help]                   Show help information
+  [options [args]]              Start one-line setup, check options and arguments below
+
+One-line setup options:
+
+  --domain=<domain>             Domain to use for project, default is magento2.test
+  --zip-archive=<path>          Full path to local Magento zip archive to use for setup (optional)
+  --magento-version=<version>   Magento version to download from official repository, default is 2.3.1
+  --php-version=<version>       PHP version to use for project, default is 7.1
+
+One-line setup optional arguments:
+
+  --composer                    Run composer install prior to Magento bin/magento setup:install
+  --composer-auth               Configure composer authentication for repo.magento.com
+  --log                         Save installation log into file
+  --varnish                     Use Varnish cache
+  --mailhog                     Use MailHog email testing tool
+  --rabbitmq                    Use RabbitMQ message-broker
+  --cron                        Use cron service
+"
+
+    echo "$USAGE"
+    exit
+
+elif [[ ${INTERACTIVE} == 1 ]]; then
+
+    print_header \
+        'Mage2click' \
+        '' \
+        'Welcome to interactive setup of #Docker #Magento #Mutagen' \
+        'development environment.' \
+        '' \
+        'https://mage2.click' \
+        'https://github.com/mage2click/docker-magento-mutagen'
+
+    echo
+    read -p "Specify desired domain for project [magento2.test]: " DOMAIN
+
+    DOMAIN=${DOMAIN:-magento2.test}
+
+    RES=
+    while grep -qw "$DOMAIN" /etc/hosts || [[ -z "$DOMAIN" ]]; do
+        if [[ -z "$DOMAIN" ]]; then
+            echo "Domain cannot be empty!"
+        else
+            echo
+            echo "Domain $DOMAIN is already existed in /etc/hosts! Choose an option:"
+            select OPTS in "Proceed with this domain" "Specify new domain"; do
+                case ${OPTS} in
+                    "Specify new domain" ) RES=1; break;;
+                    "Proceed with this domain" ) break;;
+                esac
+            done
+        fi
+
+        if [[ -z "$RES" ]]; then
+            break
+        else
+            echo
+            read -p "New domain: " DOMAIN
+        fi
+    done
+
+    if ! grep -qw "$DOMAIN" /etc/hosts; then
+        echo
+        echo "Your system password has been requested to add an entry to /etc/hosts..."
+        echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
+    fi
+
+    RES=
+    echo
+    echo "Download Magento archive from official repo or use local downloaded Magento zip archive?"
+    select OPTS in "Download archive" "Use local zip archive"; do
+        case ${OPTS} in
+            "Download archive" ) RES=1; break;;
+            "Use local zip archive" ) break;;
+        esac
+    done
+
+    echo
+    if [[ -z "$RES" ]]; then
+        read -p "Full path to local Magento zip archive: " ARCHIVE
+
+        while [[ ! -f "$ARCHIVE" ]]; do
+            echo "Specified path does not exists!"
+            echo
+            read -p "Full path to local Magento zip archive: " ARCHIVE
+        done
+    else
+        read -p "Magento version to download? [2.3.1]: " VERSION
+        VERSION=${VERSION:-2.3.1}
+    fi
+
+    echo
+    echo "Select optional features for development environment:"
+
+    echo
+    echo "Use Varnish cache?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) VARNISH=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+    echo
+    echo "Use MailHog email testing tool?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) MAILHOG=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+    echo
+    echo "Use RabbitMQ message-broker?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) RABBITMQ=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+    echo
+    echo "Use cron service?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) CRON=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+    echo
+    echo "What PHP version to use?"
+    select OPTS in "7.1" "7.2" "7.3"; do
+        case ${OPTS} in
+            "7.1" ) PHPVER='7.1'; break;;
+            "7.2" ) PHPVER='7.2'; break;;
+            "7.3" ) PHPVER='7.3'; break;;
+        esac
+    done
+
+    PHPVER=${PHPVER:-7.1}
+
+    echo
+    echo "Run composer install prior to Magento bin/magento setup:install?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) COMPOSER=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+    echo
+    echo "Configure composer authentication for repo.magento.com?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) AUTH=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+    echo
+    echo "Save installation log into file?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) LOG=1; break;;
+            "No" ) break;;
+        esac
+    done
+
+else
+    print_header \
+        'Mage2click' \
+        '' \
+        'Welcome to one-line setup of #Docker #Magento #Mutagen' \
+        'development environment.' \
+        '' \
+        'https://mage2.click' \
+        'https://github.com/mage2click/docker-magento-mutagen'
+
+    DOMAIN=${DOMAIN:-magento2.test}
+
+    if ! grep -qw "$DOMAIN" /etc/hosts; then
+        echo
+        echo "Your system password has been requested to add an entry to /etc/hosts..."
+        echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
+    fi
+
+    if [[ ! -z "$ARCHIVE" ]] && [[ ! -f "$ARCHIVE" ]]; then
+        echo
+        echo "Specified path to local Magento zip archive does not exists!"
+        exit
+    fi
+
+    VERSION=${VERSION:-2.3.1}
+    PHPVER=${PHPVER:-7.1}
+fi
+
+echo
+echo "Starting setup..."
+
+git init -qqq
+git remote add origin https://github.com/mage2click/docker-magento
+git fetch origin -qqq
+git checkout origin/mutagen-sync -- compose/$1
+mv compose/magento-2/* ./
+rm -rf compose .git
+git init
+
+if [[ ! -z "$ARCHIVE" ]]; then
+    bin/unzip ${ARCHIVE}
+else
+    bin/download ${VERSION}
+fi
+
+bin/setup \
+    DOMAIN \
+    ARCHIVE \
+    VERSION \
+    VARNISH \
+    MAILHOG \
+    RABBITMQ \
+    CRON \
+    PHPVER \
+    COMPOSER \
+    AUTH \
+    LOG
+
