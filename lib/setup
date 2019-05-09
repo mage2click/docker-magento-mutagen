@@ -44,8 +44,6 @@ for i in "$@"
         esac
     done
 
-exec < /dev/tty
-
 if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
 
     print_header \
@@ -98,8 +96,10 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
         'https://mage2.click' \
         'https://github.com/mage2click/docker-magento-mutagen'
 
+    #exec </dev/tty
+
     echo
-    read -p "Specify desired domain for project [magento2.test]: " DOMAIN
+    read -p "Specify desired domain for project [magento2.test]: " DOMAIN </dev/tty
     DOMAIN=${DOMAIN:-magento2.test}
     echo ${DOMAIN}
 
@@ -116,14 +116,14 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
                     "Specify new domain" ) RES=1; break;;
                     "Proceed with this domain" ) break;;
                 esac
-            done
+            done </dev/tty
         fi
 
         if [[ -z "$RES" ]]; then
             break
         else
             echo
-            read -p "New domain: " DOMAIN
+            read -p "New domain: " DOMAIN </dev/tty
             if [[ -z "$DOMAIN" ]]; then
                 echo ${DOMAIN}
             fi
@@ -138,53 +138,46 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
 
     RES=
     echo
-    echo "Download Magento from official repo, use downloaded Magento zip archive or add existing project?"
-    select OPTS in "Download archive" "Use downloaded zip archive" "Add existing project"; do
+    echo "Select source of Magento soruce files:"
+    select OPTS in "Download from official repo" "Use downloaded zip archive" "Import existing project"; do
         case ${OPTS} in
-            "Download archive" ) RES=1; break;;
+            "Download from official repo" ) RES=1; break;;
             "Use downloaded zip archive" ) RES=2; break;;
-            "Add existing project" ) break;;
+            "Import existing project" ) break;;
         esac
-    done
+    done </dev/tty
 
     echo
     if [[ -z "$RES" ]]; then
-        read -p "Full path to existing Magento project: " PROJECT
+        read -p "Full path to existing Magento project: " PROJECT </dev/tty
 
         while [[ ! -d "$PROJECT" ]]; do
             echo "$(tput setaf 1)Specified path does not exists!"
             tput sgr 0
             echo
-            read -p "Full path to existing Magento project: " PROJECT
+            read -p "Full path to existing Magento project: " PROJECT </dev/tty
         done
 
-        echo ${PROJECT}
-
-        read -p "Full path to database SQL dump file: " DUMP
+        read -p "Full path to database SQL dump file: " DUMP </dev/tty
 
         while [[ ! -f "$DUMP" ]]; do
             echo "$(tput setaf 1)Specified path does not exists!"
             tput sgr 0
             echo
-            read -p "Full path to database SQL dump file: " DUMP
+            read -p "Full path to database SQL dump file: " DUMP </dev/tty
         done
-
-        echo ${DUMP}
     elif [[ "$RES" == "2" ]]; then
-        read -p "Full path to downloaded Magento zip archive: " ARCHIVE
+        read -p "Full path to downloaded Magento zip archive: " ARCHIVE </dev/tty
 
         while [[ ! -f "$ARCHIVE" ]]; do
             echo "$(tput setaf 1)Specified path does not exists!"
             tput sgr 0
             echo
-            read -p "Full path to downloaded Magento zip archive: " ARCHIVE
+            read -p "Full path to downloaded Magento zip archive: " ARCHIVE </dev/tty
         done
-
-        echo ${ARCHIVE}
     else
-        read -p "Magento version to download? [2.3.1]: " VERSION
+        read -p "Magento version to download? [2.3.1]: " VERSION </dev/tty
         VERSION=${VERSION:-2.3.1}
-        echo ${VERSION}
     fi
 
     echo
@@ -197,7 +190,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             "Yes" ) VARNISH=1; break;;
             "No" ) break;;
         esac
-    done
+    done </dev/tty
 
     echo
     echo "Use MailHog email testing tool?"
@@ -206,7 +199,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             "Yes" ) MAILHOG=1; break;;
             "No" ) break;;
         esac
-    done
+    done </dev/tty
 
     echo
     echo "Use RabbitMQ message-broker?"
@@ -215,7 +208,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             "Yes" ) RABBITMQ=1; break;;
             "No" ) break;;
         esac
-    done
+    done </dev/tty
 
     echo
     echo "Use cron service?"
@@ -224,7 +217,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             "Yes" ) CRON=1; break;;
             "No" ) break;;
         esac
-    done
+    done </dev/tty
 
     echo
     echo "What PHP version to use?"
@@ -235,7 +228,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             "7.2" ) PHPVER='7.2'; break;;
             "7.3" ) PHPVER='7.3'; break;;
         esac
-    done
+    done </dev/tty
 
     PHPVER=${PHPVER:-7.2}
 
@@ -246,7 +239,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             "Yes" ) COMPOSER=1; break;;
             "No" ) break;;
         esac
-    done
+    done </dev/tty
 
 else
     print_header \
@@ -363,11 +356,9 @@ while [[ ! -z "$PORTS" ]]; do
         echo "If any other host services or active Docker containers are using these ports, stop them respectively."
 
         echo
-        read -p "Press any key to continue setup..."
+        read -p "Press any key to continue setup..." </dev/tty
     fi
 done
-
-exec <&-
 
 echo
 echo "Starting setup..."

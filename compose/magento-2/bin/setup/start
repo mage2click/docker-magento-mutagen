@@ -34,7 +34,6 @@ if hash composer 2>/dev/null; then
     PRIVATE_KEY="$(composer config -gl | grep '\[http-basic.repo.magento.com.password\]' | cut -c40-)"
 fi
 
-exec < /dev/tty
 echo
 echo "$(tput setaf 2)Authentication required for repo.magento.com"
 tput sgr 0
@@ -46,26 +45,26 @@ if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
             "Yes" ) RES=1; break;;
             "No" ) break;;
         esac
-    done
+    done </dev/tty
 fi
 
 if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
     echo
-    read -p "Username: " PUBLIC_KEY
+    read -p "Username: " PUBLIC_KEY </dev/tty
     while [[ -z "$PUBLIC_KEY" ]]; do
         echo "$(tput setaf 1)Username cannot be empty!"
         tput sgr 0
         echo
-        read -p "Username: " PUBLIC_KEY
+        read -p "Username: " PUBLIC_KEY </dev/tty
     done
 
     echo
-    read -p "Password: " PRIVATE_KEY
+    read -p "Password: " PRIVATE_KEY </dev/tty
     while [[ -z "$PRIVATE_KEY" ]]; do
         echo "$(tput setaf 1)Password cannot be empty!"
         tput sgr 0
         echo
-        read -p "Password: " PRIVATE_KEY
+        read -p "Password: " PRIVATE_KEY </dev/tty
     done
 
     if [[ -z "$RES" ]] && hash composer 2>/dev/null; then
@@ -76,14 +75,13 @@ if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
                 "Yes" ) RES=1; break;;
                 "No" ) break;;
             esac
-        done
+        done </dev/tty
 
         if [[ "$RES" == "1" ]]; then
             $(composer global config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}) > /dev/null
         fi
     fi
 fi
-exec <&-
 
 if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
     bin/clinotty composer config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}
