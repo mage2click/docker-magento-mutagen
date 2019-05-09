@@ -44,6 +44,8 @@ for i in "$@"
         esac
     done
 
+exec < /dev/tty
+
 if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
 
     print_header \
@@ -364,6 +366,8 @@ while [[ ! -z "$PORTS" ]]; do
         read -p "Press any key to continue setup..."
     fi
 done
+
+exec <&-
 
 echo
 echo "Starting setup..."
