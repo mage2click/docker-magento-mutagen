@@ -12,7 +12,7 @@ function print_header()
     echo "| ${b//?/ } |"
 
     for l in "${s[@]}"; do
-        printf '| %s%*s%s |\n' "$(tput setaf 4)" "-$w" "$l" "$(tput setaf 3)"
+        printf '| %s%*s%s |\n' "$(tput setaf 2)" "-$w" "$l" "$(tput setaf 3)"
     done
 
     echo "| ${b//?/ } |"
@@ -23,7 +23,7 @@ function print_header()
 
 for i in "$@"
     do
-        case $i in
+        case ${i} in
             -h|--help) HELP=1; break;;
             -i|--interactive) INTERACTIVE=1; break;;
 
@@ -44,23 +44,28 @@ for i in "$@"
         esac
     done
 
-if [[ "${HELP}" == "1" ]]; then
+if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
+
+    print_header \
+        'Mage2click' \
+        '' \
+        '#Docker #Magento #Mutagen development environment' \
+        '' \
+        'https://mage2.click' \
+        'https://github.com/mage2click/docker-magento-mutagen'
 
     USAGE="
-Arguments:
+Arguments usage:
 
-  [-i|--interactive]            Start interactive setup
-  [-h|--help]                   Show help information
-  [options [args]]              Start one-line setup, check options and arguments below
-
-One-line setup options:
+  [--domain=<domain>] [--php-version=<version>] [--zip-archive=<path>] [--magento-version=<version>]
+  [--composer] [--composer-auth] [--log] [--varnish] [--mailhog] [--rabbitmq] [--cron]
+  [-i/--interactive] [-h/--help]
 
   --domain=<domain>             Domain to use for project, default is magento2.test
+  --php-version=<version>       PHP version to use for project, default is 7.2
   --zip-archive=<path>          Full path to local Magento zip archive to use for setup (optional)
   --magento-version=<version>   Magento version to download from official repository, default is 2.3.1
-  --php-version=<version>       PHP version to use for project, default is 7.1
-
-One-line setup optional arguments:
+                                If --zip-archive option is specified, this option will be skipped
 
   --composer                    Run composer install prior to Magento bin/magento setup:install
   --composer-auth               Configure composer authentication for repo.magento.com
@@ -69,6 +74,9 @@ One-line setup optional arguments:
   --mailhog                     Use MailHog email testing tool
   --rabbitmq                    Use RabbitMQ message-broker
   --cron                        Use cron service
+
+  -i/--interactive              Start interactive setup
+  -h/--help                     Show help information
 "
 
     echo "$USAGE"
@@ -80,15 +88,15 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
         'Mage2click' \
         '' \
         'Welcome to interactive setup of #Docker #Magento #Mutagen' \
-        'development environment.' \
+        'development environment' \
         '' \
         'https://mage2.click' \
         'https://github.com/mage2click/docker-magento-mutagen'
 
     echo
     read -p "Specify desired domain for project [magento2.test]: " DOMAIN
-
     DOMAIN=${DOMAIN:-magento2.test}
+    echo ${DOMAIN}
 
     RES=
     while grep -qw "$DOMAIN" /etc/hosts || [[ -z "$DOMAIN" ]]; do
@@ -110,6 +118,9 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
         else
             echo
             read -p "New domain: " DOMAIN
+            if [[ -z "$DOMAIN" ]]; then
+                echo ${DOMAIN}
+            fi
         fi
     done
 
@@ -138,9 +149,12 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
             echo
             read -p "Full path to local Magento zip archive: " ARCHIVE
         done
+
+        echo ${ARCHIVE}
     else
         read -p "Magento version to download? [2.3.1]: " VERSION
         VERSION=${VERSION:-2.3.1}
+        echo ${VERSION}
     fi
 
     echo
@@ -184,15 +198,16 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
 
     echo
     echo "What PHP version to use?"
-    select OPTS in "7.1" "7.2" "7.3"; do
+    select OPTS in "7.0" "7.1" "7.2" "7.3"; do
         case ${OPTS} in
+            "7.0" ) PHPVER='7.0'; break;;
             "7.1" ) PHPVER='7.1'; break;;
             "7.2" ) PHPVER='7.2'; break;;
             "7.3" ) PHPVER='7.3'; break;;
         esac
     done
 
-    PHPVER=${PHPVER:-7.1}
+    PHPVER=${PHPVER:-7.2}
 
     echo
     echo "Run composer install prior to Magento bin/magento setup:install?"
@@ -226,7 +241,7 @@ else
         'Mage2click' \
         '' \
         'Welcome to one-line setup of #Docker #Magento #Mutagen' \
-        'development environment.' \
+        'development environment' \
         '' \
         'https://mage2.click' \
         'https://github.com/mage2click/docker-magento-mutagen'
@@ -246,18 +261,119 @@ else
     fi
 
     VERSION=${VERSION:-2.3.1}
-    PHPVER=${PHPVER:-7.1}
+    PHPVER=${PHPVER:-7.2}
 fi
+
+PORTS=1
+
+while [[ ! -z "$PORTS" ]]; do
+    echo
+    echo "Checking ports availability..."
+
+    PORTS=""
+
+    if lsof -Pi :80 -sTCP:LISTEN -t >/dev/null; then
+        PORTS="$PORTS 80,"
+    fi
+
+    if lsof -Pi :443 -sTCP:LISTEN -t >/dev/null; then
+        PORTS="$PORTS 443,"
+    fi
+
+    if lsof -Pi :3306 -sTCP:LISTEN -t >/dev/null; then
+        PORTS="$PORTS 3306,"
+    fi
+
+    if lsof -Pi :9200 -sTCP:LISTEN -t >/dev/null; then
+        PORTS="$PORTS 9200,"
+    fi
+
+    if lsof -Pi :9300 -sTCP:LISTEN -t >/dev/null; then
+        PORTS="$PORTS 9300,"
+    fi
+
+    if [[ ! -z ${VARNISH} ]]; then
+        if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 8000,"
+        fi
+
+        if lsof -Pi :6082 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 6082,"
+        fi
+    fi
+
+    if [[ ! -z ${MAILHOG} ]]; then
+        if lsof -Pi :1025 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 1025,"
+        fi
+
+        if lsof -Pi :8025 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 8025,"
+        fi
+    fi
+
+    if [[ ! -z ${RABBITMQ} ]]; then
+        if lsof -Pi :5672 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 5672,"
+        fi
+
+        if lsof -Pi :15672 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 15672,"
+        fi
+    fi
+
+    if [[ ! -z ${PORTS} ]]; then
+        echo
+        echo "[${PORTS%?} ]"
+        echo
+        echo "Ports listed above are already allocated on host machine."
+        echo "This will cause an error when creating Docker containers!"
+        echo "If any other host services or active Docker containers are using these ports, stop them respectively."
+
+        echo
+        read -p "Press any key to continue setup..."
+    fi
+done
 
 echo
 echo "Starting setup..."
 
+mkdir tmp
+cd tmp
 git init -qqq
-git remote add origin https://github.com/mage2click/docker-magento
+git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
-git checkout origin/mutagen-sync -- compose/$1
-mv compose/magento-2/* ./
-rm -rf compose .git
+git checkout origin/master -- compose/magento-2
+mv compose/magento-2/* ../
+cd ../
+
+if [[ -z ${VARNISH} ]]; then
+    CONCAT="cat compose/app/default.yml"
+else
+    CONCAT="cat compose/app/varnish.yml"
+fi
+
+CONCAT="$CONCAT compose/db.yml compose/redis.yml compose/elasticsearch.yml"
+
+if [[ -z ${MAILHOG} ]]; then
+    CONCAT="$CONCAT compose/phpfpm/$PHPVER.yml"
+else
+    CONCAT="$CONCAT compose/phpfpm/$PHPVER-mailhog.yml compose/mailhog.yml"
+fi
+
+if [[ ! -z ${RABBITMQ} ]]; then
+    CONCAT="$CONCAT compose/rabbitmq.yml"
+fi
+
+if [[ ! -z ${CRON} ]]; then
+    CONCAT="$CONCAT compose/cron/$PHPVER.yml"
+fi
+
+CMD=("$CONCAT compose/volumes.yml")
+
+${CMD[@]} > docker-compose.yml
+
+rm -rf tmp
 git init
 
 if [[ ! -z "$ARCHIVE" ]]; then
@@ -266,16 +382,9 @@ else
     bin/download ${VERSION}
 fi
 
-bin/setup \
-    DOMAIN \
-    ARCHIVE \
-    VERSION \
-    VARNISH \
-    MAILHOG \
-    RABBITMQ \
-    CRON \
-    PHPVER \
-    COMPOSER \
-    AUTH \
-    LOG
-
+bin/setup-lite \
+    ${DOMAIN} \
+    ${VARNISH} \
+    ${COMPOSER} \
+    ${AUTH} \
+    ${LOG}
