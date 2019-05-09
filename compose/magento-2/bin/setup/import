@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function spinner()
+{
+    local pid=$1
+    local delay=0.75
+    local spin='|/-\'
+    while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
+        local temp=${spin#?}
+        printf " [%c]  " "$spin"
+        local spin=${temp}${spin%"$temp"}
+        sleep ${delay}
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
+if [[ ! -z "$1" ]] && [[ -d $1 ]]; then
+    printf "Copying project files:"
+
+    (rm -r src && mkdir -p src && cp -R "$1/" src/) & spinner $!
+
+    printf " Done!"
+    echo
+else
+    echo "Specified path to local Magento zip archive does not exists!"
+fi

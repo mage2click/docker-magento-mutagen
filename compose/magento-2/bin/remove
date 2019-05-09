@@ -1,2 +1,11 @@
 #!/bin/bash
-docker-compose rm
+if [[ "$1" == "-v" ]] || [[ "$1" == "--volumes" ]]; then
+    #Remove volumes
+    current_folder=${PWD##*/}
+    docker volume rm ${current_folder}_appdata
+    docker volume rm ${current_folder}_dbdata
+    docker volume rm ${current_folder}_sockdata
+else
+    #Remove stopped service containers.
+    docker-compose rm
+fi

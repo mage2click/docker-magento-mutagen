@@ -1,3 +1,0 @@
-#!/bin/bash
-# getting the latest changes from the docker's vendor folder to local vendor folder
-mutagen flush --all
