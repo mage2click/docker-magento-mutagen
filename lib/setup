@@ -29,6 +29,8 @@ for i in "$@"
 
             --domain=*) DOMAIN="${i#*=}"; shift;;
             --zip-archive=*) ARCHIVE="${i#*=}"; shift;;
+            --import-project=*) PROJECT="${i#*=}"; shift;;
+            --import-db=*) DUMP="${i#*=}"; shift;;
             --magento-version=*) VERSION="${i#*=}"; shift;;
             --php-version=*) PHPVER="${i#*=}"; shift;;
 
@@ -37,8 +39,6 @@ for i in "$@"
             --rabbitmq) RABBITMQ=1; shift;;
             --cron) CRON=1; shift;;
             --composer) COMPOSER=1; shift;;
-            --composer-auth) AUTH=1; shift;;
-            --log) LOG=1; shift;;
 
             *) ;;
         esac
@@ -57,26 +57,29 @@ if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
     USAGE="
 Arguments usage:
 
-  [--domain=<domain>] [--php-version=<version>] [--zip-archive=<path>] [--magento-version=<version>]
-  [--composer] [--composer-auth] [--log] [--varnish] [--mailhog] [--rabbitmq] [--cron]
-  [-i/--interactive] [-h/--help]
+  [--domain=<domain>] [--php-version=<version>] [--zip-archive=<path>]
+  [--import-project=<path>] [--import-db=<path>] [--magento-version=<version>]
+  [--composer] [--varnish] [--mailhog] [--rabbitmq] [--cron]
+  [-i, --interactive] [-h, --help]
 
   --domain=<domain>             Domain to use for project, default is magento2.test
   --php-version=<version>       PHP version to use for project, default is 7.2
-  --zip-archive=<path>          Full path to local Magento zip archive to use for setup (optional)
+  --zip-archive=<path>          Full path to downloaded Magento zip archive to use for setup (optional)
+  --import-project=<path>       Full path to existing Magento project to use for setup (optional)
+                                If specified, --import-db option is required as well
+  --import-db=<path>            Full path to database SQL dump file to use for setup (optional)
+                                If specified, --import-project option is required as well
   --magento-version=<version>   Magento version to download from official repository, default is 2.3.1
                                 If --zip-archive option is specified, this option will be skipped
 
   --composer                    Run composer install prior to Magento bin/magento setup:install
-  --composer-auth               Configure composer authentication for repo.magento.com
-  --log                         Save installation log into file
   --varnish                     Use Varnish cache
   --mailhog                     Use MailHog email testing tool
   --rabbitmq                    Use RabbitMQ message-broker
   --cron                        Use cron service
 
-  -i/--interactive              Start interactive setup
-  -h/--help                     Show help information
+  -i, --interactive             Start interactive setup
+  -h, --help                    Show help information
 "
 
     echo "$USAGE"
@@ -101,7 +104,8 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     RES=
     while grep -qw "$DOMAIN" /etc/hosts || [[ -z "$DOMAIN" ]]; do
         if [[ -z "$DOMAIN" ]]; then
-            echo "Domain cannot be empty!"
+            echo "$(tput setaf 1)Domain cannot be empty!"
+            tput sgr 0
         else
             echo
             echo "Domain $DOMAIN is already existed in /etc/hosts! Choose an option:"
@@ -132,22 +136,46 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
 
     RES=
     echo
-    echo "Download Magento archive from official repo or use local downloaded Magento zip archive?"
-    select OPTS in "Download archive" "Use local zip archive"; do
+    echo "Download Magento from official repo, use downloaded Magento zip archive or add existing project?"
+    select OPTS in "Download archive" "Use downloaded zip archive" "Add existing project"; do
         case ${OPTS} in
             "Download archive" ) RES=1; break;;
-            "Use local zip archive" ) break;;
+            "Use downloaded zip archive" ) RES=2; break;;
+            "Add existing project" ) break;;
         esac
     done
 
     echo
     if [[ -z "$RES" ]]; then
-        read -p "Full path to local Magento zip archive: " ARCHIVE
+        read -p "Full path to existing Magento project: " PROJECT
+
+        while [[ ! -d "$PROJECT" ]]; do
+            echo "$(tput setaf 1)Specified path does not exists!"
+            tput sgr 0
+            echo
+            read -p "Full path to existing Magento project: " PROJECT
+        done
+
+        echo ${PROJECT}
+
+        read -p "Full path to database SQL dump file: " DUMP
+
+        while [[ ! -f "$DUMP" ]]; do
+            echo "$(tput setaf 1)Specified path does not exists!"
+            tput sgr 0
+            echo
+            read -p "Full path to database SQL dump file: " DUMP
+        done
+
+        echo ${DUMP}
+    elif [[ "$RES" == "2" ]]; then
+        read -p "Full path to downloaded Magento zip archive: " ARCHIVE
 
         while [[ ! -f "$ARCHIVE" ]]; do
-            echo "Specified path does not exists!"
+            echo "$(tput setaf 1)Specified path does not exists!"
+            tput sgr 0
             echo
-            read -p "Full path to local Magento zip archive: " ARCHIVE
+            read -p "Full path to downloaded Magento zip archive: " ARCHIVE
         done
 
         echo ${ARCHIVE}
@@ -218,24 +246,6 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
         esac
     done
 
-    echo
-    echo "Configure composer authentication for repo.magento.com?"
-    select OPTS in "Yes" "No"; do
-        case ${OPTS} in
-            "Yes" ) AUTH=1; break;;
-            "No" ) break;;
-        esac
-    done
-
-    echo
-    echo "Save installation log into file?"
-    select OPTS in "Yes" "No"; do
-        case ${OPTS} in
-            "Yes" ) LOG=1; break;;
-            "No" ) break;;
-        esac
-    done
-
 else
     print_header \
         'Mage2click' \
@@ -256,7 +266,22 @@ else
 
     if [[ ! -z "$ARCHIVE" ]] && [[ ! -f "$ARCHIVE" ]]; then
         echo
-        echo "Specified path to local Magento zip archive does not exists!"
+        echo "$(tput setaf 1)Specified path to downloaded Magento zip archive does not exists!"
+        tput sgr 0
+        exit
+    fi
+
+    if [[ ! -z "$PROJECT" ]] && [[ ! -d "$PROJECT" ]]; then
+        echo
+        echo "$(tput setaf 1)Specified path to existing Magento project does not exists!"
+        tput sgr 0
+        exit
+    fi
+
+    if [[ ! -z "$DUMP" ]] && [[ ! -f "$DUMP" ]]; then
+        echo
+        echo "$(tput setaf 1)Specified path to database SQL dump file does not exists!"
+        tput sgr 0
         exit
     fi
 
@@ -282,6 +307,10 @@ while [[ ! -z "$PORTS" ]]; do
 
     if lsof -Pi :3306 -sTCP:LISTEN -t >/dev/null; then
         PORTS="$PORTS 3306,"
+    fi
+
+    if lsof -Pi :9001 -sTCP:LISTEN -t >/dev/null; then
+        PORTS="$PORTS 9001,"
     fi
 
     if lsof -Pi :9200 -sTCP:LISTEN -t >/dev/null; then
@@ -378,14 +407,17 @@ rm -rf tmp
 git init
 
 if [[ ! -z "$ARCHIVE" ]]; then
-    bin/unzip ${ARCHIVE}
+    bin/setup/unzip ${ARCHIVE}
+elif [[ ! -z "$PROJECT" ]] && [[ ! -z "$DUMP" ]]; then
+    bin/setup/import ${PROJECT}
 else
-    bin/download ${VERSION}
+    bin/setup/download ${VERSION}
 fi
 
-bin/setup-lite \
+bin/setup/start \
     ${DOMAIN} \
-    ${VARNISH} \
     ${COMPOSER} \
-    ${AUTH} \
-    ${LOG}
+    ${VARNISH} \
+    ${DUMP} \
+    ${MAILHOG} \
+    ${RABBITMQ}
