@@ -168,29 +168,33 @@ open https://magento2.test
 - `bin/composer`: Run the composer binary. Ex. `bin/composer install`
 - `bin/copyfromcontainer`: Copy folders or files from container to host. Ex. `bin/copyfromcontainer vendor`
 - `bin/copytocontainer`: Copy folders or files from host to container. Ex. `bin/copytocontainer --all`
-- `bin/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/download 2.3.1`
 - `bin/fixowns`: This will fix filesystem ownerships within the container.
 - `bin/fixperms`: This will fix filesystem permissions within the container.
 - `bin/grunt`: Run the grunt binary. Note that this runs the version from the node_modules directory for project version parity. Ex. `bin/grunt exec`
 - `bin/magento`: Run the Magento CLI. Ex: `bin/magento cache:flush`
+- `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush`. Ex. `bin/mutagen start`
 - `bin/node`: Run the node binary. Ex. `bin/node --version`
 - `bin/npm`: Run the npm binary. Ex. `bin/npm install`
 - `bin/redis`: Run a command from the redis container. Ex `bin/redis redis-cli monitor`
-- `bin/remove`: Remove all containers.
-- `bin/removevolumes`: Remove all volumes.
+- `bin/remove`: Remove all stopped service containers. Accepts params `-v` or `--volumes` to remove volumes.
 - `bin/restart`: Stop and then start all containers.
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
-- `bin/setup`: Run the Magento setup process to install Magento from the source code, with optional domain name. Defaults to `magento2.test`. Ex. `bin/setup magento2.test`
 - `bin/start`: Start all containers, good practice to use this instead of `docker-compose up -d`, as it may contain additional helpers.
 - `bin/status`: Check the container status.
 - `bin/stop`: Stop all containers.
-- `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests
-- `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`
-- `bin/magento-configure-elasticsearch5`: Enabling Elasticsearch 5 as Search Engine...
-- `bin/mutagen-start`: Start mutagen daemon & sync.
-- `bin/mutagen-stop`: Stop mutagen daemon & sync. 
-- `bin/magento-configure-varnish`: Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
+- `bin/varnish`: Run commands in the Varnish container, Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
+- `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable` 
+
+## Setup and Configuration CLI Commands
+
+- `bin/setup/elasticsearch`: Enable Elasticsearch 5 as Search Engine.
+- `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
+- `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
+- `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
+- `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with optional domain name (defaults to `magento2.test`) and optional `--composer-install` flag. Ex. `bin/setup magento2.test` 
+- `bin/setup/unzip`: Extract downloaded Magento zip archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
+- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
 ## Misc Info
 
 ### Database
