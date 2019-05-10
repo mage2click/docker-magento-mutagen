@@ -410,9 +410,9 @@ else
 fi
 
 bin/setup/start \
-    ${DOMAIN} \
-    ${COMPOSER} \
-    ${VARNISH} \
-    ${DUMP} \
-    ${MAILHOG} \
-    ${RABBITMQ}
+    --domain=${DOMAIN} \
+    ${COMPOSER:+ --composer} \
+    ${VARNISH:+ --varnish} \
+    ${DUMP:+ --import-db} \
+    ${MAILHOG:+ --mailhog} \
+    ${RABBITMQ:+ --rabbitmq}

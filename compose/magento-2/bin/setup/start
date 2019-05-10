@@ -1,10 +1,20 @@
 #!/bin/bash
+for i in "$@"
+    do
+        case ${i} in
+            --domain=*) DOMAIN="${i#*=}"; shift;;
+            --import-db=*) DUMP="${i#*=}"; shift;;
+
+            --composer) COMPOSER=1; shift;;
+            --varnish) VARNISH=1; shift;;
+            --mailhog) MAILHOG=1; shift;;
+            --rabbitmq) RABBITMQ=1; shift;;
+
+            *) ;;
+        esac
+    done
+
 DOMAIN=${1:-magento2.test}
-COMPOSER=${2}
-VARNISH=${3}
-DUMP=${4}
-MAILHOG=${5}
-RABBITMQ=${6}
 
 docker-compose stop
 
