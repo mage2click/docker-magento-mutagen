@@ -3,7 +3,7 @@
 echo
 printf "Fetching latest version..."
 mkdir tmp-fetch
-cd tmp
+cd tmp-fetch
 git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
