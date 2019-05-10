@@ -288,7 +288,7 @@ PORTS=1
 
 while [[ ! -z "$PORTS" ]]; do
     echo
-    echo "Checking ports availability..."
+    printf "Checking ports availability..."
 
     PORTS=""
 
@@ -348,6 +348,7 @@ while [[ ! -z "$PORTS" ]]; do
 
     if [[ ! -z ${PORTS} ]]; then
         echo
+        echo
         echo "$(tput setaf 1)[${PORTS%?} ]"
         tput sgr 0
         echo
@@ -360,8 +361,12 @@ while [[ ! -z "$PORTS" ]]; do
     fi
 done
 
+printf " OK!"
+echo
+
 echo
 echo "Starting setup..."
+echo
 
 mkdir tmp
 cd tmp
@@ -400,6 +405,7 @@ ${CMD[@]} > docker-compose.yml
 
 rm -rf tmp parts
 git init
+echo
 
 if [[ ! -z "$ARCHIVE" ]]; then
     bin/setup/unzip ${ARCHIVE}
@@ -408,6 +414,7 @@ elif [[ ! -z "$PROJECT" ]] && [[ ! -z "$DUMP" ]]; then
 else
     bin/setup/download ${VERSION}
 fi
+echo
 
 bin/setup/start \
     --domain=${DOMAIN} \

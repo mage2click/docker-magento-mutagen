@@ -56,6 +56,7 @@ if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
             "No" ) break;;
         esac
     done </dev/tty
+    echo
 fi
 
 if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
@@ -91,6 +92,7 @@ if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
             $(composer global config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}) > /dev/null
         fi
     fi
+    echo
 fi
 
 if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
@@ -152,13 +154,15 @@ bin/copyfromcontainer app
 bin/copyfromcontainer vendor
 
 echo "Starting mutagen sync for files from host to container..."
-bin/mutagen-start
+bin/mutagen start
 
 echo "Restarting app container"
 docker-compose restart app
 
-echo "$(tput setaf 2)Docker development environment setup complete"
+echo
+echo "$(tput setaf 2)#Docker #Magento #Mutagen development environment setup is complete!"
 tput sgr 0
+echo
 
 if [[ ! -z "$MAILHOG" ]]; then
     echo "Mailhog web UI available at http://${DOMAIN}:8025"
@@ -168,4 +172,4 @@ if [[ ! -z "$RABBITMQ" ]]; then
     echo "RabbitMQ Management panel available at http://${DOMAIN}:15672"
 fi
 
-echo "You may now access your Magento instance at https://${DOMAIN}/"
+echo "You may now access your Magento instance at https://${DOMAIN}"

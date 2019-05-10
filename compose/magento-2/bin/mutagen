@@ -11,6 +11,7 @@ Available Commands:
   flush       Flush all synchronization sessions
 "
 elif [[ "$1" == "start" ]]; then
+    mutagen daemon start
     # sync files from local to docker immediately,
     # local is alpha here, so it will rewrite all your changes made on the docker side
     mutagen create \
