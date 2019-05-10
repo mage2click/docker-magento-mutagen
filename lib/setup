@@ -398,7 +398,7 @@ CMD=("$CONCAT parts/volumes.yml")
 
 ${CMD[@]} > docker-compose.yml
 
-rm -rf tmp
+rm -rf tmp parts
 git init
 
 if [[ ! -z "$ARCHIVE" ]]; then

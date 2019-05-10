@@ -1,10 +1,10 @@
 #!/bin/bash
 DOMAIN=${1:-magento2.test}
-COMPOSER=${2:-}
-VARNISH=${3-}
-DUMP=${4:-}
-MAILHOG=${5:-}
-RABBITMQ=${6:-}
+COMPOSER=${2}
+VARNISH=${3}
+DUMP=${4}
+MAILHOG=${5}
+RABBITMQ=${6}
 
 docker-compose stop
 
