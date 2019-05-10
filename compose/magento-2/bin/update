@@ -7,7 +7,7 @@ git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
 git checkout origin/feature/self-update -- compose/magento-2
-cp -R compose/magento-2/bin/* compose/magento-2/bin/.* ../bin/ 2>/dev/null
+yes | cp -Rf compose/magento-2/bin/* ../bin/ 2>/dev/null
 cd ../
 rm -rf tmp-mage2click
 printf " DONE!"
