@@ -368,13 +368,13 @@ echo
 echo "Starting setup..."
 echo
 
-mkdir tmp
-cd tmp
+mkdir tmp-mage2click
+cd tmp-mage2click
 git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
 git checkout origin/feature/interactive-setup -- compose/magento-2
-mv compose/magento-2/* ../
+mv compose/magento-2/* compose/magento-2/.* ../
 cd ../
 
 if [[ -z ${VARNISH} ]]; then
@@ -403,7 +403,7 @@ CMD=("$CONCAT parts/volumes.yml")
 
 ${CMD[@]} > docker-compose.yml
 
-rm -rf tmp parts
+rm -rf tmp-mage2click parts
 git init
 echo
 
