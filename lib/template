@@ -1,8 +1,0 @@
-#!/bin/bash
-git init -qqq
-git remote add origin https://github.com/mage2click/docker-magento-mutagen
-git fetch origin -qqq
-git checkout origin/master -- compose/$1
-mv compose/$1/* ./
-rm -rf compose .git
-git init
