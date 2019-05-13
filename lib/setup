@@ -379,7 +379,9 @@ git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
 git checkout origin/feature/interactive-setup -- compose/magento-2
-mv compose/magento-2/* compose/magento-2/.* ../
+for x in compose/magento-2/* compose/magento-2/.[!.]* compose/magento-2/..?*; do
+  if [[ -e "$x" ]]; then mv -- "$x" ../; fi
+done
 cd ../
 
 if [[ -z ${VARNISH} ]]; then

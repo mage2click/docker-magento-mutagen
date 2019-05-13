@@ -149,6 +149,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with optional domain name (defaults to `magento2.test`) and optional `--composer-install` flag. Ex. `bin/setup magento2.test` 
 - `bin/setup/unzip`: Extract downloaded Magento zip archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
 - `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
+
 ## Misc Info
 
 ### Database
@@ -184,6 +185,7 @@ Use the following lines to enable Redis on existing installs:
 `bin/magento setup:config:set --cache-backend=redis --cache-backend-redis-server=redis --cache-backend-redis-db=0`
 
 **Enable for Full Page Cache:**
+
 `bin/magento setup:config:set --page-cache=redis --page-cache-redis-server=redis --page-cache-redis-db=1`
 
 **Enable for Session:**
@@ -196,6 +198,7 @@ For more information about Redis usage with Magento, <a href="https://devdocs.ma
 
 
 ### Xdebug & PHPStorm
+
 >not tested yet
 
 1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PHPStorm from the list and click Save.
