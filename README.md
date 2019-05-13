@@ -40,7 +40,7 @@ View Dockerfiles:
   - 7.1
       - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
       - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
-  7.0
+  - 7.0
       - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.0-fpm-mailhog)
       - [`7.0-fpm`](https://github.com/mage2click/magento-php/tree/7.0-fpm)
 
@@ -110,7 +110,7 @@ Flags:
 curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -h
 ```
 
-The `-h` flag above (shorthand of `--help`) defines that setup script must only output usage information.
+The `-h` flag above (shorthand of `--help`) defines that setup script must only output usage information. This command won't start the installation process.
 
 
 ## Custom CLI Commands
@@ -146,8 +146,8 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
 - `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
-- `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with optional domain name (defaults to `magento2.test`) and optional `--composer-install` flag. Ex. `bin/setup magento2.test` 
-- `bin/setup/unzip`: Extract downloaded Magento zip archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
+- `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with the optional parameter `--domain=<domain>` (defaults to `magento2.test`) and optional `--composer` flag. Ex. `bin/setup/start --domain=magento2.test` 
+- `bin/setup/unzip`: Extract downloaded Magento zip-archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
 - `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
 
 ## Misc Info
@@ -165,14 +165,16 @@ bin/cli mysql -h db -umagento -pmagento magento
 You can use the `bin/clinotty` helper script to import a database. This example uses the root MySQL user, and looks for the `dbdump.sql` file in your local host directory:
 
 ```
-bin/clinotty mysql -h db -u root -pmagento magento < dbdump.sql
+bin/clinotty mysql -hdb -umagento -pmagento magento < dbdump.sql
 ```
 
 ### Composer Authentication
 
-First setup Magento Marketplace authentication (details in the [DevDocs](http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html)).
+Get your authentication keys for Magento Marketplace. For more information about Magento Marketplace authentication, see the [DevDocs](http://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html).  
 
-Copy `src/auth.json.sample` to `src/auth.json`. Then, update the username and password values with your Magento public and private keys, respectively. Finally, copy the file to the container by running `bin/copytocontainer auth.json`.
+The setup script will prompt you to provide authentication information!
+
+To manually configure authentication, copy `src/auth.json.sample` to `src/auth.json`. Then, update the username and password values with your Magento public and private keys, respectively. Finally, copy the file to the container by running `bin/copytocontainer auth.json`.
 
 ### Redis
 
@@ -194,7 +196,7 @@ Use the following lines to enable Redis on existing installs:
 
 You may also monitor Redis by running: `bin/redis redis-cli monitor`
 
-For more information about Redis usage with Magento, <a href="https://devdocs.magento.com/guides/v2.3/config-guide/redis/redis-session.html" target="_blank">see the DevDocs</a>.
+For more information about Redis usage with Magento, see the <a href="https://devdocs.magento.com/guides/v2.3/config-guide/redis/redis-session.html" target="_blank">DevDocs</a>.
 
 
 ### Xdebug & PHPStorm
