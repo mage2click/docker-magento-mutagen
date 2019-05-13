@@ -1,0 +1,7 @@
+
+  cron:
+    image: mage2click/magento-php:7.2-fpm
+    user: root
+    command: /usr/local/bin/cronstart
+    tty: true
+    volumes: *appvolumes

@@ -5,6 +5,7 @@
   <a href="https://github.com/magento/magento2" target="_blank"><img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true" alt="Supported Magento Versions" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
   <a href="https://join.slack.com/t/magentocommeng/shared_invite/enQtNDUzMDg4Mzc4NTY3LWEyOThjMzY5Zjk2ZGVjZWZmNTU4ZjJkYmQzMWNjY2MwMzRlNDM0ODMyZTVmM2NjODIwOTNjZWQ4NTM2ZjU2YmE" target="_blank"><img src="https://img.shields.io/badge/chat-%23mutagen--sync%20in%20Slack-brightgreen.svg" alt="chat #mutagen-sync in Slack"/></a>
@@ -17,7 +18,7 @@
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
 - [Mutagen.io](#mutagen)
-- [Quick Setup](#quick-setup)
+- [Automated Setup](#automated-setup)
 - [Custom CLI Commands](#custom-cli-commands)
 - [Misc Info](#misc-info)
 - [Credits](#credits)
@@ -39,6 +40,9 @@ View Dockerfiles:
   - 7.1
       - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
       - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
+  - 7.0
+      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.0-fpm-mailhog)
+      - [`7.0-fpm`](https://github.com/mage2click/magento-php/tree/7.0-fpm)
 
 ## Usage
 
@@ -50,113 +54,64 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 4GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
 
 This configuration has been tested on macOS.
-### Mutagen
+
+## Mutagen
 This version of Docker-based development environment with mutagen sync is working fine even if it still under development, it requires the <a href="https://mutagen.io/" target="_blank">mutagen.io</a> to be installed on your system. See the <a href="https://mutagen.io/documentation/installation/" target="_blank">mutagen.io/documentation/installation</a> or use  <a href="https://brew.sh/" target="_blank">Homebrew</a> to install it on macOS
+
 ```bash
 brew install havoc-io/mutagen/mutagen
 ```
-## Quick Setup
 
-### Automated Setup (New Project)
+## Automated Setup
 
-> macOS Only
+Run one of the commands below from the directory you want to install your project to. Existing projects can be imported as well.
 
-Run this automated one-liner from the directory you want to install your project to:
-
-```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
-```
-
-or use the following command to install from the zip file downloaded from magento.com :
+### Interactive mode
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -i
 ```
 
-The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive.   
-The `lite` param at the end means that we do not need to execute composer install during the setup because zip version of magento already have all needed files in the vendor folder
+The `-i` flag above (shorthand of `--interactive`) defines that setup script must be launched in interactive mode.  
+Simply follow the steps during setup initialisation to configure resulted Magento development environment.
 
-Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
-
-After the one-liner above completes running, you should be able to access your site at `https://magento2.test`.
-
-### Manual Setup
-
-Same result as the one-liner above. Just replace `magento2.test` references with the hostname that you wish to use.
-
-#### New Projects
+### One-line mode 
 
 ```bash
-# Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
-
-# Download the version of Magento you want to use with:
-bin/download 2.3.1
-
-# or if you'd rather install with Composer, run:
-#
-# OPEN SOURCE:
-#
-# rm -rf src
-# composer create-project --repository=https://repo.magento.com/ --ignore-platform-reqs magento/project-community-edition=2.3.1 src
-#
-# COMMERCE:
-#
-# rm -rf src
-# composer create-project --repository=https://repo.magento.com/ --ignore-platform-reqs magento/project-enterprise-edition=2.3.1 src
-
-# Create a DNS host entry for the site:
-echo "127.0.0.1 magento2.test" | sudo tee -a /etc/hosts
-
-# Run the setup installer for Magento:
-bin/setup magento2.test
-
-open https://magento2.test
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- --domain=magento2.test
 ```
 
-#### Existing Projects
+The `--domain=magento2.test` above defines the hostname to use.  
+Script accepts also other parameters and flags to configure resulted Magento development environment.
+
+Parameters:  
+- `--domain=<domain>` Domain to use for the project, default is `magento2.test`.
+- `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1`, `7.2` and `7.3`.
+- `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
+- `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional). If specified, `--magento-db` parameter is required as well.
+- `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional). If specified, `--magento-project` parameter is required as well.
+- `--magento-version=<version>` Magento version to download from the official repository, default is `2.3.1`. If `--magento-archive` parameter is specified, this will be skipped.
+
+Flags:
+- `--composer` Use \`composer install\` command during the setup process.
+- `--varnish` Use Varnish cache.
+- `--mailhog` Use MailHog email testing tool.
+- `--rabbitmq` Use RabbitMQ message-broker.
+- `--cron` Use cron service.
+- `-i`, `--interactive` Start interactive setup.
+- `-h`, `--help` Show usage information.
+
+### Usage info output
 
 ```bash
-# Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
-
-# Remove existing src directory:
-rm -rf src
-
-# Replace with existing source code of your existing Magento instance:
-cp ~/Sites/existing src
-# or: git clone git@github.com:myrepo.git src
-
-# Create a DNS host entry for the site:
-echo "127.0.0.1 magento2.test" | sudo tee -a /etc/hosts
-
-# Copy some files to the containers and install dependencies, then restart the containers:
-docker-compose up -d
-bin/copytocontainer --all
-
-# Install composer dependencies, then copy artifacts back to the host:
-bin/composer install
-bin/copyfromcontainer vendor
-
-# Import existing database:
-bin/clinotty mysql -hdb -umagento -pmagento magento < existing/magento.sql
-
-# Update database connection details:
-# vi src/app/etc/env.php
-
-# Set base URLs to local environment URL:
-bin/magento config:set web/secure/base_url https://magento2.test/
-bin/magento config:set web/unsecure/base_url https://magento2.test/
-
-bin/restart
-
-open https://magento2.test
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -h
 ```
 
-> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/master/SETUP.md).
+The `-h` flag above (shorthand of `--help`) defines that setup script must only output usage information. This command won't start the installation process.
+
 
 ## Custom CLI Commands
 
@@ -167,31 +122,37 @@ open https://magento2.test
 - `bin/composer`: Run the composer binary. Ex. `bin/composer install`
 - `bin/copyfromcontainer`: Copy folders or files from container to host. Ex. `bin/copyfromcontainer vendor`
 - `bin/copytocontainer`: Copy folders or files from host to container. Ex. `bin/copytocontainer --all`
-- `bin/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/download 2.3.1`
 - `bin/fixowns`: This will fix filesystem ownerships within the container.
 - `bin/fixperms`: This will fix filesystem permissions within the container.
 - `bin/grunt`: Run the grunt binary. Note that this runs the version from the node_modules directory for project version parity. Ex. `bin/grunt exec`
 - `bin/magento`: Run the Magento CLI. Ex: `bin/magento cache:flush`
+- `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush`. Ex. `bin/mutagen start`
 - `bin/node`: Run the node binary. Ex. `bin/node --version`
 - `bin/npm`: Run the npm binary. Ex. `bin/npm install`
 - `bin/redis`: Run a command from the redis container. Ex `bin/redis redis-cli monitor`
-- `bin/remove`: Remove all containers.
-- `bin/removevolumes`: Remove all volumes.
+- `bin/remove`: Remove all stopped service containers. Accepts params `-v` or `--volumes` to remove volumes.
 - `bin/restart`: Stop and then start all containers.
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
-- `bin/setup`: Run the Magento setup process to install Magento from the source code, with optional domain name. Defaults to `magento2.test`. Ex. `bin/setup magento2.test`
+- `bin/self-update`: Alias for bin/update.
+- `bin/selfupdate`: Alias for bin/update.
 - `bin/start`: Start all containers, good practice to use this instead of `docker-compose up -d`, as it may contain additional helpers.
 - `bin/status`: Check the container status.
 - `bin/stop`: Stop all containers.
-- `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests
-- `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`
-- `bin/magento-configure-elasticsearch5`: Enabling Elasticsearch 5 as Search Engine...
-- `bin/mutagen-start`: Start mutagen daemon & sync.
-- `bin/mutagen-stop`: Stop mutagen daemon & sync.
 - `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the master branch.
-- `bin/selfupdate`: Alias for bin/update.
-- `bin/self-update`: Alias for bin/update.
+- `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
+- `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`.
+
+## Setup and Configuration CLI Commands
+
+- `bin/setup/elasticsearch`: Enable Elasticsearch 5 as Search Engine.
+- `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
+- `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
+- `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
+- `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with the optional parameter `--domain=<domain>` (defaults to `magento2.test`) and optional `--composer` flag. Ex. `bin/setup/start --domain=magento2.test` 
+- `bin/setup/unzip`: Extract downloaded Magento zip-archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
+- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
+
 ## Misc Info
 
 ### Database
@@ -207,14 +168,16 @@ bin/cli mysql -h db -umagento -pmagento magento
 You can use the `bin/clinotty` helper script to import a database. This example uses the root MySQL user, and looks for the `dbdump.sql` file in your local host directory:
 
 ```
-bin/clinotty mysql -h db -u root -pmagento magento < dbdump.sql
+bin/clinotty mysql -hdb -umagento -pmagento magento < dbdump.sql
 ```
 
 ### Composer Authentication
 
-First setup Magento Marketplace authentication (details in the [DevDocs](http://devdocs.magento.com/guides/v2.0/install-gde/prereq/connect-auth.html)).
+Get your authentication keys for Magento Marketplace. For more information about Magento Marketplace authentication, see the [DevDocs](http://devdocs.magento.com/guides/v2.3/install-gde/prereq/connect-auth.html).  
 
-Copy `src/auth.json.sample` to `src/auth.json`. Then, update the username and password values with your Magento public and private keys, respectively. Finally, copy the file to the container by running `bin/copytocontainer auth.json`.
+The setup script will prompt you to provide authentication information!
+
+To manually configure authentication, copy `src/auth.json.sample` to `src/auth.json`. Then, update the username and password values with your Magento public and private keys, respectively. Finally, copy the file to the container by running `bin/copytocontainer auth.json`.
 
 ### Redis
 
@@ -227,6 +190,7 @@ Use the following lines to enable Redis on existing installs:
 `bin/magento setup:config:set --cache-backend=redis --cache-backend-redis-server=redis --cache-backend-redis-db=0`
 
 **Enable for Full Page Cache:**
+
 `bin/magento setup:config:set --page-cache=redis --page-cache-redis-server=redis --page-cache-redis-db=1`
 
 **Enable for Session:**
@@ -235,10 +199,11 @@ Use the following lines to enable Redis on existing installs:
 
 You may also monitor Redis by running: `bin/redis redis-cli monitor`
 
-For more information about Redis usage with Magento, <a href="https://devdocs.magento.com/guides/v2.3/config-guide/redis/redis-session.html" target="_blank">see the DevDocs</a>.
+For more information about Redis usage with Magento, see the <a href="https://devdocs.magento.com/guides/v2.3/config-guide/redis/redis-session.html" target="_blank">DevDocs</a>.
 
 
 ### Xdebug & PHPStorm
+
 >not tested yet
 
 1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PHPStorm from the list and click Save.
