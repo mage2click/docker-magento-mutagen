@@ -40,6 +40,9 @@ View Dockerfiles:
   - 7.1
       - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
       - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
+  7.0
+      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.0-fpm-mailhog)
+      - [`7.0-fpm`](https://github.com/mage2click/magento-php/tree/7.0-fpm)
 
 ## Usage
 
@@ -51,113 +54,64 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 4GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
 
 This configuration has been tested on macOS.
+
 ### Mutagen
 This version of Docker-based development environment with mutagen sync is working fine even if it still under development, it requires the <a href="https://mutagen.io/" target="_blank">mutagen.io</a> to be installed on your system. See the <a href="https://mutagen.io/documentation/installation/" target="_blank">mutagen.io/documentation/installation</a> or use  <a href="https://brew.sh/" target="_blank">Homebrew</a> to install it on macOS
+
 ```bash
 brew install havoc-io/mutagen/mutagen
 ```
-## Quick Setup
 
-### Automated Setup (New Project)
+## Automated Setup
 
-> macOS Only
+Run one of the commands below from the directory you want to install your project to. Existing projects can be imported as well.
 
-Run this automated one-liner from the directory you want to install your project to:
-
-```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
-```
-
-or use the following command to install from the zip file downloaded from magento.com :
+### Interactive mode
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -i
 ```
 
-The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive.   
-The `lite` param at the end means that we do not need to execute composer install during the setup because zip version of magento already have all needed files in the vendor folder
+The `-i` flag above (shorthand of `--interactive`) defines that setup script must be launched in interactive mode.  
+Simply follow the steps during setup initialisation to configure resulted Magento development environment.
 
-Note that since we need a write to `/etc/hosts` for DNS resolution, you will be prompted for your system password during setup.
-
-After the one-liner above completes running, you should be able to access your site at `https://magento2.test`.
-
-### Manual Setup
-
-Same result as the one-liner above. Just replace `magento2.test` references with the hostname that you wish to use.
-
-#### New Projects
+### One liner mode 
 
 ```bash
-# Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
-
-# Download the version of Magento you want to use with:
-bin/download 2.3.1
-
-# or if you'd rather install with Composer, run:
-#
-# OPEN SOURCE:
-#
-# rm -rf src
-# composer create-project --repository=https://repo.magento.com/ --ignore-platform-reqs magento/project-community-edition=2.3.1 src
-#
-# COMMERCE:
-#
-# rm -rf src
-# composer create-project --repository=https://repo.magento.com/ --ignore-platform-reqs magento/project-enterprise-edition=2.3.1 src
-
-# Create a DNS host entry for the site:
-echo "127.0.0.1 magento2.test" | sudo tee -a /etc/hosts
-
-# Run the setup installer for Magento:
-bin/setup magento2.test
-
-open https://magento2.test
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- --domain=magento2.test
 ```
 
-#### Existing Projects
+The `--domain=magento2.test` above defines the hostname to use.  
+Script accepts also other parameters and flags to configure resulted Magento development environment.
+
+Parameters:  
+- `--domain=<domain>` Domain to use for the project, default is `magento2.test`.
+- `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1`, `7.2` and `7.3`.
+- `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
+- `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional). If specified, `--magento-db` parameter is required as well.
+- `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional). If specified, `--magento-project` parameter is required as well.
+- `--magento-version=<version>` Magento version to download from the official repository, default is `2.3.1`. If `--magento-archive` parameter is specified, this will be skipped.
+
+Flags:
+- `--composer` Use \`composer install\` command during the setup process.
+- `--varnish` Use Varnish cache.
+- `--mailhog` Use MailHog email testing tool.
+- `--rabbitmq` Use RabbitMQ message-broker.
+- `--cron` Use cron service.
+- `-i`, `--interactive` Start interactive setup.
+- `-h`, `--help` Show usage information.
+
+### Usage output mode
 
 ```bash
-# Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
-
-# Remove existing src directory:
-rm -rf src
-
-# Replace with existing source code of your existing Magento instance:
-cp ~/Sites/existing src
-# or: git clone git@github.com:myrepo.git src
-
-# Create a DNS host entry for the site:
-echo "127.0.0.1 magento2.test" | sudo tee -a /etc/hosts
-
-# Copy some files to the containers and install dependencies, then restart the containers:
-docker-compose up -d
-bin/copytocontainer --all
-
-# Install composer dependencies, then copy artifacts back to the host:
-bin/composer install
-bin/copyfromcontainer vendor
-
-# Import existing database:
-bin/clinotty mysql -hdb -umagento -pmagento magento < existing/magento.sql
-
-# Update database connection details:
-# vi src/app/etc/env.php
-
-# Set base URLs to local environment URL:
-bin/magento config:set web/secure/base_url https://magento2.test/
-bin/magento config:set web/unsecure/base_url https://magento2.test/
-
-bin/restart
-
-open https://magento2.test
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -h
 ```
 
-> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/master/SETUP.md).
+The `-h` flag above (shorthand of `--help`) defines that setup script must only output usage information.
+
 
 ## Custom CLI Commands
 

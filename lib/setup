@@ -28,9 +28,9 @@ for i in "$@"
             -i|--interactive) INTERACTIVE=1; break;;
 
             --domain=*) DOMAIN="${i#*=}"; shift;;
-            --zip-archive=*) ARCHIVE="${i#*=}"; shift;;
-            --import-project=*) PROJECT="${i#*=}"; shift;;
-            --import-db=*) DUMP="${i#*=}"; shift;;
+            --magento-archive=*) ARCHIVE="${i#*=}"; shift;;
+            --magento-project=*) PROJECT="${i#*=}"; shift;;
+            --magento-db=*) DB="${i#*=}"; shift;;
             --magento-version=*) VERSION="${i#*=}"; shift;;
             --php-version=*) PHPVER="${i#*=}"; shift;;
 
@@ -55,31 +55,36 @@ if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
         'https://github.com/mage2click/docker-magento-mutagen'
 
     USAGE="
-Arguments usage:
+Usage:
 
-  [--domain=<domain>] [--php-version=<version>] [--zip-archive=<path>]
-  [--import-project=<path>] [--import-db=<path>] [--magento-version=<version>]
+  [--domain=<domain>] [--php-version=<version>] [--magento-archive=<path>]
+  [--magento-project=<path>] [--magento-db=<path>] [--magento-version=<version>]
   [--composer] [--varnish] [--mailhog] [--rabbitmq] [--cron]
   [-i, --interactive] [-h, --help]
 
-  --domain=<domain>             Domain to use for project, default is magento2.test
-  --php-version=<version>       PHP version to use for project, default is 7.2
-  --zip-archive=<path>          Full path to downloaded Magento zip archive to use for setup (optional)
-  --import-project=<path>       Full path to existing Magento project to use for setup (optional)
-                                If specified, --import-db option is required as well
-  --import-db=<path>            Full path to database SQL dump file to use for setup (optional)
-                                If specified, --import-project option is required as well
-  --magento-version=<version>   Magento version to download from official repository, default is 2.3.1
-                                If --zip-archive option is specified, this option will be skipped
+Parameters:
 
-  --composer                    Run composer install command during setup process
-  --varnish                     Use Varnish cache
-  --mailhog                     Use MailHog email testing tool
-  --rabbitmq                    Use RabbitMQ message-broker
-  --cron                        Use cron service
+  --domain=<domain>              Domain to use for the project, default is magento2.test
+  --php-version=<version>        PHP version to use for the project, default is 7.2
+                                 Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3
+  --magento-archive=<path>       Full path to downloaded Magento zip-archive to use in setup (optional).
+  --magento-project=<path>       Full path to the existing Magento project to use in setup (optional).
+                                 If specified, --magento-db parameter is required as well.
+  --magento-db=<path>            Full path to .sql file with database dump to use in setup (optional).
+                                 If specified, --magento-project parameter is required as well.
+  --magento-version=<version>    Magento version to download from the official repository, default is 2.3.1.
+                                 If --magento-archive parameter is specified, this will be skipped.
 
-  -i, --interactive             Start interactive setup
-  -h, --help                    Show help information
+Flags:
+
+  --composer                     Run composer install command during setup process.
+  --varnish                      Use Varnish cache.
+  --mailhog                      Use MailHog email testing tool.
+  --rabbitmq                     Use RabbitMQ message-broker.
+  --cron                         Use cron service.
+
+  -i, --interactive              Start interactive setup.
+  -h, --help                     Show usage information.
 "
 
     echo "$USAGE"
@@ -99,7 +104,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     #exec </dev/tty
 
     echo
-    read -p "Specify desired domain for project [magento2.test]: " DOMAIN </dev/tty
+    read -p "Specify desired domain for the project [magento2.test]: " DOMAIN </dev/tty
     DOMAIN=${DOMAIN:-magento2.test}
     echo ${DOMAIN}
 
@@ -138,11 +143,11 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
 
     RES=
     echo
-    echo "Select source of Magento soruce files:"
+    echo "Select the source of Magento source files:"
     select OPTS in "Download from official repo" "Use downloaded zip archive" "Import existing project"; do
         case ${OPTS} in
             "Download from official repo" ) RES=1; break;;
-            "Use downloaded zip archive" ) RES=2; break;;
+            "Use downloaded zip-archive" ) RES=2; break;;
             "Import existing project" ) break;;
         esac
     done </dev/tty
@@ -152,28 +157,28 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
         read -p "Full path to existing Magento project: " PROJECT </dev/tty
 
         while [[ ! -d "$PROJECT" ]]; do
-            echo "$(tput setaf 1)Specified path does not exists!"
+            echo "$(tput setaf 1)The specified path does not exist!"
             tput sgr 0
             echo
             read -p "Full path to existing Magento project: " PROJECT </dev/tty
         done
 
-        read -p "Full path to database SQL dump file: " DUMP </dev/tty
+        read -p "Full path to database SQL dump file: " DB </dev/tty
 
-        while [[ ! -f "$DUMP" ]]; do
-            echo "$(tput setaf 1)Specified path does not exists!"
+        while [[ ! -f "$DB" ]]; do
+            echo "$(tput setaf 1)The specified path does not exist!"
             tput sgr 0
             echo
-            read -p "Full path to database SQL dump file: " DUMP </dev/tty
+            read -p "Full path to database SQL dump file: " DB </dev/tty
         done
     elif [[ "$RES" == "2" ]]; then
-        read -p "Full path to downloaded Magento zip archive: " ARCHIVE </dev/tty
+        read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
 
         while [[ ! -f "$ARCHIVE" ]]; do
-            echo "$(tput setaf 1)Specified path does not exists!"
+            echo "$(tput setaf 1)The specified path does not exist!"
             tput sgr 0
             echo
-            read -p "Full path to downloaded Magento zip archive: " ARCHIVE </dev/tty
+            read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
         done
     else
         read -p "Magento version to download? [2.3.1]: " VERSION </dev/tty
@@ -233,7 +238,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     PHPVER=${PHPVER:-7.2}
 
     echo
-    echo "Run composer install command during setup process?"
+    echo "Use \`composer install\` command during the setup process?"
     select OPTS in "Yes" "No"; do
         case ${OPTS} in
             "Yes" ) COMPOSER=1; break;;
@@ -261,21 +266,21 @@ else
 
     if [[ ! -z "$ARCHIVE" ]] && [[ ! -f "$ARCHIVE" ]]; then
         echo
-        echo "$(tput setaf 1)Specified path to downloaded Magento zip archive does not exists!"
+        echo "$(tput setaf 1)Specified path to downloaded Magento zip-archive does not exist!"
         tput sgr 0
         exit
     fi
 
     if [[ ! -z "$PROJECT" ]] && [[ ! -d "$PROJECT" ]]; then
         echo
-        echo "$(tput setaf 1)Specified path to existing Magento project does not exists!"
+        echo "$(tput setaf 1)Specified path to existing Magento project does not exist!"
         tput sgr 0
         exit
     fi
 
-    if [[ ! -z "$DUMP" ]] && [[ ! -f "$DUMP" ]]; then
+    if [[ ! -z "$DB" ]] && [[ ! -f "$DB" ]]; then
         echo
-        echo "$(tput setaf 1)Specified path to database SQL dump file does not exists!"
+        echo "$(tput setaf 1)Specified path to database SQL dump file does not exist!"
         tput sgr 0
         exit
     fi
@@ -352,8 +357,8 @@ while [[ ! -z "$PORTS" ]]; do
         echo "$(tput setaf 1)[${PORTS%?} ]"
         tput sgr 0
         echo
-        echo "Ports listed above are already allocated on host machine."
-        echo "This will cause an error when creating Docker containers!"
+        echo "Ports listed above are already allocated on the host machine."
+        echo "This will cause an error when running Docker containers!"
         echo "If any other host services or active Docker containers are using these ports, stop them respectively."
 
         echo
@@ -409,7 +414,7 @@ echo
 
 if [[ ! -z "$ARCHIVE" ]]; then
     bin/setup/unzip ${ARCHIVE}
-elif [[ ! -z "$PROJECT" ]] && [[ ! -z "$DUMP" ]]; then
+elif [[ ! -z "$PROJECT" ]] && [[ ! -z "$DB" ]]; then
     bin/setup/import ${PROJECT}
 else
     bin/setup/download ${VERSION}
@@ -418,8 +423,8 @@ echo
 
 bin/setup/start \
     --domain=${DOMAIN} \
+    ${DB:+ --magento-db=${DB}} \
     ${COMPOSER:+ --composer} \
     ${VARNISH:+ --varnish} \
-    ${DUMP:+ --import-db} \
     ${MAILHOG:+ --mailhog} \
-    ${RABBITMQ:+ --rabbitmq}
+    ${RABBITMQ:+ --rabbitmq} \

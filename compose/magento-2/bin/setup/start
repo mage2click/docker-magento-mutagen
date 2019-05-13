@@ -3,7 +3,7 @@ for i in "$@"
     do
         case ${i} in
             --domain=*) DOMAIN="${i#*=}"; shift;;
-            --import-db=*) DUMP="${i#*=}"; shift;;
+            --magento-db=*) DB="${i#*=}"; shift;;
 
             --composer) COMPOSER=1; shift;;
             --varnish) VARNISH=1; shift;;
@@ -35,7 +35,7 @@ sleep 1 #Ensure containers are started...
 
 cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
 
-echo "Copying all files from host to container..."
+echo "Copying all files from host to the container..."
 bin/copytocontainer --all
 bin/fixperms
 
@@ -104,7 +104,7 @@ if [[ ! -z "$COMPOSER" ]]; then
     bin/clinotty composer install
 fi
 
-if [[ -z "$DUMP" ]]; then
+if [[ -z "$DB" ]]; then
     bin/clinotty bin/magento setup:install \
                     --db-host=db \
                     --db-name=magento \
@@ -122,7 +122,7 @@ if [[ -z "$DUMP" ]]; then
                     --use-rewrites=1
 else
     echo "Importing database..."
-    bin/clinotty mysql -hdb -umagento -pmagento magento < "$DUMP"
+    bin/clinotty mysql -hdb -umagento -pmagento magento < "$DB"
 
     # Set base URLs to local environment URL:
     bin/magento config:set web/secure/base_url "https://$DOMAIN/"
@@ -138,7 +138,7 @@ bin/setup/elasticsearch
 echo "Forcing deploy of static content to speed up initial requests..."
 bin/clinotty bin/magento setup:static-content:deploy -f
 
-echo "Enabling Redis for Backend Cache, Page Cache and Session..."
+echo "Enabling Redis for Backend Cache, Page Cache, and Session..."
 bin/setup/redis
 
 if [[ ! -z "$VARNISH" ]]; then
