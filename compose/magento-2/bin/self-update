@@ -1,0 +1,3 @@
+#!/bin/bash
+#alias for the update command
+bin/update

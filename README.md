@@ -188,7 +188,10 @@ open https://magento2.test
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`
 - `bin/magento-configure-elasticsearch5`: Enabling Elasticsearch 5 as Search Engine...
 - `bin/mutagen-start`: Start mutagen daemon & sync.
-- `bin/mutagen-stop`: Stop mutagen daemon & sync. 
+- `bin/mutagen-stop`: Stop mutagen daemon & sync.
+- `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the master branch.
+- `bin/selfupdate`: Alias for bin/update.
+- `bin/self-update`: Alias for bin/update.
 ## Misc Info
 
 ### Database
