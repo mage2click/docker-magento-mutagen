@@ -190,7 +190,10 @@ open https://magento2.test
 - `bin/magento-configure-elasticsearch5`: Enabling Elasticsearch 5 as Search Engine...
 - `bin/mutagen-start`: Start mutagen daemon & sync.
 - `bin/mutagen-stop`: Stop mutagen daemon & sync. 
-- `bin/magento-configure-varnish`: Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
+- `bin/magento-configure-varnish`: Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly
+- `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the master branch.
+- `bin/selfupdate`: Alias for bin/update.
+- `bin/self-update`: Alias for bin/update. 
 ## Misc Info
 
 ### Database
