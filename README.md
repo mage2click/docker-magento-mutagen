@@ -6,7 +6,7 @@
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
-  <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
+  <a href="https://github.com/mage2click/docker-magento-mutagen/blob/1.0.0/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
   <a href="https://join.slack.com/t/magentocommeng/shared_invite/enQtNDUzMDg4Mzc4NTY3LWEyOThjMzY5Zjk2ZGVjZWZmNTU4ZjJkYmQzMWNjY2MwMzRlNDM0ODMyZTVmM2NjODIwOTNjZWQ4NTM2ZjU2YmE" target="_blank"><img src="https://img.shields.io/badge/chat-%23mutagen--sync%20in%20Slack-brightgreen.svg" alt="chat #mutagen-sync in Slack"/></a>
   <a href="https://twitter.com/intent/follow?screen_name=mage2_click" target="_blank"><img src="https://img.shields.io/twitter/follow/mage2_click.svg?style=social" /></a>
 </div>
@@ -67,13 +67,13 @@ brew install havoc-io/mutagen/mutagen
 Run this automated one-liner from the directory you want to install your project to:
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test 2.3.1
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/1.0.0/lib/onelinesetup | bash -s -- magento2.test 2.3.1
 ```
 
 or use the following command to install from the zip file downloaded from magento.com :
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/1.0.0/lib/onelinesetup | bash -s -- magento2.test /path/to/magento.zip lite
 ```
 
 The `magento2.test` above defines the hostname to use, and the `/path/to/magento.zip` defines the local path to Magento zip archive.   
@@ -91,7 +91,7 @@ Same result as the one-liner above. Just replace `magento2.test` references with
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/1.0.0/lib/template | bash -s -- magento-2
 
 # Download the version of Magento you want to use with:
 bin/download 2.3.1
@@ -121,7 +121,7 @@ open https://magento2.test
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/1.0.0/lib/template | bash -s -- magento-2
 
 # Remove existing src directory:
 rm -rf src
@@ -156,7 +156,7 @@ bin/restart
 open https://magento2.test
 ```
 
-> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/master/SETUP.md).
+> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/1.0.0/SETUP.md).
 
 ## Custom CLI Commands
 
@@ -189,7 +189,7 @@ open https://magento2.test
 - `bin/magento-configure-elasticsearch5`: Enabling Elasticsearch 5 as Search Engine...
 - `bin/mutagen-start`: Start mutagen daemon & sync.
 - `bin/mutagen-stop`: Stop mutagen daemon & sync.
-- `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the master branch.
+- `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the current branch.
 - `bin/selfupdate`: Alias for bin/update.
 - `bin/self-update`: Alias for bin/update.
 ## Misc Info
@@ -299,7 +299,7 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 
 ## License
 
-[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
+[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/1.0.0/LICENSE.md)
 
 ## TBD 
 - Easy switch between using or not using Varnish - currently you can use fully automated Varnish setup from our [feature/develop-varnish](https://github.com/mage2click/docker-magento-mutagen/tree/feature/develop-varnish) branch
