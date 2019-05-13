@@ -18,7 +18,7 @@
 - [Usage](#usage)
 - [Prerequisites](#prerequisites)
 - [Mutagen.io](#mutagen)
-- [Quick Setup](#quick-setup)
+- [Automated Setup](#automated-setup)
 - [Custom CLI Commands](#custom-cli-commands)
 - [Misc Info](#misc-info)
 - [Credits](#credits)
@@ -58,7 +58,7 @@ This setup assumes you are running Docker on a computer with at least 6GB of all
 
 This configuration has been tested on macOS.
 
-### Mutagen
+## Mutagen
 This version of Docker-based development environment with mutagen sync is working fine even if it still under development, it requires the <a href="https://mutagen.io/" target="_blank">mutagen.io</a> to be installed on your system. See the <a href="https://mutagen.io/documentation/installation/" target="_blank">mutagen.io/documentation/installation</a> or use  <a href="https://brew.sh/" target="_blank">Homebrew</a> to install it on macOS
 
 ```bash
@@ -78,7 +78,7 @@ curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feat
 The `-i` flag above (shorthand of `--interactive`) defines that setup script must be launched in interactive mode.  
 Simply follow the steps during setup initialisation to configure resulted Magento development environment.
 
-### One liner mode 
+### One-line mode 
 
 ```bash
 curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- --domain=magento2.test
@@ -104,7 +104,7 @@ Flags:
 - `-i`, `--interactive` Start interactive setup.
 - `-h`, `--help` Show usage information.
 
-### Usage output mode
+### Usage info output
 
 ```bash
 curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -h

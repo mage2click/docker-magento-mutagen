@@ -410,7 +410,7 @@ CMD=("$CONCAT parts/volumes.yml")
 
 ${CMD[@]} > docker-compose.yml
 
-rm -rf tmp-mage2click parts
+rm -rf tmp-mage2click parts docker-compose.yml.sample
 git init
 echo
 
