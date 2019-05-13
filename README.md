@@ -72,7 +72,7 @@ Run one of the commands below from the directory you want to install your projec
 ### Interactive mode
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -i
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/setup | bash -s -- -i
 ```
 
 The `-i` flag above (shorthand of `--interactive`) defines that setup script must be launched in interactive mode.  
@@ -81,7 +81,7 @@ Simply follow the steps during setup initialisation to configure resulted Magent
 ### One-line mode 
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- --domain=magento2.test
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/setup | bash -s -- --domain=magento2.test
 ```
 
 The `--domain=magento2.test` above defines the hostname to use.  
@@ -107,7 +107,7 @@ Flags:
 ### Usage info output
 
 ```bash
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/interactive-setup/lib/setup | bash -s -- -h
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/master/lib/setup | bash -s -- -h
 ```
 
 The `-h` flag above (shorthand of `--help`) defines that setup script must only output usage information. This command won't start the installation process.
@@ -139,7 +139,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/start`: Start all containers, good practice to use this instead of `docker-compose up -d`, as it may contain additional helpers.
 - `bin/status`: Check the container status.
 - `bin/stop`: Stop all containers.
-- `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the master branch.
+- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch.
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`.
 
@@ -151,7 +151,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
 - `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with the optional parameter `--domain=<domain>` (defaults to `magento2.test`) and optional `--composer` flag. Ex. `bin/setup/start --domain=magento2.test` 
 - `bin/setup/unzip`: Extract downloaded Magento zip-archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
-- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
+- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly. 
 
 ## Misc Info
 
