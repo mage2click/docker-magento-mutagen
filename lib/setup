@@ -183,6 +183,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     else
         read -p "Magento version to download? [2.3.1]: " VERSION </dev/tty
         VERSION=${VERSION:-2.3.1}
+        echo ${VERSION}
     fi
 
     echo
