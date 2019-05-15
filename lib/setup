@@ -21,6 +21,20 @@ function print_header()
     tput sgr 0
 }
 
+function in_array()
+{
+    local array="$1[@]"
+    local value=$2
+    local in=0
+    for entry in "${!array}"; do
+        if [[ "$entry" == "$value" ]]; then
+            in=1
+            break
+        fi
+    done
+    return ${in}
+}
+
 for i in "$@"
     do
         case ${i} in
@@ -288,6 +302,15 @@ else
 
     VERSION=${VERSION:-2.3.1}
     PHPVER=${PHPVER:-7.2}
+
+    VERSIONS=("7.0" "7.1" "7.2" "7.3")
+    if in_array VERSIONS "$PHPVER"; then
+        echo
+        echo "$(tput setaf 1)Specified PHP version ($PHPVER) does not supported!"
+        echo "Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3"
+        tput sgr 0
+        exit
+    fi
 fi
 
 PORTS=1
