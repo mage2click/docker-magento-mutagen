@@ -1,6 +1,0 @@
-
-  elasticsearch:
-    image: elasticsearch:5.6
-    ports:
-      - "9200:9200"
-      - "9300:9300"

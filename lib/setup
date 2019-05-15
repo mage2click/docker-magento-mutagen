@@ -439,7 +439,9 @@ else
     CONCAT="cat parts/app/varnish.yml"
 fi
 
-CONCAT="$CONCAT parts/db.yml parts/redis.yml parts/elasticsearch.yml"
+CONCAT="$CONCAT parts/db.yml parts/redis.yml"
+
+CONCAT="$CONCAT parts/elasticsearch/$ELASTICSEARCHVER.yml"
 
 if [[ -z ${MAILHOG} ]]; then
     CONCAT="$CONCAT parts/phpfpm/$PHPVER.yml"
