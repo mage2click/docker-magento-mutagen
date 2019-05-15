@@ -4,8 +4,10 @@ for i in "$@"
         case ${i} in
             --domain=*) DOMAIN="${i#*=}"; shift;;
             --magento-db=*) DB="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCHVER="${i#*=}"; shift;;
 
             --composer) COMPOSER=1; shift;;
+            --elasticsearch) ELASTICSEARCH=1; shift;;
             --varnish) VARNISH=1; shift;;
             --mailhog) MAILHOG=1; shift;;
             --rabbitmq) RABBITMQ=1; shift;;
@@ -14,7 +16,8 @@ for i in "$@"
         esac
     done
 
-DOMAIN=${1:-magento2.test}
+DOMAIN=${DOMAIN:-magento2.test}
+ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
 
 docker-compose stop
 
@@ -132,8 +135,10 @@ fi
 echo "Turning on developer mode..."
 bin/clinotty bin/magento deploy:mode:set developer
 
-echo "Enabling Elasticsearch 5 as Search Engine..."
-bin/setup/elasticsearch
+if [[ ! -z "$ELASTICSEARCH" ]]; then
+    echo "Enabling Elasticsearch as Search Engine..."
+    bin/setup/elasticsearch ${ELASTICSEARCHVER}
+fi
 
 echo "Forcing deploy of static content to speed up initial requests..."
 bin/clinotty bin/magento setup:static-content:deploy -f

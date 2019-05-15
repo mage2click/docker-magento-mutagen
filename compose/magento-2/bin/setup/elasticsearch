@@ -1,8 +1,22 @@
 #!/bin/bash
-bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+if [[ "$1" == "2" ]]; then
+    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+                catalog/search/engine elasticsearch > /dev/null
+
+    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+                catalog/search/elasticsearch_server_hostname elasticsearch > /dev/null
+elif [[ "$1" == "5" ]]; then
+    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
                 catalog/search/engine elasticsearch5 > /dev/null
 
-bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
                 catalog/search/elasticsearch5_server_hostname elasticsearch > /dev/null
+else
+    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+                catalog/search/engine elasticsearch6 > /dev/null
+
+    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+                catalog/search/elasticsearch6_server_hostname elasticsearch > /dev/null
+fi
 
 bin/clinotty bin/magento indexer:reindex
