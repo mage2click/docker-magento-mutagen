@@ -21,6 +21,20 @@ function print_header()
     tput sgr 0
 }
 
+function in_array()
+{
+    local array="$1[@]"
+    local value=$2
+    local in=0
+    for entry in "${!array}"; do
+        if [[ "$entry" == "$value" ]]; then
+            in=1
+            break
+        fi
+    done
+    return ${in}
+}
+
 for i in "$@"
     do
         case ${i} in
@@ -33,6 +47,7 @@ for i in "$@"
             --magento-db=*) DB="${i#*=}"; shift;;
             --magento-version=*) VERSION="${i#*=}"; shift;;
             --php-version=*) PHPVER="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCHVER="${i#*=}"; shift;;
 
             --varnish) VARNISH=1; shift;;
             --mailhog) MAILHOG=1; shift;;
@@ -57,23 +72,26 @@ if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
     USAGE="
 Usage:
 
-  [--domain=<domain>] [--php-version=<version>] [--magento-archive=<path>]
-  [--magento-project=<path>] [--magento-db=<path>] [--magento-version=<version>]
-  [--composer] [--varnish] [--mailhog] [--rabbitmq] [--cron]
-  [-i, --interactive] [-h, --help]
+  [--domain=<domain>] [--php-version=<version>] [--elasticsearch-version=<version>]
+  [--magento-archive=<path>] [--magento-project=<path>] [--magento-db=<path>]
+  [--magento-version=<version>] [--composer] [--varnish] [--mailhog]
+  [--rabbitmq] [--cron] [-i, --interactive] [-h, --help]
 
 Parameters:
 
-  --domain=<domain>              Domain to use for the project, default is magento2.test
-  --php-version=<version>        PHP version to use for the project, default is 7.2
-                                 Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3
-  --magento-archive=<path>       Full path to downloaded Magento zip-archive to use in setup (optional).
-  --magento-project=<path>       Full path to the existing Magento project to use in setup (optional).
-                                 If specified, --magento-db parameter is required as well.
-  --magento-db=<path>            Full path to .sql file with database dump to use in setup (optional).
-                                 If specified, --magento-project parameter is required as well.
-  --magento-version=<version>    Magento version to download from the official repository, default is 2.3.1.
-                                 If --magento-archive parameter is specified, this will be skipped.
+  --domain=<domain>                 Domain to use for the project, default is magento2.test
+  --php-version=<version>           PHP version to use for the project, default is 7.2
+                                    Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3
+  --elasticsearch-version=<version> Elasticsearch version to use for the project, default is 6
+                                    Currently supported Elasticsearch versions: 5.6 and 6
+                                    Note that Magento versions prior to 2.3.1 uses Elasticsearch 5.6
+  --magento-archive=<path>          Full path to downloaded Magento zip-archive to use in setup (optional).
+  --magento-project=<path>          Full path to the existing Magento project to use in setup (optional).
+                                    If specified, --magento-db parameter is required as well.
+  --magento-db=<path>               Full path to .sql file with database dump to use in setup (optional).
+                                    If specified, --magento-project parameter is required as well.
+  --magento-version=<version>       Magento version to download from the official repository, default is 2.3.1.
+                                    If --magento-archive parameter is specified, this will be skipped.
 
 Flags:
 
@@ -183,6 +201,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     else
         read -p "Magento version to download? [2.3.1]: " VERSION </dev/tty
         VERSION=${VERSION:-2.3.1}
+        echo ${VERSION}
     fi
 
     echo
@@ -238,6 +257,17 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     PHPVER=${PHPVER:-7.2}
 
     echo
+    echo "What Elasticsearch version to use?"
+    select OPTS in "5.6 (for Magento versions prior to 2.3.1)" "6 (for Magento 2.3.1 and later)"; do
+        case ${OPTS} in
+            "5.6 (for Magento versions prior to 2.3.1)" ) ELASTICSEARCHVER='5.6'; break;;
+            "6 (for Magento 2.3.1 and later)" ) ELASTICSEARCHVER='6'; break;;
+        esac
+    done </dev/tty
+
+    ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+
+    echo
     echo "Use \`composer install\` command during the setup process?"
     select OPTS in "Yes" "No"; do
         case ${OPTS} in
@@ -287,6 +317,25 @@ else
 
     VERSION=${VERSION:-2.3.1}
     PHPVER=${PHPVER:-7.2}
+    ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+
+    VERSIONS=("7.0" "7.1" "7.2" "7.3")
+    if in_array VERSIONS "$PHPVER"; then
+        echo
+        echo "$(tput setaf 1)Specified PHP version ($PHPVER) does not supported!"
+        echo "Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3"
+        tput sgr 0
+        exit
+    fi
+
+    VERSIONS=("5.6" "6")
+    if in_array VERSIONS "$ELASTICSEARCHVER"; then
+        echo
+        echo "$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCHVER) does not supported!"
+        echo "Currently supported Elasticsearch versions: 5.6 and 6"
+        tput sgr 0
+        exit
+    fi
 fi
 
 PORTS=1
@@ -390,7 +439,9 @@ else
     CONCAT="cat parts/app/varnish.yml"
 fi
 
-CONCAT="$CONCAT parts/db.yml parts/redis.yml parts/elasticsearch.yml"
+CONCAT="$CONCAT parts/db.yml parts/redis.yml"
+
+CONCAT="$CONCAT parts/elasticsearch/$ELASTICSEARCHVER.yml"
 
 if [[ -z ${MAILHOG} ]]; then
     CONCAT="$CONCAT parts/phpfpm/$PHPVER.yml"

@@ -3,4 +3,6 @@
     image: mage2click/magento-php:7.1-fpm-mailhog
     depends_on:
       - db
+    ports:
+      - "9001:9001"
     volumes: *appvolumes
