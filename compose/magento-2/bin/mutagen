@@ -29,7 +29,7 @@ elif [[ "$1" == "start" ]]; then
         --ignore=/vendor \
         --ignore=node_modules \
         --ignore-vcs \
-        src docker://$(docker-compose ps|grep phpfpm|awk '{print $1}')/var/www/html
+        src docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html
 
     # sync vendor folder from local to docker immediately,
     # but keeping no-watch for docker side, so only "mutagen flush --all" will get the newest changes from the docker side (see bin/composer)
@@ -43,7 +43,7 @@ elif [[ "$1" == "start" ]]; then
         --sync-mode=two-way-resolved \
         --watch-mode-alpha=no-watch \
         --ignore-vcs \
-        docker://$(docker-compose ps|grep phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
+        docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
 elif [[ "$1" == "stop" ]]; then
     mutagen terminate -a
     mutagen daemon stop
