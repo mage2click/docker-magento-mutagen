@@ -23,7 +23,7 @@ if [[ ! -z "$LIST_VCL" ]]; then
     TIME=$(date)
     echo "-------------------------"
     echo "vcl.list output at $TIME:"
-    bin/varnish varnishadm vcl.list
+    docker-compose exec -T varnish varnishadm vcl.list
 fi
 
 if [[ ! -z "$CONFIGURE" ]]; then
@@ -44,7 +44,7 @@ fi
 
 if [[ ! -z "$GENERATE_VCL" ]]; then
     echo "Generating vcl config to var/default.vcl"
-    bin/magento varnish:vcl:generate --access-list app --backend-host app \
+    bin/clinotty bin/magento  varnish:vcl:generate --access-list app --backend-host app \
                     --backend-port 8000 --output-file ./var/default.vcl
     bin/copyfromcontainer var
 fi
@@ -58,11 +58,11 @@ if [[ "$APPLY_VCL" == "1" ]]; then
 
     # Load the default file into memory
     echo "Loading default.vcl as default.vcl-$TIME"
-    bin/varnish varnishadm vcl.load default.vcl-${TIME} /usr/local/share/default.vcl
+    docker-compose exec -T varnish varnishadm vcl.load default.vcl-${TIME} /usr/local/share/default.vcl
 
     # Active this Varnish config
     echo "Activating default.vcl-$TIME"
-    bin/varnish varnishadm vcl.use default.vcl-${TIME}
+    docker-compose exec -T varnish varnishadm vcl.use default.vcl-${TIME}
     bin/setup/varnish --list-vcl
 elif [[ ! -z "$APPLY_VCL" ]]; then
     # List all applied VCLs to see which one is active
@@ -73,11 +73,11 @@ elif [[ ! -z "$APPLY_VCL" ]]; then
 
     # Load the specified file into memory return (pass)
     echo "Loading $2 as varnish_$TIME"
-    bin/varnish varnishadm vcl.load varnish_${TIME} /usr/local/share/$2
+    docker-compose exec -T varnish varnishadm vcl.load varnish_${TIME} /usr/local/share/$2
 
     # Active this Varnish config
     echo "Activating varnish_${TIME}"
-    bin/varnish varnishadm vcl.use varnish_${TIME}
+    docker-compose exec -T varnish varnishadm vcl.use varnish_${TIME}
     bin/setup/varnish --list-vcl
 fi
 
@@ -96,5 +96,5 @@ elif [[ ! -z "$COPY_VCL" ]]; then
 fi
 
 if [[ ! -z "$USE_VCL" ]]; then
-    bin/varnish varnishadm vcl.use $1
+    docker-compose exec -T varnish varnishadm vcl.use $1
 fi
