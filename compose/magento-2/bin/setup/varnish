@@ -24,7 +24,6 @@ if [[ ! -z "$LIST_VCL" ]]; then
     echo "-------------------------"
     echo "vcl.list output at $TIME:"
     bin/varnish varnishadm vcl.list
-    exit
 fi
 
 if [[ ! -z "$CONFIGURE" ]]; then
@@ -52,7 +51,7 @@ fi
 
 if [[ "$APPLY_VCL" == "1" ]]; then
     # List all applied VCLs to see which one is active
-    bin/setup/varnish --vcl-list --copy-vcl
+    bin/setup/varnish --list-vcl --copy-vcl
 
     # Generate a unique timestamp ID for this version of the VCL
     TIME=$(date +%s)
@@ -64,10 +63,10 @@ if [[ "$APPLY_VCL" == "1" ]]; then
     # Active this Varnish config
     echo "Activating default.vcl-$TIME"
     bin/varnish varnishadm vcl.use default.vcl-${TIME}
-    bin/setup/varnish --vcl-list
+    bin/setup/varnish --list-vcl
 elif [[ ! -z "$APPLY_VCL" ]]; then
     # List all applied VCLs to see which one is active
-    bin/setup/varnish --vcl-list --copy-vcl=${APPLY_VCL}
+    bin/setup/varnish --list-vcl --copy-vcl=${APPLY_VCL}
 
     # Generate a unique timestamp ID for this version of the VCL
     TIME=$(date +%s)
@@ -79,7 +78,7 @@ elif [[ ! -z "$APPLY_VCL" ]]; then
     # Active this Varnish config
     echo "Activating varnish_${TIME}"
     bin/varnish varnishadm vcl.use varnish_${TIME}
-    bin/setup/varnish --vcl-list
+    bin/setup/varnish --list-vcl
 fi
 
 if [[ "$COPY_VCL" == "1" ]]; then
