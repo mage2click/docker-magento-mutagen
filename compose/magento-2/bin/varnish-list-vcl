@@ -2,4 +2,4 @@
 TIME=$(date)
 echo "-------------------------"
 echo "vcl.list output at $TIME :"
-bin/varnish varnishadm vcl.list
+bin/varnish-notty varnishadm vcl.list

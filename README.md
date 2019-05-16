@@ -199,6 +199,7 @@ open https://magento2.test
 - `bin/varnish-apply-vcl`: Apply the specified vcl file with Varnish config (or default.vcl if no argument specified), with automated copying it from the ./src/var/ folder to the varnish container, also showing additional info about the list of loaded vcls and active vcl before and after execution of this command.
 - `bin/varnish-list-vcl`: Show info from varnish container with the list of loaded vlcs, and active vcl.
 - `bin/varnish-use-vcl`: Use the specified vlc (you should specify one of the names from the bin/varnish-list-vcl output - for example "boot") as active config for varnish container.
+- `bin/varnish-notty`: Run commands in the Varnish container with no TTY.
 ## Misc Info
 
 ### Database
