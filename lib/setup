@@ -163,7 +163,7 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
     RES=
     echo
     echo "Select the source of Magento source files:"
-    select OPTS in "Download from official repo" "Use downloaded zip archive" "Import existing project"; do
+    select OPTS in "Download from official repo" "Use downloaded zip-archive" "Import existing project"; do
         case ${OPTS} in
             "Download from official repo" ) RES=1; break;;
             "Use downloaded zip-archive" ) RES=2; break;;
