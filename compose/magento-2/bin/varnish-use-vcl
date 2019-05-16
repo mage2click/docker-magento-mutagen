@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+    echo "Please specify a name of loaded vcl from the list: "
+    bin/varnish-list-vcl
+    exit
+else
+    bin/varnish varnishadm vcl.use $1
+    bin/varnish-list-vcl
+fi

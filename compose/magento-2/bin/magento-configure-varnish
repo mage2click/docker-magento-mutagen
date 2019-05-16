@@ -1,5 +1,6 @@
 #!/bin/bash
 bin/clinotty bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/caching_application 2 > /dev/null
-bin/clinotty bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/varnish/access_list localhost,app > /dev/null
+bin/clinotty bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/varnish/access_list app > /dev/null
+bin/clinotty bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/varnish/backend_host app > /dev/null
 bin/clinotty bin/magento config:set --scope=default --scope-code=0 system/full_page_cache/varnish/backend_port 8000 > /dev/null
 bin/clinotty bin/magento setup:config:set --http-cache-hosts=varnish:80 > /dev/null
