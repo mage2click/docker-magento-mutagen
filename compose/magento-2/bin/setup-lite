@@ -78,6 +78,8 @@ bin/clinotty bin/magento setup:config:set --no-interaction --session-save=redis 
 
 echo "Enabling Varnish as Caching Application for Full Page Cache..."
 bin/magento-configure-varnish
+bin/magento-generate-vcl
+bin/varnish-apply-vcl
 
 echo "Clearing the cache for good measure..."
 bin/clinotty bin/magento cache:flush

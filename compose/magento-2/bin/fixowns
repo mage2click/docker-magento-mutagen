@@ -1,3 +1,3 @@
 #!/bin/bash
-echo "Correcting filesystem ownerships..."
+echo "Correcting filesystem ownerships for /var/www/... inside the phpfpm container"
 bin/rootnotty chown -R app:app /var/www/

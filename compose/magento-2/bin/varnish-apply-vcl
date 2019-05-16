@@ -1,0 +1,30 @@
+#!/bin/bash
+# List all applied VCLs to see which one is active
+bin/varnish-list-vcl
+
+# Generate a unique timestamp ID for this version of the VCL
+TIME=$(date +%s)
+
+# Copy $1 to container
+bin/varnish-put-vcl-to-container $1
+
+if [[ -z "$1" ]]; then
+    # Load the default file into memory
+    echo Loading defalut.vcl as default.vcl-${TIME}
+    bin/varnish varnishadm vcl.load default.vcl-${TIME} /usr/local/share/default.vcl
+
+    # Active this Varnish config
+    echo Activating default.vcl-${TIME}
+    bin/varnish varnishadm vcl.use default.vcl-${TIME}
+else
+    echo Loading ${1} as varnish_${TIME}
+    # Load the specified file into memory   return (pass)
+    bin/varnish varnishadm vcl.load varnish_${TIME} /usr/local/share/$1
+
+    # Active this Varnish config
+    echo Activating varnish_${TIME}
+    bin/varnish varnishadm vcl.use varnish_${TIME}
+fi
+
+# List all applied VCLs to see which one is active
+bin/varnish-list-vcl

@@ -1,0 +1,4 @@
+#!/bin/bash
+echo "Generating vcl config to var/default.vcl"
+bin/magento varnish:vcl:generate --access-list app --backend-host app --backend-port 8000 --output-file ./var/default.vcl
+bin/copyfromcontainer var
