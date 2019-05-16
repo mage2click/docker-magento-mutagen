@@ -46,8 +46,8 @@ for i in "$@"
             --magento-project=*) PROJECT="${i#*=}"; shift;;
             --magento-db=*) DB="${i#*=}"; shift;;
             --magento-version=*) VERSION="${i#*=}"; shift;;
-            --php-version=*) PHPVER="${i#*=}"; shift;;
-            --elasticsearch-version=*) ELASTICSEARCHVER="${i#*=}"; shift;;
+            --php-version=*) PHP_VER="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCH_VER="${i#*=}"; shift;;
 
             --elasticsearch) ELASTICSEARCH=1; shift;;
             --varnish) VARNISH=1; shift;;
@@ -60,7 +60,7 @@ for i in "$@"
         esac
     done
 
-if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
+if [[ -z "$@" ]] || [[ "$HELP" == "1" ]]; then
 
     print_header \
         'Mage2click' \
@@ -109,7 +109,7 @@ Flags:
     echo "$USAGE"
     exit
 
-elif [[ ${INTERACTIVE} == 1 ]]; then
+elif [[ "$INTERACTIVE" == "1" ]]; then
 
     print_header \
         'Mage2click' \
@@ -257,27 +257,27 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     echo "What PHP version to use?"
     select OPTS in "7.0" "7.1" "7.2" "7.3"; do
         case ${OPTS} in
-            "7.0" ) PHPVER='7.0'; break;;
-            "7.1" ) PHPVER='7.1'; break;;
-            "7.2" ) PHPVER='7.2'; break;;
-            "7.3" ) PHPVER='7.3'; break;;
+            "7.0" ) PHP_VER='7.0'; break;;
+            "7.1" ) PHP_VER='7.1'; break;;
+            "7.2" ) PHP_VER='7.2'; break;;
+            "7.3" ) PHP_VER='7.3'; break;;
         esac
     done </dev/tty
 
-    PHPVER=${PHPVER:-7.2}
+    PHP_VER=${PHP_VER:-7.2}
 
     if [[ ! -z ${ELASTICSEARCH} ]]; then
         echo
         echo "What Elasticsearch version to use?"
         select OPTS in "2" "5" "6"; do
             case ${OPTS} in
-                "2" ) ELASTICSEARCHVER='2'; break;;
-                "5" ) ELASTICSEARCHVER='5'; break;;
-                "6" ) ELASTICSEARCHVER='6'; break;;
+                "2" ) ELASTICSEARCH_VER='2'; break;;
+                "5" ) ELASTICSEARCH_VER='5'; break;;
+                "6" ) ELASTICSEARCH_VER='6'; break;;
             esac
         done </dev/tty
 
-        ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+        ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
     fi
 
     echo
@@ -329,13 +329,13 @@ else
     fi
 
     VERSION=${VERSION:-2.3.1}
-    PHPVER=${PHPVER:-7.2}
-    ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+    PHP_VER=${PHP_VER:-7.2}
+    ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
 
     VERSIONS=("7.0" "7.1" "7.2" "7.3")
-    if in_array VERSIONS "$PHPVER"; then
+    if in_array VERSIONS "$PHP_VER"; then
         echo
-        echo "$(tput setaf 1)Specified PHP version ($PHPVER) does not supported!"
+        echo "$(tput setaf 1)Specified PHP version ($PHP_VER) does not supported!"
         echo "Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3"
         tput sgr 0
         exit
@@ -343,9 +343,9 @@ else
 
     if [[ ! -z ${ELASTICSEARCH} ]]; then
         VERSIONS=("2" "5" "6")
-        if in_array VERSIONS "$ELASTICSEARCHVER"; then
+        if in_array VERSIONS "$ELASTICSEARCH_VER"; then
             echo
-            echo "$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCHVER) does not supported!"
+            echo "$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCH_VER) does not supported!"
             echo "Currently supported Elasticsearch versions: 2, 5 and 6"
             tput sgr 0
             exit
@@ -377,7 +377,7 @@ while [[ ! -z "$PORTS" ]]; do
         PORTS="$PORTS 9001,"
     fi
 
-    if [[ ! -z ${ELASTICSEARCH} ]]; then
+    if [[ ! -z "$ELASTICSEARCH" ]]; then
         if lsof -Pi :9200 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 9200,"
         fi
@@ -387,7 +387,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${VARNISH} ]]; then
+    if [[ ! -z "$VARNISH" ]]; then
         if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 8000,"
         fi
@@ -397,7 +397,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${MAILHOG} ]]; then
+    if [[ ! -z "$MAILHOG" ]]; then
         if lsof -Pi :1025 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 1025,"
         fi
@@ -407,7 +407,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${RABBITMQ} ]]; then
+    if [[ ! -z "$RABBITMQ" ]]; then
         if lsof -Pi :5672 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 5672,"
         fi
@@ -417,7 +417,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${PORTS} ]]; then
+    if [[ ! -z "$PORTS" ]]; then
         echo
         echo
         echo "$(tput setaf 1)[${PORTS%?} ]"
@@ -450,7 +450,7 @@ for x in compose/magento-2/* compose/magento-2/.[!.]* compose/magento-2/..?*; do
 done
 cd ../
 
-if [[ -z ${VARNISH} ]]; then
+if [[ -z "$VARNISH" ]]; then
     CONCAT="cat parts/app/default.yml"
 else
     CONCAT="cat parts/app/varnish.yml"
@@ -458,22 +458,22 @@ fi
 
 CONCAT="$CONCAT parts/db.yml parts/redis.yml"
 
-if [[ ! -z ${ELASTICSEARCH} ]]; then
-    CONCAT="$CONCAT parts/elasticsearch/$ELASTICSEARCHVER.yml"
+if [[ ! -z "$ELASTICSEARCH" ]]; then
+    CONCAT="$CONCAT parts/elasticsearch/$ELASTICSEARCH_VER.yml"
 fi
 
-if [[ -z ${MAILHOG} ]]; then
-    CONCAT="$CONCAT parts/phpfpm/$PHPVER.yml"
+if [[ -z "$MAILHOG" ]]; then
+    CONCAT="$CONCAT parts/phpfpm/$PHP_VER.yml"
 else
-    CONCAT="$CONCAT parts/phpfpm/$PHPVER-mailhog.yml parts/mailhog.yml"
+    CONCAT="$CONCAT parts/phpfpm/$PHP_VER-mailhog.yml parts/mailhog.yml"
 fi
 
-if [[ ! -z ${RABBITMQ} ]]; then
+if [[ ! -z "$RABBITMQ" ]]; then
     CONCAT="$CONCAT parts/rabbitmq.yml"
 fi
 
-if [[ ! -z ${CRON} ]]; then
-    CONCAT="$CONCAT parts/cron/$PHPVER.yml"
+if [[ ! -z "$CRON" ]]; then
+    CONCAT="$CONCAT parts/cron/$PHP_VER.yml"
 fi
 
 CMD=("$CONCAT parts/volumes.yml")
@@ -494,11 +494,11 @@ fi
 echo
 
 bin/setup/start \
-    --domain=${DOMAIN} \
+    ${DOMAIN:+ --domain=${DOMAIN}} \
     ${DB:+ --magento-db=${DB}} \
     ${COMPOSER:+ --composer} \
     ${ELASTICSEARCH:+ --elasticsearch} \
-    ${ELASTICSEARCHVER:+ --elasticsearch-version=${ELASTICSEARCHVER}} \
+    ${ELASTICSEARCH_VER:+ --elasticsearch-version=${ELASTICSEARCH_VER}} \
     ${VARNISH:+ --varnish} \
     ${MAILHOG:+ --mailhog} \
     ${RABBITMQ:+ --rabbitmq}

@@ -4,7 +4,7 @@ for i in "$@"
         case ${i} in
             --domain=*) DOMAIN="${i#*=}"; shift;;
             --magento-db=*) DB="${i#*=}"; shift;;
-            --elasticsearch-version=*) ELASTICSEARCHVER="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCH_VER="${i#*=}"; shift;;
 
             --composer) COMPOSER=1; shift;;
             --elasticsearch) ELASTICSEARCH=1; shift;;
@@ -17,7 +17,7 @@ for i in "$@"
     done
 
 DOMAIN=${DOMAIN:-magento2.test}
-ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
 
 docker-compose stop
 
@@ -137,7 +137,7 @@ bin/clinotty bin/magento deploy:mode:set developer
 
 if [[ ! -z "$ELASTICSEARCH" ]]; then
     echo "Enabling Elasticsearch as Search Engine..."
-    bin/setup/elasticsearch ${ELASTICSEARCHVER}
+    bin/setup/elasticsearch ${ELASTICSEARCH_VER}
 fi
 
 echo "Forcing deploy of static content to speed up initial requests..."
@@ -148,7 +148,7 @@ bin/setup/redis
 
 if [[ ! -z "$VARNISH" ]]; then
     echo "Enabling Varnish as Caching Application for Full Page Cache..."
-    bin/setup/varnish
+    bin/setup/varnish --configure --generate-vcl ---apply-vcl
 fi
 
 echo "Clearing the cache for good measure..."
