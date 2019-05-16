@@ -217,6 +217,20 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
         esac
     done </dev/tty
 
+    if [[ ! -z ${ELASTICSEARCH} ]]; then
+        echo
+        echo "What Elasticsearch version to use?"
+        select OPTS in "2" "5" "6"; do
+            case ${OPTS} in
+                "2" ) ELASTICSEARCH_VER='2'; break;;
+                "5" ) ELASTICSEARCH_VER='5'; break;;
+                "6" ) ELASTICSEARCH_VER='6'; break;;
+            esac
+        done </dev/tty
+
+        ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
+    fi
+
     echo
     echo "Use Varnish cache?"
     select OPTS in "Yes" "No"; do
@@ -265,20 +279,6 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
     done </dev/tty
 
     PHP_VER=${PHP_VER:-7.2}
-
-    if [[ ! -z ${ELASTICSEARCH} ]]; then
-        echo
-        echo "What Elasticsearch version to use?"
-        select OPTS in "2" "5" "6"; do
-            case ${OPTS} in
-                "2" ) ELASTICSEARCH_VER='2'; break;;
-                "5" ) ELASTICSEARCH_VER='5'; break;;
-                "6" ) ELASTICSEARCH_VER='6'; break;;
-            esac
-        done </dev/tty
-
-        ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
-    fi
 
     echo
     echo "Use \`composer install\` command during the setup process?"
