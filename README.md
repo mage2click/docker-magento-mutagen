@@ -194,6 +194,11 @@ open https://magento2.test
 - `bin/update`: Update the content of the bin folder and docker-compose.yml file with the latest changes from the master branch.
 - `bin/selfupdate`: Alias for bin/update.
 - `bin/self-update`: Alias for bin/update. 
+- `bin/magento-generate-vcl`: Generate the default.vcl file with the default Varnish config, save it to the var/default.vcl and copy from the phpfpm container to ./src/var/default.vcl .
+- `bin/varnish-put-vcl-to-container`: Copy the specified file (or default.vcl if no argument specified) from the ./src/var/ folder to the varnish container.
+- `bin/varnish-apply-vcl`: Apply the specified vcl file with Varnish config (or default.vcl if no argument specified), with automated copying it from the ./src/var/ folder to the varnish container, also showing additional info about the list of loaded vcls and active vcl before and after execution of this command.
+- `bin/varnish-list-vcl`: Show info from varnish container with the list of loaded vlcs, and active vcl.
+- `bin/varnish-use-vcl`: Use the specified vlc (you should specify one of the names from the bin/varnish-list-vcl output - for example "boot") as active config for varnish container.
 ## Misc Info
 
 ### Database
