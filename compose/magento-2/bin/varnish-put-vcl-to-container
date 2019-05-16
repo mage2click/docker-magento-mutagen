@@ -3,12 +3,12 @@ if [[ -z "$1" ]]; then
     #fix for 503 error https://www.sohaib.com/magento-2-12-varnish-error-503-backend-fetch-failed-solved-php-7-1-nginx-varnish-5-x/
     sed "-i" "" "-e" "s/\/pub\/health_check.php/\/health_check.php/g" "./src/var/default.vcl"
 
-    docker cp ./src/var/default.vcl $(docker-compose ps|grep varnish|awk '{print $1}'):/usr/local/share/
+    docker cp ./src/var/default.vcl $(docker-compose ps -q varnish|awk '{print $1}'):/usr/local/share/
     echo "Completed copying './src/var/default.vcl' file from host to varnish container"
 else
     #fix for 503 error https://www.sohaib.com/magento-2-12-varnish-error-503-backend-fetch-failed-solved-php-7-1-nginx-varnish-5-x/
     sed "-i" "" "-e" "s/\/pub\/health_check.php/\/health_check.php/g" "./src/var/$1"
 
-    docker cp ./src/var/$1 $(docker-compose ps|grep varnish|awk '{print $1}'):/usr/local/share/
+    docker cp ./src/var/$1 $(docker-compose ps -q varnish|awk '{print $1}'):/usr/local/share/
     echo "Completed copying './src/var/$1' file from host to varnish container"
 fi
