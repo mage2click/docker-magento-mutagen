@@ -2,9 +2,9 @@
 [ -z "$1" ] && echo "Please specify a directory or file to copy from container (ex. vendor, --all)" && exit
 
 if [ "$1" == "--all" ]; then
-  docker cp $(docker-compose ps|grep phpfpm|awk '{print $1}'):/var/www/html/./ src/
+  docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/./ src/
   echo "Completed copying all files from /var/www/html/ folder from the phpfpm container to ./src/ folder on the host"
 else
-  docker cp $(docker-compose ps|grep phpfpm|awk '{print $1}'):/var/www/html/$1 src/
+  docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/$1 src/
   echo "Completed copying /var/www/html/$1 from the phpfpm container to the ./src/$1 on the host"
 fi
