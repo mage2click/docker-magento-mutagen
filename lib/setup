@@ -360,58 +360,58 @@ while [[ ! -z "$PORTS" ]]; do
 
     PORTS=""
 
-    if lsof -Pi :80 -sTCP:LISTEN -t >/dev/null; then
+    if lsof -PiTCP:80 -sTCP:LISTEN -t >/dev/null; then
         PORTS="$PORTS 80,"
     fi
 
-    if lsof -Pi :443 -sTCP:LISTEN -t >/dev/null; then
+    if lsof -PiTCP:443 -sTCP:LISTEN -t >/dev/null; then
         PORTS="$PORTS 443,"
     fi
 
-    if lsof -Pi :3306 -sTCP:LISTEN -t >/dev/null; then
+    if lsof -PiTCP:3306 -sTCP:LISTEN -t >/dev/null; then
         PORTS="$PORTS 3306,"
     fi
 
-    if lsof -Pi :9001 -sTCP:LISTEN -t >/dev/null; then
+    if lsof -PiTCP:9001 -sTCP:LISTEN -t >/dev/null; then
         PORTS="$PORTS 9001,"
     fi
 
     if [[ ! -z "$ELASTICSEARCH" ]]; then
-        if lsof -Pi :9200 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:9200 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 9200,"
         fi
 
-        if lsof -Pi :9300 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:9300 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 9300,"
         fi
     fi
 
     if [[ ! -z "$VARNISH" ]]; then
-        if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:8000 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 8000,"
         fi
 
-        if lsof -Pi :6082 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:6082 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 6082,"
         fi
     fi
 
     if [[ ! -z "$MAILHOG" ]]; then
-        if lsof -Pi :1025 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:1025 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 1025,"
         fi
 
-        if lsof -Pi :8025 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:8025 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 8025,"
         fi
     fi
 
     if [[ ! -z "$RABBITMQ" ]]; then
-        if lsof -Pi :5672 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:5672 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 5672,"
         fi
 
-        if lsof -Pi :15672 -sTCP:LISTEN -t >/dev/null; then
+        if lsof -PiTCP:15672 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 15672,"
         fi
     fi
