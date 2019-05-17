@@ -4,8 +4,10 @@ for i in "$@"
         case ${i} in
             --domain=*) DOMAIN="${i#*=}"; shift;;
             --magento-db=*) DB="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCH_VER="${i#*=}"; shift;;
 
             --composer) COMPOSER=1; shift;;
+            --elasticsearch) ELASTICSEARCH=1; shift;;
             --varnish) VARNISH=1; shift;;
             --mailhog) MAILHOG=1; shift;;
             --rabbitmq) RABBITMQ=1; shift;;
@@ -14,7 +16,8 @@ for i in "$@"
         esac
     done
 
-DOMAIN=${1:-magento2.test}
+DOMAIN=${DOMAIN:-magento2.test}
+ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
 
 docker-compose stop
 
@@ -40,8 +43,8 @@ bin/copytocontainer --all
 bin/fixperms
 
 if hash composer 2>/dev/null; then
-    PUBLIC_KEY="$(composer config -gl | grep '\[http-basic.repo.magento.com.username\]' | cut -c40-)"
-    PRIVATE_KEY="$(composer config -gl | grep '\[http-basic.repo.magento.com.password\]' | cut -c40-)"
+    PUBLIC_KEY="$(composer config -gl | grep 'http-basic.repo.magento.com.username' | cut -f 2 -d ' ')"
+    PRIVATE_KEY="$(composer config -gl | grep 'http-basic.repo.magento.com.password' | cut -f 2 -d ' ')"
 fi
 
 echo
@@ -125,15 +128,17 @@ else
     bin/clinotty mysql -hdb -umagento -pmagento magento < "$DB"
 
     # Set base URLs to local environment URL:
-    bin/magento config:set web/secure/base_url "https://$DOMAIN/"
-    bin/magento config:set web/unsecure/base_url "https://$DOMAIN/"
+    bin/clinotty bin/magento config:set web/secure/base_url "https://$DOMAIN/"
+    bin/clinotty bin/magento config:set web/unsecure/base_url "https://$DOMAIN/"
 fi
 
 echo "Turning on developer mode..."
 bin/clinotty bin/magento deploy:mode:set developer
 
-echo "Enabling Elasticsearch 5 as Search Engine..."
-bin/setup/elasticsearch
+if [[ ! -z "$ELASTICSEARCH" ]]; then
+    echo "Enabling Elasticsearch as Search Engine..."
+    bin/setup/elasticsearch ${ELASTICSEARCH_VER}
+fi
 
 echo "Forcing deploy of static content to speed up initial requests..."
 bin/clinotty bin/magento setup:static-content:deploy -f
@@ -143,7 +148,7 @@ bin/setup/redis
 
 if [[ ! -z "$VARNISH" ]]; then
     echo "Enabling Varnish as Caching Application for Full Page Cache..."
-    bin/setup/varnish
+    bin/setup/varnish --configure --generate-vcl --apply-vcl
 fi
 
 echo "Clearing the cache for good measure..."

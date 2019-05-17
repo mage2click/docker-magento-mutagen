@@ -89,7 +89,8 @@ Script accepts also other parameters and flags to configure resulted Magento dev
 
 Parameters:  
 - `--domain=<domain>` Domain to use for the project, default is `magento2.test`.
-- `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1`, `7.2` and `7.3`.
+- `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1` and `7.2`.
+- `--elasticsearch-version=<version>` Elasticsearch version to use for the project, default is `6.7.2`. Currently supported Elasticsearch versions: `2.4`, `5.6` and `6.7.2`.
 - `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
 - `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional). If specified, `--magento-db` parameter is required as well.
 - `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional). If specified, `--magento-project` parameter is required as well.
@@ -151,7 +152,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
 - `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with the optional parameter `--domain=<domain>` (defaults to `magento2.test`) and optional `--composer` flag. Ex. `bin/setup/start --domain=magento2.test` 
 - `bin/setup/unzip`: Extract downloaded Magento zip-archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
-- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly. 
+- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
 
 ## Misc Info
 

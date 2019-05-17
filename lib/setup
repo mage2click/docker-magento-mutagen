@@ -46,9 +46,10 @@ for i in "$@"
             --magento-project=*) PROJECT="${i#*=}"; shift;;
             --magento-db=*) DB="${i#*=}"; shift;;
             --magento-version=*) VERSION="${i#*=}"; shift;;
-            --php-version=*) PHPVER="${i#*=}"; shift;;
-            --elasticsearch-version=*) ELASTICSEARCHVER="${i#*=}"; shift;;
+            --php-version=*) PHP_VER="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCH_VER="${i#*=}"; shift;;
 
+            --elasticsearch) ELASTICSEARCH=1; shift;;
             --varnish) VARNISH=1; shift;;
             --mailhog) MAILHOG=1; shift;;
             --rabbitmq) RABBITMQ=1; shift;;
@@ -59,7 +60,7 @@ for i in "$@"
         esac
     done
 
-if [[ -z "$@" ]] || [[ "${HELP}" == "1" ]]; then
+if [[ -z "$@" ]] || [[ "$HELP" == "1" ]]; then
 
     print_header \
         'Mage2click' \
@@ -81,10 +82,9 @@ Parameters:
 
   --domain=<domain>                 Domain to use for the project, default is magento2.test
   --php-version=<version>           PHP version to use for the project, default is 7.2
-                                    Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3
-  --elasticsearch-version=<version> Elasticsearch version to use for the project, default is 6
-                                    Currently supported Elasticsearch versions: 5.6 and 6
-                                    Note that Magento versions prior to 2.3.1 uses Elasticsearch 5.6
+                                    Currently supported PHP versions: 7.0, 7.1 and 7.2
+  --elasticsearch-version=<version> Elasticsearch version to use for the project, default is 6.7.2
+                                    Currently supported Elasticsearch versions: 2.4, 5.6 and 6.7.2
   --magento-archive=<path>          Full path to downloaded Magento zip-archive to use in setup (optional).
   --magento-project=<path>          Full path to the existing Magento project to use in setup (optional).
                                     If specified, --magento-db parameter is required as well.
@@ -96,6 +96,7 @@ Parameters:
 Flags:
 
   --composer                     Run composer install command during setup process.
+  --elasticsearch                Use Elasticsearch search engine.
   --varnish                      Use Varnish cache.
   --mailhog                      Use MailHog email testing tool.
   --rabbitmq                     Use RabbitMQ message-broker.
@@ -108,7 +109,7 @@ Flags:
     echo "$USAGE"
     exit
 
-elif [[ ${INTERACTIVE} == 1 ]]; then
+elif [[ "$INTERACTIVE" == "1" ]]; then
 
     print_header \
         'Mage2click' \
@@ -162,7 +163,7 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     RES=
     echo
     echo "Select the source of Magento source files:"
-    select OPTS in "Download from official repo" "Use downloaded zip archive" "Import existing project"; do
+    select OPTS in "Download from official repo" "Use downloaded zip-archive" "Import existing project"; do
         case ${OPTS} in
             "Download from official repo" ) RES=1; break;;
             "Use downloaded zip-archive" ) RES=2; break;;
@@ -208,6 +209,29 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
     echo "Select optional features for development environment:"
 
     echo
+    echo "Use Elasticsearch search engine?"
+    select OPTS in "Yes" "No"; do
+        case ${OPTS} in
+            "Yes" ) ELASTICSEARCH=1; break;;
+            "No" ) break;;
+        esac
+    done </dev/tty
+
+    if [[ ! -z ${ELASTICSEARCH} ]]; then
+        echo
+        echo "What Elasticsearch version to use?"
+        select OPTS in "2.4" "5.6" "6.7.2"; do
+            case ${OPTS} in
+                "2.4" ) ELASTICSEARCH_VER='2.4'; break;;
+                "5.6" ) ELASTICSEARCH_VER='5.6'; break;;
+                "6.7.2" ) ELASTICSEARCH_VER='6.7.2'; break;;
+            esac
+        done </dev/tty
+
+        ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
+    fi
+
+    echo
     echo "Use Varnish cache?"
     select OPTS in "Yes" "No"; do
         case ${OPTS} in
@@ -245,27 +269,15 @@ elif [[ ${INTERACTIVE} == 1 ]]; then
 
     echo
     echo "What PHP version to use?"
-    select OPTS in "7.0" "7.1" "7.2" "7.3"; do
+    select OPTS in "7.0" "7.1" "7.2"; do
         case ${OPTS} in
-            "7.0" ) PHPVER='7.0'; break;;
-            "7.1" ) PHPVER='7.1'; break;;
-            "7.2" ) PHPVER='7.2'; break;;
-            "7.3" ) PHPVER='7.3'; break;;
+            "7.0" ) PHP_VER='7.0'; break;;
+            "7.1" ) PHP_VER='7.1'; break;;
+            "7.2" ) PHP_VER='7.2'; break;;
         esac
     done </dev/tty
 
-    PHPVER=${PHPVER:-7.2}
-
-    echo
-    echo "What Elasticsearch version to use?"
-    select OPTS in "5.6 (for Magento versions prior to 2.3.1)" "6 (for Magento 2.3.1 and later)"; do
-        case ${OPTS} in
-            "5.6 (for Magento versions prior to 2.3.1)" ) ELASTICSEARCHVER='5.6'; break;;
-            "6 (for Magento 2.3.1 and later)" ) ELASTICSEARCHVER='6'; break;;
-        esac
-    done </dev/tty
-
-    ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+    PHP_VER=${PHP_VER:-7.2}
 
     echo
     echo "Use \`composer install\` command during the setup process?"
@@ -316,25 +328,27 @@ else
     fi
 
     VERSION=${VERSION:-2.3.1}
-    PHPVER=${PHPVER:-7.2}
-    ELASTICSEARCHVER=${ELASTICSEARCHVER:-6}
+    PHP_VER=${PHP_VER:-7.2}
+    ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
 
-    VERSIONS=("7.0" "7.1" "7.2" "7.3")
-    if in_array VERSIONS "$PHPVER"; then
+    VERSIONS=("7.0" "7.1" "7.2")
+    if in_array VERSIONS "$PHP_VER"; then
         echo
-        echo "$(tput setaf 1)Specified PHP version ($PHPVER) does not supported!"
-        echo "Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3"
+        echo "$(tput setaf 1)Specified PHP version ($PHP_VER) does not supported!"
+        echo "Currently supported PHP versions: 7.0, 7.1 and 7.2"
         tput sgr 0
         exit
     fi
 
-    VERSIONS=("5.6" "6")
-    if in_array VERSIONS "$ELASTICSEARCHVER"; then
-        echo
-        echo "$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCHVER) does not supported!"
-        echo "Currently supported Elasticsearch versions: 5.6 and 6"
-        tput sgr 0
-        exit
+    if [[ ! -z ${ELASTICSEARCH} ]]; then
+        VERSIONS=("2.4" "5.6" "6.7.2")
+        if in_array VERSIONS "$ELASTICSEARCH_VER"; then
+            echo
+            echo "$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCH_VER) does not supported!"
+            echo "Currently supported Elasticsearch versions: 2.4, 5.6 and 6.7.2"
+            tput sgr 0
+            exit
+        fi
     fi
 fi
 
@@ -362,15 +376,17 @@ while [[ ! -z "$PORTS" ]]; do
         PORTS="$PORTS 9001,"
     fi
 
-    if lsof -PiTCP:9200 -sTCP:LISTEN -t >/dev/null; then
-        PORTS="$PORTS 9200,"
+    if [[ ! -z "$ELASTICSEARCH" ]]; then
+        if lsof -PiTCP:9200 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 9200,"
+        fi
+
+        if lsof -PiTCP:9300 -sTCP:LISTEN -t >/dev/null; then
+            PORTS="$PORTS 9300,"
+        fi
     fi
 
-    if lsof -PiTCP:9300 -sTCP:LISTEN -t >/dev/null; then
-        PORTS="$PORTS 9300,"
-    fi
-
-    if [[ ! -z ${VARNISH} ]]; then
+    if [[ ! -z "$VARNISH" ]]; then
         if lsof -PiTCP:8000 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 8000,"
         fi
@@ -380,7 +396,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${MAILHOG} ]]; then
+    if [[ ! -z "$MAILHOG" ]]; then
         if lsof -PiTCP:1025 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 1025,"
         fi
@@ -390,7 +406,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${RABBITMQ} ]]; then
+    if [[ ! -z "$RABBITMQ" ]]; then
         if lsof -PiTCP:5672 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 5672,"
         fi
@@ -400,7 +416,7 @@ while [[ ! -z "$PORTS" ]]; do
         fi
     fi
 
-    if [[ ! -z ${PORTS} ]]; then
+    if [[ ! -z "$PORTS" ]]; then
         echo
         echo
         echo "$(tput setaf 1)[${PORTS%?} ]"
@@ -433,7 +449,7 @@ for x in compose/magento-2/* compose/magento-2/.[!.]* compose/magento-2/..?*; do
 done
 cd ../
 
-if [[ -z ${VARNISH} ]]; then
+if [[ -z "$VARNISH" ]]; then
     CONCAT="cat parts/app/default.yml"
 else
     CONCAT="cat parts/app/varnish.yml"
@@ -441,20 +457,22 @@ fi
 
 CONCAT="$CONCAT parts/db.yml parts/redis.yml"
 
-CONCAT="$CONCAT parts/elasticsearch/$ELASTICSEARCHVER.yml"
-
-if [[ -z ${MAILHOG} ]]; then
-    CONCAT="$CONCAT parts/phpfpm/$PHPVER.yml"
-else
-    CONCAT="$CONCAT parts/phpfpm/$PHPVER-mailhog.yml parts/mailhog.yml"
+if [[ ! -z "$ELASTICSEARCH" ]]; then
+    CONCAT="$CONCAT parts/elasticsearch/$ELASTICSEARCH_VER.yml"
 fi
 
-if [[ ! -z ${RABBITMQ} ]]; then
+if [[ -z "$MAILHOG" ]]; then
+    CONCAT="$CONCAT parts/phpfpm/$PHP_VER.yml"
+else
+    CONCAT="$CONCAT parts/phpfpm/$PHP_VER-mailhog.yml parts/mailhog.yml"
+fi
+
+if [[ ! -z "$RABBITMQ" ]]; then
     CONCAT="$CONCAT parts/rabbitmq.yml"
 fi
 
-if [[ ! -z ${CRON} ]]; then
-    CONCAT="$CONCAT parts/cron/$PHPVER.yml"
+if [[ ! -z "$CRON" ]]; then
+    CONCAT="$CONCAT parts/cron/$PHP_VER.yml"
 fi
 
 CMD=("$CONCAT parts/volumes.yml")
@@ -475,9 +493,11 @@ fi
 echo
 
 bin/setup/start \
-    --domain=${DOMAIN} \
+    ${DOMAIN:+ --domain=${DOMAIN}} \
     ${DB:+ --magento-db=${DB}} \
     ${COMPOSER:+ --composer} \
+    ${ELASTICSEARCH:+ --elasticsearch} \
+    ${ELASTICSEARCH_VER:+ --elasticsearch-version=${ELASTICSEARCH_VER}} \
     ${VARNISH:+ --varnish} \
     ${MAILHOG:+ --mailhog} \
-    ${RABBITMQ:+ --rabbitmq} \
+    ${RABBITMQ:+ --rabbitmq}
