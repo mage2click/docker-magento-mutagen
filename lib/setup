@@ -35,6 +35,9 @@ function in_array()
     return ${in}
 }
 
+# Implicit --help if no arguments are passed
+[[ -z "$@" ]] && HELP=1
+
 for i in "$@"
     do
         case ${i} in
