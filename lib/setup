@@ -42,7 +42,7 @@ for i in "$@"
     do
         case ${i} in
             -h|--help) HELP=1; break;;
-            -i|--interactive) INTERACTIVE=1; break;;
+            -i|--interactive) INTERACTIVE=1; shift; break;;
 
             --domain=*) DOMAIN="${i#*=}"; shift;;
             --magento-archive=*) ARCHIVE="${i#*=}"; shift;;
