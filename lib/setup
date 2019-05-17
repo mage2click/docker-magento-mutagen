@@ -60,7 +60,7 @@ for i in "$@"
         esac
     done
 
-if [[ -z "$@" ]] || [[ "$HELP" == "1" ]]; then
+if [[ ! -z "$@" ]] || [[ "$HELP" == "1" ]]; then
 
     print_header \
         'Mage2click' \
