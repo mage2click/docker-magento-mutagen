@@ -56,7 +56,9 @@ for i in "$@"
             --cron) CRON=1; shift;;
             --composer) COMPOSER=1; shift;;
 
-            *) ;;
+            *)
+                >&2 printf "\e[01;31mError: Unrecognized argument: %s\n" "${i}"
+                ;;
         esac
     done
 
