@@ -1,13 +1,15 @@
 #!/bin/bash
 echo
 printf "Fetching latest version..."
+rm -rf tmp-mage2click
 mkdir tmp-mage2click
 cd tmp-mage2click
 git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
 git checkout origin/master -- compose/magento-2
-yes | cp -Rf compose/magento-2/bin/* ../bin/ 2>/dev/null
+rm -rf ../bin
+cp -Rf compose/magento-2/bin ../
 cd ../
 rm -rf tmp-mage2click
 printf " DONE!"
