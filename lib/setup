@@ -35,11 +35,14 @@ function in_array()
     return ${in}
 }
 
+# Implicit --help if no arguments are passed
+[[ -z "$@" ]] && HELP=1
+
 for i in "$@"
     do
         case ${i} in
             -h|--help) HELP=1; break;;
-            -i|--interactive) INTERACTIVE=1; break;;
+            -i|--interactive) INTERACTIVE=1; shift; break;;
 
             --domain=*) DOMAIN="${i#*=}"; shift;;
             --magento-archive=*) ARCHIVE="${i#*=}"; shift;;
@@ -56,11 +59,13 @@ for i in "$@"
             --cron) CRON=1; shift;;
             --composer) COMPOSER=1; shift;;
 
-            *) ;;
+            *)
+                >&2 ERROR="$ERROR $i"
+                ;;
         esac
     done
 
-if [[ -z "$@" ]] || [[ "$HELP" == "1" ]]; then
+if [[ ! -z "$@" ]] || [[ "$HELP" == "1" ]]; then
 
     print_header \
         'Mage2click' \
@@ -69,6 +74,11 @@ if [[ -z "$@" ]] || [[ "$HELP" == "1" ]]; then
         '' \
         'https://mage2.click' \
         'https://github.com/mage2click/docker-magento-mutagen'
+
+    if [[ ! -z "$ERROR" ]]; then
+        echo
+        printf "\e[01;31mError: Unrecognized argument: %s\n\e[m" ${ERROR}
+    fi
 
     USAGE="
 Usage:
