@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 bin/clinotty bin/magento setup:config:set --no-interaction --cache-backend=redis \
                 --cache-backend-redis-server=redis --cache-backend-redis-db=0 > /dev/null
 
