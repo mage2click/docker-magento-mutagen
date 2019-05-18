@@ -149,7 +149,16 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
 - `bin/setup/start`: Run the Magento setup process to install Magento from the source code, with the optional parameter `--domain=<domain>` (defaults to `magento2.test`) and optional `--composer` flag. Ex. `bin/setup/start --domain=magento2.test` 
 - `bin/setup/unzip`: Extract downloaded Magento zip-archive to the `src` directory. Ex. `bin/setup/unzip /path/to/magento.zip`
-- `bin/setup/varnish` Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly 
+    #### Varnish:
+    - `bin/setup/varnish` Varnish-related configurations and VCL-related actions   
+        #### Flags: 
+        - `--configure`: Apply required settings to enable Varnish as Caching Application for Full Page Cache and handle cache invalidations correctly
+        - `--generate-vcl`: Generate the default.vcl file with the default Varnish config, save it to the var/default.vcl and copy from the phpfpm container to ./src/var/default.vcl .
+        - `--list-vcl`: Show info from varnish container with the list of loaded VCLs, and active vcl.
+        #### Parameters: 
+        - `--apply-vcl`: Apply the specified VCL file with Varnish config (or default.vcl if no argument specified), with automated copying it from the ./src/var/ folder to the varnish container, also showing additional info about the list of loaded VCLs and active VCL before and after execution of this command.
+        - `--copy-vcl`: Copy the specified file (or default.vcl if no argument specified) from the ./src/var/ folder to the varnish container. 
+        - `--use-vcl`: Use the specified VCL (you should specify one of the names from the bin/setup/varnish --list-vcl output - for example "boot") as active config for varnish container.
 
 ## Misc Info
 
@@ -265,7 +274,6 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 [MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
 
 ## TBD 
-- Easy switch between using or not using Varnish - currently you can use fully automated Varnish setup from our [feature/develop-varnish](https://github.com/mage2click/docker-magento-mutagen/tree/feature/develop-varnish) branch
 - n98-magerun2 tool installed out of the box  
 
-feel free to create new GitHub issue with feature request :) 
+feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
