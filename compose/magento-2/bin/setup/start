@@ -92,14 +92,14 @@ if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
         done </dev/tty
 
         if [[ "$RES" == "1" ]]; then
-            $(composer global config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}) > /dev/null
+            composer global config http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}" 2>/dev/null
         fi
     fi
     echo
 fi
 
 if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
-    bin/clinotty composer config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}
+    bin/clinotty composer config http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}"
 fi
 
 if [[ ! -z "$COMPOSER" ]]; then
