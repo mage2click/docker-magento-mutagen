@@ -125,7 +125,8 @@ if [[ -z "$DB" ]]; then
                     --use-rewrites=1
 else
     echo "Importing database..."
-    bin/clinotty mysql -hdb -umagento -pmagento magento < "$DB"
+    bin/clinotty bash -c 'LC_ALL=C sed -e '\''s/DEFINER[ ]*=[ ]*[^*]*\*/\*/'\'' \
+        | mysql -hdb -umagento -pmagento magento' < "$DB"
 
     # Set base URLs to local environment URL:
     bin/clinotty bin/magento config:set web/secure/base_url "https://$DOMAIN/" > /dev/null
