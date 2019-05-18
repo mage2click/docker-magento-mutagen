@@ -144,7 +144,7 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
             tput sgr 0
         else
             echo
-            echo "Domain $DOMAIN is already existed in /etc/hosts! Choose an option:"
+            echo "Domain $DOMAIN already exists in /etc/hosts! Choose an option:"
             select OPTS in "Proceed with this domain" "Specify new domain"; do
                 case ${OPTS} in
                     "Specify new domain" ) RES=1; break;;
