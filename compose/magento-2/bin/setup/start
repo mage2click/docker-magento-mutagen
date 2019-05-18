@@ -164,6 +164,9 @@ bin/mutagen start
 
 docker-compose restart app
 
+echo "Finalizing setup..."
+sleep 10 #Cooldown after nginx restart
+
 echo
 echo "$(tput setaf 2)#Docker #Magento #Mutagen development environment setup is complete!"
 tput sgr 0
