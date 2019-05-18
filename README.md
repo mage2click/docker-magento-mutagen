@@ -54,7 +54,7 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://hub.docker.com/search/?type=edition&offering=community).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition).](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
 
 This configuration has been tested on macOS.
 
