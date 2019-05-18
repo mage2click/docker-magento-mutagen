@@ -30,6 +30,7 @@ if [[ ! -z "$COMPOSER" ]]; then
     fi
 
     rm -rf src/vendor #Clear for step below
+    mkdir src/vendor #Empty vendor directory for bin/fixperms script
 fi
 
 docker-compose up -d
