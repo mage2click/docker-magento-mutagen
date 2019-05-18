@@ -43,8 +43,8 @@ bin/copytocontainer --all
 bin/fixperms
 
 if hash composer 2>/dev/null; then
-    PUBLIC_KEY="$(composer config -ng http-basic.repo.magento.com.username 2>/dev/null)"
-    PRIVATE_KEY="$(composer config -ng http-basic.repo.magento.com.password 2>/dev/null)"
+    PUBLIC_KEY="$(composer config -ng http-basic.repo.magento.com.username 2>/dev/null || true)"
+    PRIVATE_KEY="$(composer config -ng http-basic.repo.magento.com.password 2>/dev/null || true)"
 fi
 
 echo
