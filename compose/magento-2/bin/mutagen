@@ -1,0 +1,52 @@
+#!/bin/bash
+if [[ -z "$@" ]]; then
+echo "Usage:
+  bin/mutagen [command]
+  bin/mutagen [stop]
+  bin/mutagen [flush]
+
+Available Commands:
+  start       Start mutagen daemon and create sync sessions
+  stop        Terminate all active sync sessions and stop mutagen daemon
+  flush       Flush all synchronization sessions
+"
+elif [[ "$1" == "start" ]]; then
+    mutagen daemon start
+    # sync files from local to docker immediately,
+    # local is alpha here, so it will rewrite all your changes made on the docker side
+    mutagen create \
+        --default-file-mode-beta=0644 \
+        --default-directory-mode-beta=0755 \
+        --default-owner-beta=app \
+        --default-group-beta=app \
+        --sync-mode=two-way-resolved \
+        --ignore=/.idea \
+        --ignore=/bin \
+        --ignore=/generated \
+        --ignore=/pub/media/catalog/product \
+        --ignore=/pub/static \
+        --ignore=/var \
+        --ignore=/vendor \
+        --ignore=node_modules \
+        --ignore-vcs \
+        src docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html
+
+    # sync vendor folder from local to docker immediately,
+    # but keeping no-watch for docker side, so only "mutagen flush --all" will get the newest changes from the docker side (see bin/composer)
+    # please note that docker is alpha here,
+    # so it will rewrite your unsynced files on flush command in case of any issues with sync from local to docker
+    mutagen create \
+        --default-file-mode-alpha=0644 \
+        --default-directory-mode-alpha=0755 \
+        --default-owner-alpha=app \
+        --default-group-alpha=app \
+        --sync-mode=two-way-resolved \
+        --watch-mode-alpha=no-watch \
+        --ignore-vcs \
+        docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
+elif [[ "$1" == "stop" ]]; then
+    mutagen terminate -a
+    mutagen daemon stop
+elif [[ "$@" == "flush" ]]; then
+    mutagen flush --all
+fi

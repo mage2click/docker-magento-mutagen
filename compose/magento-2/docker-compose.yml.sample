@@ -1,15 +1,33 @@
-# Mage2click Docker Configuration for Magento 2 with Mutagen.io sync (https://github.com/mage2click/docker-magento-mutagen)
-# Version 1.0.0
+# Mage2click Docker Configuration for Magento 2 with Mutagen.io sync, Mailhog and Varnish (https://github.com/mage2click/docker-magento-mutagen)
+# Version 1.1.0
 
 version: "3"
 
 services:
 
+  proxy:
+    image: mage2click/magento-nginx:1.13
+    environment:
+      NGINX_TYPE: "proxy"
+    ports:
+      - "443:8443"
+    depends_on:
+      - varnish
+
+  varnish:
+    image: mage2click/magento-varnish:4.1
+    ports:
+      - "80:80"
+      - "6082:6082"
+    depends_on:
+      - app
+
   app:
     image: mage2click/magento-nginx:1.13
+    environment:
+      NGINX_TYPE: "under-proxy"
     ports:
-      - "80:8000"
-      - "443:8443"
+      - "8000:8000"
     depends_on:
       - db
       - phpfpm
@@ -46,6 +64,19 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  rabbitmq:
+    image: rabbitmq:3.7.14-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  cron:
+    image: mage2click/magento-php:7.1-fpm
+    user: root
+    command: /usr/local/bin/cronstart
+    tty: true
+    volumes: *appvolumes
 
 volumes:
   appdata:

@@ -1,4 +1,15 @@
 #!/bin/bash
+for i in "$@"
+    do
+        case ${i} in
+            -v=*) VERSION="${i#*=}"; shift;;
+            --version=*) VERSION="${i#*=}"; shift;;
+            *) ;;
+        esac
+    done
+
+VERSION=${VERSION:-master}
+
 echo
 printf "Fetching latest version..."
 rm -rf tmp-mage2click
@@ -7,7 +18,7 @@ cd tmp-mage2click
 git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
-git checkout origin/master -- compose/magento-2
+git checkout origin/${VERSION} -- compose/magento-2
 rm -rf ../bin
 cp -Rf compose/magento-2/bin ../
 cd ../
