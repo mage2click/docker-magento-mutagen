@@ -3,7 +3,7 @@ DOMAIN=${1:-magento2.test}
 VERSION=${2:-2.3.1}
 LITE=${3:-}
 
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/template|bash -s - magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/version/1.1.0-varnish/lib/template|bash -s - magento-2
 bin/download $VERSION
 
 while grep -qw "$DOMAIN" /etc/hosts || [ -z "$DOMAIN" ]; do

@@ -92,7 +92,7 @@ Same result as the one-liner above. Just replace `magento2.test` references with
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/version/1.1.0-varnish/lib/template | bash -s -- magento-2
 
 # Download the version of Magento you want to use with:
 bin/download 2.3.1
@@ -122,7 +122,7 @@ open https://magento2.test
 
 ```bash
 # Download the Docker Compose template:
-curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/feature/develop-varnish/lib/template | bash -s -- magento-2
+curl -s https://raw.githubusercontent.com/mage2click/docker-magento-mutagen/version/1.1.0-varnish/lib/template | bash -s -- magento-2
 
 # Remove existing src directory:
 rm -rf src
@@ -157,7 +157,7 @@ bin/restart
 open https://magento2.test
 ```
 
-> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/feature/develop-varnish/SETUP.md).
+> For more details on how everything works, see the extended [setup readme](https://github.com/mage2click/docker-magento-mutagen/blob/version/1.1.0-varnish/SETUP.md).
 
 ## Custom CLI Commands
 
@@ -307,10 +307,10 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 
 ## License
 
-[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/feature/develop-varnish/LICENSE.md)
+[MIT](https://github.com/mage2click/docker-magento-mutagen/blob/version/1.1.0-varnish/LICENSE.md)
 
 ## TBD 
-- Easy switch between using or not using Varnish - currently you can use fully automated Varnish setup from our [feature/develop-varnish](https://github.com/mage2click/docker-magento-mutagen/tree/feature/develop-varnish) branch
+- Easy switch between using or not using Varnish - currently you can use fully automated Varnish setup from our [version/1.1.0-varnish](https://github.com/mage2click/docker-magento-mutagen/tree/version/1.1.0-varnish) branch
 - n98-magerun2 tool installed out of the box  
 
 feel free to create new GitHub issue with feature request :) 
