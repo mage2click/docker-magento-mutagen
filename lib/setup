@@ -193,14 +193,27 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
             read -p "Full path to existing Magento project: " PROJECT </dev/tty
         done
 
-        read -p "Full path to database SQL dump file: " DB </dev/tty
+        RES=
+        echo
+        echo "Import existing Magento project SQL dump file or proceed with standard DB installation?"
+        select OPTS in "Import SQL dump file" "Standard DB installation"; do
+            case ${OPTS} in
+                "Import SQL dump file" ) RES=1; break;;
+                "Standard DB installation" ) break;;
+            esac
+        done </dev/tty
 
-        while [[ ! -f "$DB" ]]; do
-            echo "$(tput setaf 1)The specified path does not exist!"
-            tput sgr 0
+        if [[ ! -z "$RES" ]]; then
             echo
             read -p "Full path to database SQL dump file: " DB </dev/tty
-        done
+
+            while [[ ! -f "$DB" ]]; do
+                echo "$(tput setaf 1)The specified path does not exist!"
+                tput sgr 0
+                echo
+                read -p "Full path to database SQL dump file: " DB </dev/tty
+            done
+        fi
     elif [[ "$RES" == "2" ]]; then
         read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
 
