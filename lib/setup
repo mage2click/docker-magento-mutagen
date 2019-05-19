@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 function print_header()
 {
@@ -495,7 +496,7 @@ echo
 
 if [[ ! -z "$ARCHIVE" ]]; then
     bin/setup/unzip ${ARCHIVE}
-elif [[ ! -z "$PROJECT" ]] && [[ ! -z "$DB" ]]; then
+elif [[ ! -z "$PROJECT" ]]; then
     bin/setup/import ${PROJECT}
 else
     bin/setup/download ${VERSION}

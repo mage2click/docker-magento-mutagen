@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 for i in "$@"
     do
         case ${i} in
@@ -44,8 +46,8 @@ bin/copytocontainer --all
 bin/fixperms
 
 if hash composer 2>/dev/null; then
-    PUBLIC_KEY="$(composer config -gl | grep 'http-basic.repo.magento.com.username' | cut -f 2 -d ' ')"
-    PRIVATE_KEY="$(composer config -gl | grep 'http-basic.repo.magento.com.password' | cut -f 2 -d ' ')"
+    PUBLIC_KEY="$(composer config -ng http-basic.repo.magento.com.username 2>/dev/null || true)"
+    PRIVATE_KEY="$(composer config -ng http-basic.repo.magento.com.password 2>/dev/null || true)"
 fi
 
 echo
@@ -93,14 +95,14 @@ if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
         done </dev/tty
 
         if [[ "$RES" == "1" ]]; then
-            $(composer global config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}) > /dev/null
+            composer global config http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}" 2>/dev/null
         fi
     fi
     echo
 fi
 
 if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
-    bin/clinotty composer config http-basic.repo.magento.com ${PUBLIC_KEY} ${PRIVATE_KEY}
+    bin/clinotty composer config http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}"
 fi
 
 if [[ ! -z "$COMPOSER" ]]; then

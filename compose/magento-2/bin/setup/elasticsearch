@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 if [[ "$1" == "2" ]]; then
     bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
                 catalog/search/engine elasticsearch > /dev/null

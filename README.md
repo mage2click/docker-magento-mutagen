@@ -54,7 +54,7 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Community Edition](https://www.docker.com/community-edition#/download).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition).](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
 
 This configuration has been tested on macOS.
 
@@ -92,8 +92,8 @@ Parameters:
 - `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1` and `7.2`.
 - `--elasticsearch-version=<version>` Elasticsearch version to use for the project, default is `6.7.2`. Currently supported Elasticsearch versions: `2.4`, `5.6` and `6.7.2`.
 - `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
-- `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional). If specified, `--magento-db` parameter is required as well.
-- `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional). If specified, `--magento-project` parameter is required as well.
+- `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional).
+- `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional).
 - `--magento-version=<version>` Magento version to download from the official repository, default is `2.3.1`. If `--magento-archive` parameter is specified, this will be skipped.
 
 Flags:
