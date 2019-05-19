@@ -1,4 +1,5 @@
 <h1 align="center">mage2click/docker-magento-mutagen</h1> 
+<h2 align="center">We are not supporting this branch anymore, please see the latest updates in the master branch</h2>
 
 <div align="center">
   <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust" target="_blank">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
