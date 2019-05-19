@@ -42,6 +42,7 @@ elif [[ "$1" == "start" ]]; then
         --default-group-alpha=app \
         --sync-mode=two-way-resolved \
         --watch-mode-alpha=no-watch \
+        --symlink-mode=posix-raw \
         --ignore-vcs \
         docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
 elif [[ "$1" == "stop" ]]; then
