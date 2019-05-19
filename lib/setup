@@ -141,7 +141,7 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
     RES=
     while grep -qw "$DOMAIN" /etc/hosts || [[ -z "$DOMAIN" ]]; do
         if [[ -z "$DOMAIN" ]]; then
-            echo "$(tput setaf 1)Domain cannot be empty!"
+            echo "$(tput bold)$(tput setaf 1)Domain cannot be empty!"
             tput sgr 0
         else
             echo
@@ -187,25 +187,38 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
         read -p "Full path to existing Magento project: " PROJECT </dev/tty
 
         while [[ ! -d "$PROJECT" ]]; do
-            echo "$(tput setaf 1)The specified path does not exist!"
+            echo "$(tput bold)$(tput setaf 1)The specified path does not exist!"
             tput sgr 0
             echo
             read -p "Full path to existing Magento project: " PROJECT </dev/tty
         done
 
-        read -p "Full path to database SQL dump file: " DB </dev/tty
+        RES=
+        echo
+        echo "Import existing Magento project SQL dump file or proceed with standard DB installation?"
+        select OPTS in "Import SQL dump file" "Standard DB installation"; do
+            case ${OPTS} in
+                "Import SQL dump file" ) RES=1; break;;
+                "Standard DB installation" ) break;;
+            esac
+        done </dev/tty
 
-        while [[ ! -f "$DB" ]]; do
-            echo "$(tput setaf 1)The specified path does not exist!"
-            tput sgr 0
+        if [[ ! -z "$RES" ]]; then
             echo
             read -p "Full path to database SQL dump file: " DB </dev/tty
-        done
+
+            while [[ ! -f "$DB" ]]; do
+                echo "$(tput bold)$(tput setaf 1)The specified path does not exist!"
+                tput sgr 0
+                echo
+                read -p "Full path to database SQL dump file: " DB </dev/tty
+            done
+        fi
     elif [[ "$RES" == "2" ]]; then
         read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
 
         while [[ ! -f "$ARCHIVE" ]]; do
-            echo "$(tput setaf 1)The specified path does not exist!"
+            echo "$(tput bold)$(tput setaf 1)The specified path does not exist!"
             tput sgr 0
             echo
             read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
@@ -319,21 +332,21 @@ else
 
     if [[ ! -z "$ARCHIVE" ]] && [[ ! -f "$ARCHIVE" ]]; then
         echo
-        echo "$(tput setaf 1)Specified path to downloaded Magento zip-archive does not exist!"
+        echo "$(tput bold)$(tput setaf 1)Specified path to downloaded Magento zip-archive does not exist!"
         tput sgr 0
         exit
     fi
 
     if [[ ! -z "$PROJECT" ]] && [[ ! -d "$PROJECT" ]]; then
         echo
-        echo "$(tput setaf 1)Specified path to existing Magento project does not exist!"
+        echo "$(tput bold)$(tput setaf 1)Specified path to existing Magento project does not exist!"
         tput sgr 0
         exit
     fi
 
     if [[ ! -z "$DB" ]] && [[ ! -f "$DB" ]]; then
         echo
-        echo "$(tput setaf 1)Specified path to database SQL dump file does not exist!"
+        echo "$(tput bold)$(tput setaf 1)Specified path to database SQL dump file does not exist!"
         tput sgr 0
         exit
     fi
@@ -345,7 +358,7 @@ else
     VERSIONS=("7.0" "7.1" "7.2")
     if in_array VERSIONS "$PHP_VER"; then
         echo
-        echo "$(tput setaf 1)Specified PHP version ($PHP_VER) does not supported!"
+        echo "$(tput bold)$(tput setaf 1)Specified PHP version ($PHP_VER) does not supported!"
         echo "Currently supported PHP versions: 7.0, 7.1 and 7.2"
         tput sgr 0
         exit
@@ -355,7 +368,7 @@ else
         VERSIONS=("2.4" "5.6" "6.7.2")
         if in_array VERSIONS "$ELASTICSEARCH_VER"; then
             echo
-            echo "$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCH_VER) does not supported!"
+            echo "$(tput bold)$(tput setaf 1)Specified Elasticsearch version ($ELASTICSEARCH_VER) does not supported!"
             echo "Currently supported Elasticsearch versions: 2.4, 5.6 and 6.7.2"
             tput sgr 0
             exit
@@ -430,7 +443,7 @@ while [[ ! -z "$PORTS" ]]; do
     if [[ ! -z "$PORTS" ]]; then
         echo
         echo
-        echo "$(tput setaf 1)[${PORTS%?} ]"
+        echo "$(tput bold)$(tput setaf 1)[${PORTS%?} ]"
         tput sgr 0
         echo
         echo "Ports listed above are already allocated on the host machine."
