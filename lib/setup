@@ -518,7 +518,7 @@ echo
 
 bin/setup/start \
     ${DOMAIN:+ --domain=${DOMAIN}} \
-    ${DB:+ --magento-db=${DB}} \
+    ${DB:+ --magento-db="${DB}"} \
     ${COMPOSER:+ --composer} \
     ${ELASTICSEARCH:+ --elasticsearch} \
     ${ELASTICSEARCH_VER:+ --elasticsearch-version=${ELASTICSEARCH_VER}} \
