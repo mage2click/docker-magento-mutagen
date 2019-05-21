@@ -149,9 +149,9 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 
 - `bin/setup/elasticsearch`: Enable Elasticsearch as Search Engine (6.7.2 by default, see [Magento 2.3.1 Supported versions](https://devdocs.magento.com/guides/v2.3/config-guide/elasticsearch/es-overview.html#es-spt-versions) for more info).
     #### Flags:
-    - `2`: enable Elasticsearch 2.4
-    - `5`: enable Elasticsearch 5.6
-    - `6` or no flag: enable Elasticsearch 6.7.2
+    - `2.4`: enable Elasticsearch 2.4
+    - `5.6`: enable Elasticsearch 5.6
+    - `6.7.2` or no flag: enable Elasticsearch 6.7.2
     
 - `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
 - `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
