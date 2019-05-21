@@ -4,4 +4,7 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
-bin/cli node_modules/grunt/bin/grunt "$@"
+source env/db.env
+
+LC_ALL=C sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | docker-compose exec -T db \
+    mysql -u"${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}"

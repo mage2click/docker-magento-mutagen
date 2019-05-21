@@ -1,4 +1,9 @@
 #!/bin/bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
 if [[ -z "$@" ]]; then
     echo "Please specify a varnish command (ex. varnishstat) or --configure flag to configure varnish for Magento"
 else
