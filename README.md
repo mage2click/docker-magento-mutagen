@@ -90,7 +90,7 @@ Script accepts also other parameters and flags to configure resulted Magento dev
 Parameters:  
 - `--domain=<domain>` Domain to use for the project, default is `magento2.test`.
 - `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1` and `7.2`.
-- `--elasticsearch-version=<version>` Elasticsearch version to use for the project, default is `6.7.2`. Currently supported Elasticsearch versions: `2.4`, `5.6` and `6.7.2`.
+- `--elasticsearch-version=<version>` Elasticsearch version to use for the project, default is `6.7.2`. Currently supported Elasticsearch versions: `2.4`, `5.6` and `6.7.2`. All versions have the [analysis-phonetic](https://www.elastic.co/guide/en/elasticsearch/plugins/master/analysis-phonetic.html) plugin installed.
 - `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
 - `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional).
 - `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional).
@@ -146,7 +146,12 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 
 ## Setup and Configuration CLI Commands
 
-- `bin/setup/elasticsearch`: Enable Elasticsearch 5 as Search Engine.
+- `bin/setup/elasticsearch`: Enable Elasticsearch as Search Engine (6.7.2 by default, see [Magento 2.3.1 Supported versions](https://devdocs.magento.com/guides/v2.3/config-guide/elasticsearch/es-overview.html#es-spt-versions) for more info).
+    #### Flags:
+    - `2`: enable Elasticsearch 2.4
+    - `5`: enable Elasticsearch 5.6
+    - `6` or no flag: enable Elasticsearch 6.7.2
+    
 - `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
 - `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.

@@ -54,7 +54,7 @@ services:
     image: redis:5.0
 
   elasticsearch:
-    image: elasticsearch:5.6
+    image: mage2click/magento-elasticsearch:6.7.2
     ports:
       - "9200:9200"
       - "9300:9300"
