@@ -6,6 +6,7 @@
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-elasticsearch/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-elasticsearch.svg?label=elasticsearch%20docker%20pulls" alt="Docker Hub Pulls - Elasticsearch" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
   <a href="https://join.slack.com/t/magentocommeng/shared_invite/enQtNDUzMDg4Mzc4NTY3LWEyOThjMzY5Zjk2ZGVjZWZmNTU4ZjJkYmQzMWNjY2MwMzRlNDM0ODMyZTVmM2NjODIwOTNjZWQ4NTM2ZjU2YmE" target="_blank"><img src="https://img.shields.io/badge/chat-%23mutagen--sync%20in%20Slack-brightgreen.svg" alt="chat #mutagen-sync in Slack"/></a>
@@ -90,7 +91,7 @@ Script accepts also other parameters and flags to configure resulted Magento dev
 Parameters:  
 - `--domain=<domain>` Domain to use for the project, default is `magento2.test`.
 - `--php-version=<version>` PHP version to use for the project, default is `7.2`. Currently supported PHP versions: `7.0`, `7.1` and `7.2`.
-- `--elasticsearch-version=<version>` Elasticsearch version to use for the project, default is `6.7.2`. Currently supported Elasticsearch versions: `2.4`, `5.6` and `6.7.2`.
+- `--elasticsearch-version=<version>` Elasticsearch version to use for the project, default is `6.7.2`. Currently supported Elasticsearch versions: `2.4`, `5.6` and `6.7.2`. All versions have the [analysis-phonetic](https://www.elastic.co/guide/en/elasticsearch/plugins/master/analysis-phonetic.html) plugin installed.
 - `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
 - `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional).
 - `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional).
@@ -146,7 +147,12 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 
 ## Setup and Configuration CLI Commands
 
-- `bin/setup/elasticsearch`: Enable Elasticsearch 5 as Search Engine.
+- `bin/setup/elasticsearch`: Enable Elasticsearch as Search Engine (6.7.2 by default, see [Magento 2.3.1 Supported versions](https://devdocs.magento.com/guides/v2.3/config-guide/elasticsearch/es-overview.html#es-spt-versions) for more info).
+    #### Flags:
+    - `2.4`: enable Elasticsearch 2.4
+    - `5.6`: enable Elasticsearch 5.6
+    - `6.7.2` or no flag: enable Elasticsearch 6.7.2
+    
 - `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
 - `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.

@@ -19,7 +19,7 @@ for i in "$@"
     done
 
 DOMAIN=${DOMAIN:-magento2.test}
-ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6}
+ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
 
 docker-compose stop
 
