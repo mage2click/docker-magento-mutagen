@@ -4,5 +4,5 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
-bin/mutagen stop
+bin/mutagen stop || true    # Ignore exit code should mutagen already be stopped
 docker-compose stop
