@@ -1,4 +1,9 @@
 #!/bin/bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
 if [[ "$1" == "disable" ]]; then
   bin/cli sed -i -e 's/^zend_extension/\;zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
   bin/restart
