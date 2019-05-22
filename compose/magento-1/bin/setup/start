@@ -21,7 +21,7 @@ for i in "$@"
 DOMAIN=${DOMAIN:-magento2.test}
 ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
 
-#docker-compose stop
+docker-compose stop
 #
 ##if [[ ! -z "$COMPOSER" ]]; then
 ##    # get rid of vertex/module-tax, not required and causes checksum errors on composer install
