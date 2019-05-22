@@ -111,21 +111,22 @@ bin/fixperms
 #fi
 
 if [[ -z "$DB" ]]; then
-    bin/clinotty bin/magento setup:install \
-                    --db-host=db \
-                    --db-name=magento \
-                    --db-user=magento \
-                    --db-password=magento \
-                    --base-url=https://${DOMAIN}/ \
-                    --admin-firstname=John \
-                    --admin-lastname=Smith \
-                    --admin-email=john.smith@gmail.com \
-                    --admin-user=john.smith \
-                    --admin-password=password123 \
-                    --language=en_US \
-                    --currency=USD \
-                    --timezone=America/New_York \
-                    --use-rewrites=1
+ echo "No DB dump specified..."
+#    bin/clinotty bin/magento setup:install \
+#                    --db-host=db \
+#                    --db-name=magento \
+#                    --db-user=magento \
+#                    --db-password=magento \
+#                    --base-url=https://${DOMAIN}/ \
+#                    --admin-firstname=John \
+#                    --admin-lastname=Smith \
+#                    --admin-email=john.smith@gmail.com \
+#                    --admin-user=john.smith \
+#                    --admin-password=password123 \
+#                    --language=en_US \
+#                    --currency=USD \
+#                    --timezone=America/New_York \
+#                    --use-rewrites=1
 else
     echo "Importing database..."
     bin/clinotty bash -c 'LC_ALL=C sed -e '\''s/DEFINER[ ]*=[ ]*[^*]*\*/\*/'\'' \
