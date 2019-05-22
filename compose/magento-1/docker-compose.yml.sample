@@ -1,4 +1,4 @@
-# Mage2click Docker Configuration for Magento 2 with Mutagen.io sync, Mailhog and Varnish (https://github.com/mage2click/docker-magento-mutagen)
+# Mage2click Docker Configuration for Magento 1 with Mutagen.io sync, Mailhog and Varnish (https://github.com/mage2click/docker-magento-mutagen)
 # Version 2.*
 
 version: "3"
@@ -37,7 +37,7 @@ services:
       - sockdata:/sock
 
   phpfpm:
-    image: mage2click/magento-php:7.1-fpm-mailhog
+    image: mage2click/magento-php:5.6-fpm-tst
     depends_on:
       - db
     volumes: *appvolumes
@@ -72,7 +72,7 @@ services:
       - "15672:15672"
 
   cron:
-    image: mage2click/magento-php:7.1-fpm
+    image: mage2click/magento-php:5.6-fpm-tst
     user: root
     command: /usr/local/bin/cronstart
     tty: true

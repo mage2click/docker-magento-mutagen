@@ -1,0 +1,102 @@
+#!/bin/bash
+set -e
+#
+#for i in "$@"
+#    do
+#        case ${i} in
+#            --configure) CONFIGURE=1; shift;;
+#
+#            --generate-vcl) GENERATE_VCL=1; shift;;
+#            --list-vcl) LIST_VCL=1; shift;;
+#
+#            --apply-vcl=*) APPLY_VCL="${i#*=}"; shift;;
+#            --apply-vcl) APPLY_VCL=1; shift;;
+#
+#            --use-vcl=*) USE_VCL="${i#*=}"; shift;;
+#
+#            --copy-vcl=*) COPY_VCL="${i#*=}"; shift;;
+#            --copy-vcl) COPY_VCL=1; shift;;
+#
+#            *) ;;
+#        esac
+#    done
+#
+#if [[ ! -z "$LIST_VCL" ]]; then
+#    TIME=$(date)
+#    echo "-------------------------"
+#    echo "vcl.list output at $TIME:"
+#    docker-compose exec -T varnish varnishadm vcl.list
+#fi
+#
+#if [[ ! -z "$CONFIGURE" ]]; then
+#    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+#                    system/full_page_cache/caching_application 2 > /dev/null
+#
+#    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+#                    system/full_page_cache/varnish/access_list app > /dev/null
+#
+#    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+#                    system/full_page_cache/varnish/backend_host app > /dev/null
+#
+#    bin/clinotty bin/magento config:set --scope=default --scope-code=0 \
+#                    system/full_page_cache/varnish/backend_port 8000 > /dev/null
+#
+#    bin/clinotty bin/magento setup:config:set --http-cache-hosts=varnish:80 > /dev/null
+#fi
+#
+#if [[ ! -z "$GENERATE_VCL" ]]; then
+#    echo "Generating vcl config to var/default.vcl"
+#    bin/clinotty bin/magento  varnish:vcl:generate --access-list app --backend-host app \
+#                    --backend-port 8000 --output-file ./var/default.vcl
+#    bin/copyfromcontainer var
+#fi
+#
+#if [[ "$APPLY_VCL" == "1" ]]; then
+#    # List all applied VCLs to see which one is active
+#    bin/setup/varnish --list-vcl --copy-vcl
+#
+#    # Generate a unique timestamp ID for this version of the VCL
+#    TIME=$(date +%s)
+#
+#    # Load the default file into memory
+#    echo "Loading default.vcl as default.vcl-$TIME"
+#    docker-compose exec -T varnish varnishadm vcl.load default.vcl-${TIME} /usr/local/share/default.vcl
+#
+#    # Active this Varnish config
+#    echo "Activating default.vcl-$TIME"
+#    docker-compose exec -T varnish varnishadm vcl.use default.vcl-${TIME}
+#    bin/setup/varnish --list-vcl
+#elif [[ ! -z "$APPLY_VCL" ]]; then
+#    # List all applied VCLs to see which one is active
+#    bin/setup/varnish --list-vcl --copy-vcl=${APPLY_VCL}
+#
+#    # Generate a unique timestamp ID for this version of the VCL
+#    TIME=$(date +%s)
+#
+#    # Load the specified file into memory return (pass)
+#    echo "Loading $2 as varnish_$TIME"
+#    docker-compose exec -T varnish varnishadm vcl.load varnish_${TIME} /usr/local/share/$2
+#
+#    # Active this Varnish config
+#    echo "Activating varnish_${TIME}"
+#    docker-compose exec -T varnish varnishadm vcl.use varnish_${TIME}
+#    bin/setup/varnish --list-vcl
+#fi
+#
+#if [[ "$COPY_VCL" == "1" ]]; then
+#    #fix for 503 error https://www.sohaib.com/magento-2-12-varnish-error-503-backend-fetch-failed-solved-php-7-1-nginx-varnish-5-x/
+#    sed "-i" "" "-e" "s/\/pub\/health_check.php/\/health_check.php/g" ./src/var/default.vcl
+#
+#    echo "Copying ./src/var/default.vcl file from host to varnish container"
+#    docker cp ./src/var/default.vcl $(docker-compose ps -q varnish|awk '{print $1}'):/usr/local/share/
+#elif [[ ! -z "$COPY_VCL" ]]; then
+#    #fix for 503 error https://www.sohaib.com/magento-2-12-varnish-error-503-backend-fetch-failed-solved-php-7-1-nginx-varnish-5-x/
+#    sed "-i" "" "-e" "s/\/pub\/health_check.php/\/health_check.php/g" ./src/var/${COPY_VCL}
+#
+#    echo "Copying ./src/var/$COPY_VCL file from host to varnish container"
+#    docker cp ./src/var/${COPY_VCL} $(docker-compose ps -q varnish|awk '{print $1}'):/usr/local/share/
+#fi
+#
+#if [[ ! -z "$USE_VCL" ]]; then
+#    docker-compose exec -T varnish varnishadm vcl.use $1
+#fi

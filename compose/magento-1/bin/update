@@ -1,0 +1,33 @@
+#!/bin/bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
+for i in "$@"
+    do
+        case ${i} in
+            -v=*) VERSION="${i#*=}"; shift;;
+            --version=*) VERSION="${i#*=}"; shift;;
+            *) ;;
+        esac
+    done
+
+VERSION=${VERSION:-master}
+
+echo
+printf "Fetching latest version..."
+rm -rf tmp-mage2click
+mkdir tmp-mage2click
+cd tmp-mage2click
+git init -qqq
+git remote add origin https://github.com/mage2click/docker-magento-mutagen
+git fetch origin -qqq
+git checkout origin/${VERSION} -- compose/magento-1
+rm -rf ../bin
+cp -Rf compose/magento-1/bin ../
+cd ../
+rm -rf tmp-mage2click
+printf " DONE!"
+echo
+echo

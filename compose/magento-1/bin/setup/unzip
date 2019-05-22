@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+function spinner()
+{
+    local pid=$1
+    local delay=0.75
+    local spin='|/-\'
+    while [[ "$(ps a | awk '{print $1}' | grep ${pid})" ]]; do
+        local temp=${spin#?}
+        printf " [%c]  " "$spin"
+        local spin=${temp}${spin%"$temp"}
+        sleep ${delay}
+        printf "\b\b\b\b\b\b"
+    done
+    printf "    \b\b\b\b"
+}
+
+if [[ ! -z "$1" ]] && [[ -f $1 ]]; then
+    printf "Extracting files:"
+
+    (rm -r src && mkdir -p src && unzip -qq $1 -d src) & spinner $!
+
+    printf " Done!"
+    echo
+else
+    echo "Specified path to local Magento zip archive does not exists!"
+    exit
+fi

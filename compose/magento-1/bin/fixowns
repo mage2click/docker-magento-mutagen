@@ -1,0 +1,8 @@
+#!/bin/bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
+echo "Correcting filesystem ownerships for /var/www/ inside the phpfpm container..."
+bin/rootnotty chown -R app:app /var/www/

@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
+
+function remove_volumes()
+{
+    #Remove volumes
+    current_folder=${PWD##*/}
+    docker volume rm ${current_folder}_appdata
+    docker volume rm ${current_folder}_dbdata
+    docker volume rm ${current_folder}_sockdata
+}
+
+if [[ "$1" == "-v" ]] || [[ "$1" == "--volumes" ]]; then
+    remove_volumes
+elif [[ "$1" == "-a" ]] || [[ "$1" == "--all" ]]; then
+    docker-compose rm && remove_volumes
+else
+    #Remove stopped service containers.
+    docker-compose rm
+fi

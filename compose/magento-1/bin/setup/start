@@ -1,0 +1,186 @@
+#!/bin/bash
+set -e
+
+for i in "$@"
+    do
+        case ${i} in
+            --domain=*) DOMAIN="${i#*=}"; shift;;
+            --magento-db=*) DB="${i#*=}"; shift;;
+            --elasticsearch-version=*) ELASTICSEARCH_VER="${i#*=}"; shift;;
+
+            --composer) COMPOSER=1; shift;;
+            --elasticsearch) ELASTICSEARCH=1; shift;;
+            --varnish) VARNISH=1; shift;;
+            --mailhog) MAILHOG=1; shift;;
+            --rabbitmq) RABBITMQ=1; shift;;
+
+            *) ;;
+        esac
+    done
+
+DOMAIN=${DOMAIN:-magento2.test}
+ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
+
+#docker-compose stop
+#
+##if [[ ! -z "$COMPOSER" ]]; then
+##    # get rid of vertex/module-tax, not required and causes checksum errors on composer install
+##    # https://github.com/markshust/docker-magento/issues/135
+##    # prevent double or more insertion
+##    if ! grep -qF '"replace": { "vertex/module-tax": "*" }' src/composer.json; then
+##        sed -e 's/"conflict": {/"replace": { "vertex\/module-tax": "*" },\ "conflict": {/' src/composer.json > composer.json && mv composer.json src/composer.json
+##    fi
+##
+##    rm -rf src/vendor #Clear for step below
+##    mkdir src/vendor #Empty vendor directory for bin/fixperms script
+##fi
+#
+#docker-compose up -d
+#
+#sleep 1 #Ensure containers are started...
+
+#cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
+
+echo "Copying all files from host to the container..."
+bin/copytocontainer --all
+bin/fixperms
+
+#if hash composer 2>/dev/null; then
+#    PUBLIC_KEY="$(composer config -ng http-basic.repo.magento.com.username 2>/dev/null || true)"
+#    PRIVATE_KEY="$(composer config -ng http-basic.repo.magento.com.password 2>/dev/null || true)"
+#fi
+#
+#echo
+#echo "$(tput setaf 2)Authentication required for repo.magento.com"
+#tput sgr 0
+#if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
+#    echo
+#    echo "Use authentication information from the current composer config?"
+#    select OPTS in "Yes" "No"; do
+#        case ${OPTS} in
+#            "Yes" ) RES=1; break;;
+#            "No" ) break;;
+#        esac
+#    done </dev/tty
+#    echo
+#fi
+
+#if [[ -z "$RES" ]] || [[ -z "$PUBLIC_KEY" ]] && [[ -z "$PRIVATE_KEY" ]]; then
+#    echo
+#    read -p "Username: " PUBLIC_KEY </dev/tty
+#    while [[ -z "$PUBLIC_KEY" ]]; do
+#        echo "$(tput setaf 1)Username cannot be empty!"
+#        tput sgr 0
+#        echo
+#        read -p "Username: " PUBLIC_KEY </dev/tty
+#    done
+#
+#    echo
+#    read -p "Password: " PRIVATE_KEY </dev/tty
+#    while [[ -z "$PRIVATE_KEY" ]]; do
+#        echo "$(tput setaf 1)Password cannot be empty!"
+#        tput sgr 0
+#        echo
+#        read -p "Password: " PRIVATE_KEY </dev/tty
+#    done
+#
+#    if [[ -z "$RES" ]] && hash composer 2>/dev/null; then
+#        echo
+#        echo "Update the current composer config with provided authentication information?"
+#        select OPTS in "Yes" "No"; do
+#            case ${OPTS} in
+#                "Yes" ) RES=1; break;;
+#                "No" ) break;;
+#            esac
+#        done </dev/tty
+#
+#        if [[ "$RES" == "1" ]]; then
+#            composer global config http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}" 2>/dev/null
+#        fi
+#    fi
+#    echo
+#fi
+#
+#if [[ -n "$PUBLIC_KEY" ]] && [[ -n "$PRIVATE_KEY" ]]; then
+#    bin/clinotty composer config http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}"
+#fi
+#
+#if [[ ! -z "$COMPOSER" ]]; then
+#    echo "Forcing reinstall of composer deps to ensure perms & reqs..."
+#    bin/clinotty composer install
+#fi
+
+if [[ -z "$DB" ]]; then
+    bin/clinotty bin/magento setup:install \
+                    --db-host=db \
+                    --db-name=magento \
+                    --db-user=magento \
+                    --db-password=magento \
+                    --base-url=https://${DOMAIN}/ \
+                    --admin-firstname=John \
+                    --admin-lastname=Smith \
+                    --admin-email=john.smith@gmail.com \
+                    --admin-user=john.smith \
+                    --admin-password=password123 \
+                    --language=en_US \
+                    --currency=USD \
+                    --timezone=America/New_York \
+                    --use-rewrites=1
+else
+    echo "Importing database..."
+    bin/clinotty bash -c 'LC_ALL=C sed -e '\''s/DEFINER[ ]*=[ ]*[^*]*\*/\*/'\'' \
+        | mysql -hdb -umagento -pmagento magento' < "$DB"
+
+    # Set base URLs to local environment URL:
+#    bin/clinotty bin/magento config:set web/secure/base_url "https://$DOMAIN/" > /dev/null
+#    bin/clinotty bin/magento config:set web/unsecure/base_url "https://$DOMAIN/" > /dev/null
+fi
+
+#echo "Turning on developer mode..."
+#bin/clinotty bin/magento deploy:mode:set developer
+
+if [[ ! -z "$ELASTICSEARCH" ]]; then
+    echo "TBD Enabling Elasticsearch as Search Engine..."
+    #bin/setup/elasticsearch ${ELASTICSEARCH_VER}
+fi
+
+#echo "Forcing deploy of static content to speed up initial requests..."
+#bin/clinotty bin/magento setup:static-content:deploy -f
+
+echo "TBD: Enabling Redis for Backend Cache, Page Cache, and Session..."
+#bin/setup/redis
+
+if [[ ! -z "$VARNISH" ]]; then
+    echo "TBD: Enabling Varnish as Caching Application for Full Page Cache..."
+#    bin/setup/varnish --configure --generate-vcl --apply-vcl
+fi
+
+#echo "Clearing the cache for good measure..."
+#bin/clinotty bin/magento cache:flush
+
+#echo "Copying files from container to host after install..."
+#bin/copyfromcontainer app
+#bin/copyfromcontainer vendor
+
+echo "Starting mutagen sync for files from host to container..."
+bin/mutagen start
+
+docker-compose restart app
+
+echo "Finalizing setup..."
+sleep 10 #Cooldown after nginx restart
+
+echo
+echo "$(tput setaf 2)#Docker #Magento #Mutagen development environment setup is complete!"
+tput sgr 0
+echo
+
+if [[ ! -z "$MAILHOG" ]]; then
+    echo "Mailhog web UI available at http://${DOMAIN}:8025"
+fi
+
+if [[ ! -z "$RABBITMQ" ]]; then
+    echo "RabbitMQ Management panel available at http://${DOMAIN}:15672"
+fi
+
+echo "You may now access your Magento instance at https://${DOMAIN}"

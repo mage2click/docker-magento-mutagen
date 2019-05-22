@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+
+  app:
+    image: mage2click/magento-nginx:1.13
+    environment:
+      NGINX_TYPE: "under-proxy"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - phpfpm
+    volumes: &appvolumes
+      - ~/.composer:/var/www/.composer:delegated
+      - appdata:/var/www/html
+      - sockdata:/sock
+
+  proxy:
+    image: mage2click/magento-nginx:1.13
+    environment:
+      NGINX_TYPE: "proxy"
+    ports:
+      - "443:8443"
+    depends_on:
+      - varnish
+
+  varnish:
+    image: mage2click/magento-varnish:4.1
+    ports:
+      - "80:80"
+      - "6082:6082"
+    depends_on:
+      - app
