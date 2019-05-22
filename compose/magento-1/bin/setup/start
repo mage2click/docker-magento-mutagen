@@ -35,9 +35,9 @@ ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
 ##    mkdir src/vendor #Empty vendor directory for bin/fixperms script
 ##fi
 #
-#docker-compose up -d
-#
-#sleep 1 #Ensure containers are started...
+docker-compose up -d
+
+sleep 1 #Ensure containers are started...
 
 #cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
 
