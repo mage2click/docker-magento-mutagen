@@ -457,7 +457,7 @@ cd tmp-mage2click
 git init -qqq
 git remote add origin https://github.com/mage2click/docker-magento-mutagen
 git fetch origin -qqq
-git checkout origin/master -- compose/magento-1
+git checkout origin/feature/magento-1 -- compose/magento-1
 for x in compose/magento-1/* compose/magento-1/.[!.]* compose/magento-1/..?*; do
   if [[ -e "$x" ]]; then mv -- "$x" ../; fi
 done
