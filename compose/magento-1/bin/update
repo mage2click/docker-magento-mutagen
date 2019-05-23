@@ -13,7 +13,7 @@ for i in "$@"
         esac
     done
 
-VERSION=${VERSION:-master}
+VERSION=${VERSION:-feature/magento-1}
 
 echo
 printf "Fetching latest version..."
