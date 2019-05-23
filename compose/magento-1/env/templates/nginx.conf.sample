@@ -1,0 +1,79 @@
+# Based on gwillem/magento-nginx.conf - https://gist.github.com/gwillem/cd5ae6845fa33aa0d481
+
+root /var/www/html/;
+
+# Denied locations require a "^~" to prevent regexes (such as the PHP handler below) from matching
+# http://nginx.org/en/docs/http/ngx_http_core_module.html#location
+location ^~ /app/                       { return 403; }
+location ^~ /includes/                  { return 403; }
+location ^~ /media/downloadable/        { return 403; }
+location ^~ /pkginfo/                   { return 403; }
+location ^~ /report/config.xml          { return 403; }
+location ^~ /var/                       { return 403; }
+location ^~ /lib/                       { return 403; }
+location ^~ /dev/                       { return 403; }
+location ^~ /RELEASE_NOTES.txt          { return 403; }
+location ^~ /downloader/pearlib         { return 403; }
+location ^~ /downloader/template        { return 403; }
+location ^~ /downloader/Maged           { return 403; }
+location ~* ^/errors/.+\.xml            { return 403; }
+
+location ~* /rss/order/new              { return 403; }
+location ~* /rss/catalog/notifystock    { return 403; }
+location ~* /rss/catalog/review         { return 403; }
+
+# Skip .git, .htpasswd etc
+location ~ /\. { return 404; }
+
+location / {
+        index index.html index.php; ## Allow a static html file to be shown first
+        try_files $uri $uri/ @handler; ## If missing pass the URI to Magento's front handler
+        expires 30d; ## Assume all files are cachable
+}
+
+## Order IS important! this is required BEFORE the PHP regex
+## Allow PHP scripts in skin and JS, but render static 404 pages when skin or js file is missing
+## Magento has RewriteCond %{REQUEST_URI} !^/(media|skin|js)/ in default htaccess
+location ~ ^/(skin|js)/ {
+    try_files $uri $uri/ =404;
+    expires 30d;
+}
+# Disallow PHP scripts in /media/
+# Also render static 404 pages for missing media
+location ~ ^/media/ {
+    location ~ \.php$ {
+        return 403;
+    }
+    try_files $uri $uri/ =404;
+    expires 30d;
+}
+
+location @handler {
+    rewrite / /index.php;
+}
+
+location ~ .php/ {
+    rewrite ^(.*.php)/ $1 last;
+}
+
+# PHP entry point for main application
+location ~ ^/(index|get|static|errors/report|errors/404|errors/503)\.php$ {
+    include fastcgi_params;
+    # Mage MAGE_RUN_CODE and MAGE_RUN_TYPE and
+    #fastcgi_param MAGE_RUN_CODE 'REPLACE-with-storecode';
+    #fastcgi_param MAGE_RUN_TYPE 'REPLACE-with-runtype';
+    fastcgi_param MAGE_IS_DEVELOPER_MODE "1";
+    fastcgi_param DOCUMENT_ROOT $realpath_root;
+
+    try_files $uri =404;
+    fastcgi_pass   unix:/sock/docker.sock;
+    fastcgi_buffers 1024 4k;
+
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+}
+
+
+rewrite ^/minify/([0-9]+)(/.*.(js|css))$ /lib/minify/m.php?f=$2&d=$1 last;
+rewrite ^/skin/m/([0-9]+)(/.*.(js|css))$ /lib/minify/m.php?f=$2&d=$1 last;
+location /lib/minify/                   { allow all; }

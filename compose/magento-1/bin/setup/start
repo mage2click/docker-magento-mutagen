@@ -39,7 +39,7 @@ docker-compose up -d
 
 sleep 1 #Ensure containers are started...
 
-#cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
+cp templates/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
 
 echo "Copying all files from host to the container..."
 bin/copytocontainer --all
