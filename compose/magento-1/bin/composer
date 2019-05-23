@@ -5,4 +5,4 @@ set -eu
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
 bin/cli composer "$@"
-bin/mutagen flush
+#bin/mutagen flush

@@ -37,16 +37,16 @@ elif [[ "$1" == "start" ]]; then
     # but keeping no-watch for docker side, so only "mutagen flush --all" will get the newest changes from the docker side (see bin/composer)
     # please note that docker is alpha here,
     # so it will rewrite your unsynced files on flush command in case of any issues with sync from local to docker
-    mutagen create \
-        --default-file-mode-alpha=0644 \
-        --default-directory-mode-alpha=0755 \
-        --default-owner-alpha=app \
-        --default-group-alpha=app \
-        --sync-mode=two-way-resolved \
-        --watch-mode-alpha=no-watch \
-        --symlink-mode=posix-raw \
-        --ignore-vcs \
-        docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
+#    mutagen create \
+#        --default-file-mode-alpha=0644 \
+#        --default-directory-mode-alpha=0755 \
+#        --default-owner-alpha=app \
+#        --default-group-alpha=app \
+#        --sync-mode=two-way-resolved \
+#        --watch-mode-alpha=no-watch \
+#        --symlink-mode=posix-raw \
+#        --ignore-vcs \
+#        docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
 elif [[ "$1" == "stop" ]]; then
     mutagen terminate -a
     mutagen daemon stop
