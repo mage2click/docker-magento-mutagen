@@ -1,6 +1,6 @@
 
   phpfpm:
-    image: mage2click/magento-php-versions:5.6-fpm-tst
+    image: mage2click/magento-php-versions:5.6-fpm
     depends_on:
       - db
     ports:
