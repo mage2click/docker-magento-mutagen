@@ -3,4 +3,4 @@ set -e
 
 bin/clinotty curl -O https://files.magerun.net/n98-magerun.phar
 bin/clinotty chmod +x ./n98-magerun.phar
-bin/clinotty mv ./n98-magerun.phar /usr/local/bin/
+bin/rootnotty mv ./n98-magerun.phar /usr/local/bin/
