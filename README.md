@@ -128,12 +128,14 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/fixperms`: This will fix filesystem permissions within the container.
 - `bin/grunt`: Run the grunt binary. Note that this runs the version from the node_modules directory for project version parity. Ex. `bin/grunt exec`
 - `bin/magento`: Run the Magento CLI. Ex: `bin/magento cache:flush`
+- `bin/mr`: Run [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) inside the php-fpm container.
 - `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush`. Ex. `bin/mutagen start`
 - `bin/node`: Run the node binary. Ex. `bin/node --version`
 - `bin/npm`: Run the npm binary. Ex. `bin/npm install`
 - `bin/redis`: Run a command from the redis container. Ex `bin/redis redis-cli monitor`
 - `bin/remove`: Remove all stopped service containers. Accepts params `-v` or `--volumes` to remove volumes.
-- `bin/restart`: Stop and then start all containers.
+- `bin/restart`: Restarts all service containers. If one or more service names specified, only corresponded service containers will be restarted.
+- `bin/restart-nginx`: Restart the app container (nginx) to apply new changes to nginx.conf files (src/nginx.conf).
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
 - `bin/self-update`: Alias for bin/update.
@@ -144,8 +146,6 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/update`: Update the contents of the bin folder with the latest changes from the master branch.
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`.
-- `bin/restart-nginx`: Restart the app container (nginx) to apply new changes to nginx.conf files (src/nginx.conf).
-- `bin/mr`: Run [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) inside the php-fpm container.
 
 ## Setup and Configuration CLI Commands
 
