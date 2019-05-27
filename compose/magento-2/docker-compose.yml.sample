@@ -32,7 +32,6 @@ services:
       - db
       - phpfpm
     volumes: &appvolumes
-      - ~/.composer:/var/www/.composer:delegated
       - appdata:/var/www/html
       - sockdata:/sock
 
