@@ -1,6 +1,6 @@
 
   cron:
-    image: mage2click/magento-php:7.1-fpm
+    image: mage2click/magento-php-versions:7.1-fpm
     user: root
     command: /usr/local/bin/cronstart
     tty: true

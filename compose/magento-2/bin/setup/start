@@ -165,7 +165,7 @@ bin/copyfromcontainer vendor
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen start
 
-docker-compose restart app
+bin/restart-nginx
 
 echo "Finalizing setup..."
 sleep 10 #Cooldown after nginx restart
