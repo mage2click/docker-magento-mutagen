@@ -4,5 +4,11 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
-bin/stop
-bin/start
+if [[ -z "$@" ]]; then
+    docker-compose restart
+elif [[ ! "$(docker-compose ps -q "$@")" ]]; then
+    echo "Available services:"
+    docker-compose ps --services
+else
+    docker-compose restart "$@"
+fi
