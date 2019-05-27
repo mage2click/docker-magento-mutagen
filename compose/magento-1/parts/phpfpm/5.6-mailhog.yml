@@ -1,0 +1,8 @@
+
+  phpfpm:
+    image: mage2click/magento-php-versions:5.6-fpm-mailhog
+    depends_on:
+      - db
+    ports:
+      - "9001:9001"
+    volumes: *appvolumes
