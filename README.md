@@ -4,7 +4,7 @@
   <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust" target="_blank">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
   <a href="https://github.com/magento/magento2" target="_blank"><img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true" alt="Supported Magento Versions" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
-  <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-php-versions/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php-versions.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-elasticsearch/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-elasticsearch.svg?label=elasticsearch%20docker%20pulls" alt="Docker Hub Pulls - Elasticsearch" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
@@ -34,16 +34,16 @@ View Dockerfiles:
   - 1.13
       - [`latest`, `1.13`](https://github.com/mage2click/magento-nginx/tree/1.13)
 
-- [mage2click/magento-php (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php//)
+- [mage2click/magento-php-versions (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php-versions/)
   - 7.2
-      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.2-fpm-mailhog)
-      - [`7.2-fpm`](https://github.com/mage2click/magento-php/tree/7.2-fpm) 
+      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.2/official/fpm-mailhog)
+      - [`7.2-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.2/official/fpm) 
   - 7.1
-      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
-      - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
+      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.1/official/fpm-mailhog)
+      - [`7.1-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.1/official/fpm)
   - 7.0
-      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.0-fpm-mailhog)
-      - [`7.0-fpm`](https://github.com/mage2click/magento-php/tree/7.0-fpm)
+      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm-mailhog)
+      - [`7.0-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm)
 
 ## Usage
 
@@ -230,8 +230,8 @@ For more information about Redis usage with Magento, see the <a href="https://de
 3.  Then, open `PHPStorm > Preferences > Languages & Frameworks > PHP` and configure:
 
     * `CLI Interpreter`
-        * Create a new interpreter and specify `From Docker`, and name it `mage2click/magento-php:7-2-fpm-mailhog`.
-        * Choose `Docker`, then select the `mage2click/magento-php:7-2-fpm-mailhog` image name, and set the `PHP Executable` to `php`.
+        * Create a new interpreter and specify `From Docker`, and name it (for example `mage2click/magento-php-versions:7-2-fpm-mailhog`).
+        * Choose `Docker`, then select the `mage2click/magento-php-versions:7-2-fpm-mailhog` image name provided in example above, and set the `PHP Executable` to `php`.
 
     * `Path mappings`
         * Don't do anything here as the next `Docker container` step will automatically setup a path mapping from `/var/www/html` to `./src`.
