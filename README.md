@@ -174,7 +174,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 
 ### Database
 
-The hostname of each service is the name of the service within the `docker-compose.yml` file. So for example, MySQL's hostname is `db` (not `localhost`) when accessing it from within a Docker container. Elasticsearch's hostname is `elasticsearch`.
+The hostname of each service is the name of the service within the `docker-compose.yml` file. So for example, MySQL's (based on [MariaDB:10.2](https://mariadb.com/kb/en/library/changes-improvements-in-mariadb-102/) [Docker image](https://hub.docker.com/_/mariadb)) hostname is `db` (not `localhost`) when accessing it from within a Docker container. Elasticsearch's hostname is `elasticsearch`.
 
 Here's an example of how to connect to the MySQL cli tool of the Docker instance:
 
