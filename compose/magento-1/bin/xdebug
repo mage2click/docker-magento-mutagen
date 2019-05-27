@@ -6,11 +6,11 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
 if [[ "$1" == "disable" ]]; then
   bin/cli sed -i -e 's/^zend_extension/\;zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-  docker-compose restart phpfpm
+  bin/restart phpfpm
   echo "Xdebug has been disabled"
 elif [[ "$1" == "enable" ]]; then
   bin/cli sed -i -e 's/^\;zend_extension/zend_extension/g' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-  docker-compose restart phpfpm
+  bin/restart phpfpm
   echo "Xdebug has been enabled"
 else
   echo "Please specify either 'enable' or 'disable' as an argument"
