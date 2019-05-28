@@ -1,6 +1,6 @@
 
   phpfpm:
-    image: mage2click/magento-php:7.1-fpm-mailhog
+    image: mage2click/magento-php-versions:7.1-fpm-mailhog
     depends_on:
       - db
     ports:

@@ -4,7 +4,7 @@
   <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust" target="_blank">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
   <a href="https://github.com/magento/magento2" target="_blank"><img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true" alt="Supported Magento Versions" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
-  <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-php-versions/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php-versions.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-elasticsearch/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-elasticsearch.svg?label=elasticsearch%20docker%20pulls" alt="Docker Hub Pulls - Elasticsearch" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
@@ -34,16 +34,16 @@ View Dockerfiles:
   - 1.13
       - [`latest`, `1.13`](https://github.com/mage2click/magento-nginx/tree/1.13)
 
-- [mage2click/magento-php (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php//)
+- [mage2click/magento-php-versions (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php-versions/)
   - 7.2
-      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.2-fpm-mailhog)
-      - [`7.2-fpm`](https://github.com/mage2click/magento-php/tree/7.2-fpm) 
+      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.2/official/fpm-mailhog)
+      - [`7.2-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.2/official/fpm) 
   - 7.1
-      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
-      - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
+      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.1/official/fpm-mailhog)
+      - [`7.1-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.1/official/fpm)
   - 7.0
-      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.0-fpm-mailhog)
-      - [`7.0-fpm`](https://github.com/mage2click/magento-php/tree/7.0-fpm)
+      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm-mailhog)
+      - [`7.0-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm)
 
 ## Usage
 
@@ -128,12 +128,14 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/fixperms`: This will fix filesystem permissions within the container.
 - `bin/grunt`: Run the grunt binary. Note that this runs the version from the node_modules directory for project version parity. Ex. `bin/grunt exec`
 - `bin/magento`: Run the Magento CLI. Ex: `bin/magento cache:flush`
+- `bin/mr`: Run [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) inside the php-fpm container.
 - `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush`. Ex. `bin/mutagen start`
 - `bin/node`: Run the node binary. Ex. `bin/node --version`
 - `bin/npm`: Run the npm binary. Ex. `bin/npm install`
 - `bin/redis`: Run a command from the redis container. Ex `bin/redis redis-cli monitor`
 - `bin/remove`: Remove all stopped service containers. Accepts params `-v` or `--volumes` to remove volumes.
-- `bin/restart`: Stop and then start all containers.
+- `bin/restart`: Restarts all service containers. If one or more service names specified, only corresponded service containers will be restarted.
+- `bin/restart-nginx`: Restart the app container (nginx) to apply new changes to nginx.conf files (src/nginx.conf).
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
 - `bin/self-update`: Alias for bin/update.
@@ -168,7 +170,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
         - `--apply-vcl`: Apply the specified VCL file with Varnish config (or default.vcl if no argument specified), with automated copying it from the ./src/var/ folder to the varnish container, also showing additional info about the list of loaded VCLs and active VCL before and after execution of this command.
         - `--copy-vcl`: Copy the specified file (or default.vcl if no argument specified) from the ./src/var/ folder to the varnish container. 
         - `--use-vcl`: Use the specified VCL (you should specify one of the names from the bin/setup/varnish --list-vcl output - for example "boot") as active config for varnish container.
-
+- `bin/setup/n98-magerun2`: Install [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) to the /usr/local/bin/ folder inside the php-fpm container.
 ## Misc Info
 
 ### Database
@@ -229,8 +231,8 @@ For more information about Redis usage with Magento, see the <a href="https://de
 3.  Then, open `PHPStorm > Preferences > Languages & Frameworks > PHP` and configure:
 
     * `CLI Interpreter`
-        * Create a new interpreter and specify `From Docker`, and name it `mage2click/magento-php:7-2-fpm-mailhog`.
-        * Choose `Docker`, then select the `mage2click/magento-php:7-2-fpm-mailhog` image name, and set the `PHP Executable` to `php`.
+        * Create a new interpreter and specify `From Docker`, and name it (for example `mage2click/magento-php-versions:7-2-fpm-mailhog`).
+        * Choose `Docker`, then select the `mage2click/magento-php-versions:7-2-fpm-mailhog` image name provided in example above, and set the `PHP Executable` to `php`.
 
     * `Path mappings`
         * Don't do anything here as the next `Docker container` step will automatically setup a path mapping from `/var/www/html` to `./src`.
@@ -281,8 +283,5 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 ## License
 
 [MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
-
-## TBD 
-- n98-magerun2 tool installed out of the box  
-
+  
 feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
