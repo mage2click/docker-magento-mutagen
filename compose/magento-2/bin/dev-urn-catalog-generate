@@ -4,12 +4,15 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
+## Load per-project configuration variables
+source env/_config
+
 bin/magento dev:urn-catalog:generate misc.xml
 bin/copyfromcontainer misc.xml
 
-sed -i .bak 's?/var/www/html?'`pwd`/src'?' src/misc.xml
-rm src/misc.xml.bak
+sed -i .bak 's?/var/www/html?'`pwd`/src'?' ${CONTAINER_SRC_SYNC_DIR}/misc.xml
+rm ${CONTAINER_SRC_SYNC_DIR}/misc.xml.bak
 mkdir -p ../.idea
-mv src/misc.xml ../.idea/misc.xml
+mv ${CONTAINER_SRC_SYNC_DIR}/misc.xml ../.idea/misc.xml
 
 echo "URN's have been generated, you may now restart PHPStorm"
