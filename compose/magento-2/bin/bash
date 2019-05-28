@@ -1,2 +1,7 @@
 #!/bin/bash
-bin/cli bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
+bin/cli bash "$@"
