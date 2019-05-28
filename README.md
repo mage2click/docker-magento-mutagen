@@ -7,6 +7,7 @@
   <a href="https://hub.docker.com/r/mage2click/magento-php-versions/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php-versions.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-elasticsearch/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-elasticsearch.svg?label=elasticsearch%20docker%20pulls" alt="Docker Hub Pulls - Elasticsearch" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-proxy/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-proxy.svg?label=proxy%20docker%20pulls" alt="Docker Hub Pulls - Proxy" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
   <a href="https://join.slack.com/t/magentocommeng/shared_invite/enQtNDUzMDg4Mzc4NTY3LWEyOThjMzY5Zjk2ZGVjZWZmNTU4ZjJkYmQzMWNjY2MwMzRlNDM0ODMyZTVmM2NjODIwOTNjZWQ4NTM2ZjU2YmE" target="_blank"><img src="https://img.shields.io/badge/chat-%23mutagen--sync%20in%20Slack-brightgreen.svg" alt="chat #mutagen-sync in Slack"/></a>
@@ -24,7 +25,6 @@
 - [Misc Info](#misc-info)
 - [Credits](#credits)
 - [License](#license)
-- [TBD](#tbd)
 
 ## Docker Hub
 
@@ -44,7 +44,25 @@ View Dockerfiles:
   - 7.0
       - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm-mailhog)
       - [`7.0-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm)
-
+  - 5.6
+      - [`5.6-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/5.6/official/fpm-mailhog)
+      - [`5.6-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/5.6/official/fpm)
+      
+- [mage2click/magento-elasticsearch (Docker Hub)](https://hub.docker.com/r/mage2click/magento-elasticsearch)
+  - 6.7.2
+      - [`latest`, `6.7.2`](https://github.com/mage2click/magento-elasticsearch/tree/master/6.7.2/official)
+  - 5.6
+      - [`5.6`](https://github.com/mage2click/magento-elasticsearch/tree/master/5.6/official)
+  - 2.4    
+      - [`2.4`](https://github.com/mage2click/magento-elasticsearch/tree/master/2.4/official)
+            
+- [mage2click/magento-varnish (Docker Hub)](https://hub.docker.com/r/mage2click/magento-varnish)
+  - 4.1
+    - [`latest`, `4.1`](https://github.com/mage2click/magento-varnish/)
+    
+- [mage2click/magento-proxy (Docker Hub) - based on Nginx, used for envs with Varnish](https://hub.docker.com/r/mage2click/magento-proxy)
+  - 1.13-0
+    - [`latest`, `1.13-0`](https://github.com/mage2click/magento-proxy/)  
 ## Usage
 
 This configuration is intended to be used as a Docker-based development environment for Magento 2.
@@ -55,7 +73,7 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition).](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition)](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
 
 This configuration has been tested on macOS.
 
