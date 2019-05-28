@@ -1,0 +1,5 @@
+xdebug.remote_enable = 1
+xdebug.remote_port = 9001
+xdebug.remote_host = host.docker.internal
+xdebug.idekey = PHPSTORM
+xdebug.max_nesting_level = 1024
