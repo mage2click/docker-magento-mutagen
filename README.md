@@ -143,7 +143,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/start`: Start all containers, good practice to use this instead of `docker-compose up -d`, as it may contain additional helpers.
 - `bin/status`: Check the container status.
 - `bin/stop`: Stop all containers.
-- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch.
+- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch and/or Docker images along with the rebuilding of corresponding containers. Accepts optional arguments `-v|--version=<version>` (to specify version tag or branch path to fetch from, default is `master`, affects only bin scripts), `-i|--images` updates only Docker images along with the rebuilding of corresponding containers, `-a|--all` updates both bin scripts and Docker images along with the rebuilding of corresponding containers. 
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
 - `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`.
 
