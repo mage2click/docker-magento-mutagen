@@ -161,9 +161,9 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/start`: Start all containers, good practice to use this instead of `docker-compose up -d`, as it may contain additional helpers.
 - `bin/status`: Check the container status.
 - `bin/stop`: Stop all containers.
-- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch.
+- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch and/or Docker images along with the rebuilding of corresponding containers. Accepts optional arguments `-v|--version=<version>` (to specify version tag or branch path to fetch from, default is `master`, affects only bin scripts), `-i|--images` updates only Docker images along with the rebuilding of corresponding containers, `-a|--all` updates both bin scripts and Docker images along with the rebuilding of corresponding containers. 
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
-- `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`.
+- `bin/xdebug`: Disable or enable Xdebug by removing/adding corresponding .so line from/to .ini file in the PHP-FPM container.  Accepts params `disable` or `enable`. Ex. `bin/xdebug enable`. Xdebug extension is installed but disabled by default, as well as remote connections and autostart are disabled. Use our `bin/setup/xdebug` command get xdebug.* ini settings configured, or you can specify any xdebug.* settings via .user.ini file inside the magento project folder.
 
 ## Setup and Configuration CLI Commands
 
@@ -189,6 +189,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
         - `--copy-vcl`: Copy the specified file (or default.vcl if no argument specified) from the ./src/var/ folder to the varnish container. 
         - `--use-vcl`: Use the specified VCL (you should specify one of the names from the bin/setup/varnish --list-vcl output - for example "boot") as active config for varnish container.
 - `bin/setup/n98-magerun2`: Install [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) to the /usr/local/bin/ folder inside the php-fpm container.
+- `bin/setup/xdebug`: Enable remote debugging via set of xdebug.* ini settings in .user.ini file. Please see the detailed instructions of how to configure and use it on our Wiki page [Xdebug & PHPStorm](https://github.com/mage2click/docker-magento-mutagen/wiki/Xdebug-&-PHPStorm) 
 ## Misc Info
 
 ### Database
@@ -239,40 +240,7 @@ For more information about Redis usage with Magento, see the <a href="https://de
 
 
 ### Xdebug & PHPStorm
-
->not tested yet
-
-1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PHPStorm from the list and click Save.
-
-2.  Next, enable Xdebug in the PHP-FPM container by running: `bin/xdebug enable`, the restart the docker containers (CTRL+C then `bin/start`).
-
-3.  Then, open `PHPStorm > Preferences > Languages & Frameworks > PHP` and configure:
-
-    * `CLI Interpreter`
-        * Create a new interpreter and specify `From Docker`, and name it (for example `mage2click/magento-php-versions:7-2-fpm-mailhog`).
-        * Choose `Docker`, then select the `mage2click/magento-php-versions:7-2-fpm-mailhog` image name provided in example above, and set the `PHP Executable` to `php`.
-
-    * `Path mappings`
-        * Don't do anything here as the next `Docker container` step will automatically setup a path mapping from `/var/www/html` to `./src`.
-
-    * `Docker container`
-        * Remove any pre-existing volume bindings.
-        * Ensure a volume binding has been setup for Container path of `/var/www/html` mapped to the Host path of `./src`.
-
-4. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Debug` and set Debug Port to `9001`.
-
-5. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > DBGp Proxy` and set Port to `9001`.
-
-6. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Servers` and create a new server:
-
-    * Set Name and Host to your domain name (ex. `magento2.test`)
-    * Keep port set to `80`
-    * Check the Path Mappings box and map `src` to the absolute path of `/var/www/html`
-
-7. Go to `Run > Edit Configurations` and create a new `PHP Remote Debug` configuration by clicking the plus sign and selecting it. Set the Name to your domain (ex. `magento2.test`). Check the `Filter debug connection by IDE key` checkbox, select the server you just setup, and under IDE Key enter `PHPSTORM`. This IDE Key should match the IDE Key set by the Chrome Xdebug Helper. Then click OK to finish setting up the remote debugger in PHPStorm.
-
-8. Open up `src/pub/index.php`, and set a breakpoint near the end of the file. Go to `Run > Debug 'magento2.test'`, and open up a web browser. Ensure the Chrome Xdebug helper is enabled by clicking on it > Debug. Navigate to your Magento store URL, and Xdebug within PHPStorm should now trigger the debugger and pause at the toggled breakpoint.
-
+Please see the detailed instructions of how to configure and use it on our Wiki page [Xdebug & PHPStorm](https://github.com/mage2click/docker-magento-mutagen/wiki/Xdebug-&-PHPStorm)
 ## Credits
 
 ### Mark Shust

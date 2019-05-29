@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+## change into directory two level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/../.."
+
+## Load per-project configuration variables
+if [[ -f "env/_config" ]]; then
+    source env/_config
+fi
+
+CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
+
 for i in "$@"
     do
         case ${i} in
@@ -27,19 +37,19 @@ if [[ ! -z "$COMPOSER" ]]; then
     # get rid of vertex/module-tax, not required and causes checksum errors on composer install
     # https://github.com/markshust/docker-magento/issues/135
     # prevent double or more insertion
-    if ! grep -qF '"replace": { "vertex/module-tax": "*" }' src/composer.json; then
-        sed -e 's/"conflict": {/"replace": { "vertex\/module-tax": "*" },\ "conflict": {/' src/composer.json > composer.json && mv composer.json src/composer.json
+    if ! grep -qF '"replace": { "vertex/module-tax": "*" }' ${CONTAINER_SRC_SYNC_DIR}/composer.json; then
+        sed -e 's/"conflict": {/"replace": { "vertex\/module-tax": "*" },\ "conflict": {/' ${CONTAINER_SRC_SYNC_DIR}/composer.json > composer.json && mv composer.json ${CONTAINER_SRC_SYNC_DIR}/composer.json
     fi
 
-    rm -rf src/vendor #Clear for step below
-    mkdir src/vendor #Empty vendor directory for bin/fixperms script
+    rm -rf ${CONTAINER_SRC_SYNC_DIR}/vendor #Clear for step below
+    mkdir ${CONTAINER_SRC_SYNC_DIR}/vendor #Empty vendor directory for bin/fixperms script
 fi
 
 docker-compose up -d
 
 sleep 1 #Ensure containers are started...
 
-cp src/nginx.conf.sample src/nginx.conf #create nginx.conf from sample
+cp ${CONTAINER_SRC_SYNC_DIR}/nginx.conf.sample ${CONTAINER_SRC_SYNC_DIR}/nginx.conf #create nginx.conf from sample
 
 echo "Copying all files from host to the container..."
 bin/copytocontainer --all
