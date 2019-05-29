@@ -4,6 +4,9 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
+## Load per-project configuration variables
+source env/_config
+
 if [[ -z "$@" ]]; then
 echo "Usage:
   bin/mutagen [command]
@@ -34,7 +37,7 @@ elif [[ "$1" == "start" ]]; then
         --ignore=/vendor \
         --ignore=node_modules \
         --ignore-vcs \
-        src docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html
+        ${CONTAINER_SRC_SYNC_DIR} docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html
 
     # sync vendor folder from local to docker immediately,
     # but keeping no-watch for docker side, so only "mutagen flush --all" will get the newest changes from the docker side (see bin/composer)
@@ -49,7 +52,8 @@ elif [[ "$1" == "start" ]]; then
         --watch-mode-alpha=no-watch \
         --symlink-mode=posix-raw \
         --ignore-vcs \
-        docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor src/vendor
+        docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html/vendor ${CONTAINER_SRC_SYNC_DIR}/vendor
+
 elif [[ "$1" == "stop" ]]; then
     mutagen terminate -a
     mutagen daemon stop
