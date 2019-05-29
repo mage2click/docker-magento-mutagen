@@ -288,7 +288,7 @@ A special thanks goes out to <a href="https://www.nexcess.net/" target="_blank">
 Implemented Varnish support with https proxy <a href="https://github.com/wigman" target="_blank">Willem Wigman</a>
 
 ### Max Uroda
-<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1 Developer Plus)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
+<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1CDP+ / M2CAD)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
 <a href="https://twitter.com/u_maxx" target="_blank">@u_maxx</a>  
 <a href="https://maxuroda.pro" target="_blank">maxuroda.pro</a> 
 
