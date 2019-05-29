@@ -269,5 +269,9 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 ## License
 
 [MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
-  
-feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
+
+## Maintainers
+
+* [Dmitry Shkoliar](https://github.com/shkoliar) 
+* [Max Uroda](https://github.com/u-maxx)
+* Feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
