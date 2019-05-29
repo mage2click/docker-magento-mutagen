@@ -396,10 +396,6 @@ while [[ ! -z "$PORTS" ]]; do
         PORTS="$PORTS 3306,"
     fi
 
-    if lsof -PiTCP:9001 -sTCP:LISTEN -t >/dev/null; then
-        PORTS="$PORTS 9001,"
-    fi
-
     if [[ ! -z "$ELASTICSEARCH" ]]; then
         if lsof -PiTCP:9200 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 9200,"
