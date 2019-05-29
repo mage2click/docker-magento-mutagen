@@ -10,9 +10,17 @@ for i in "$@"
             -v=*|--version=*) VERSION="${i#*=}"; shift;;
             -i|--images) IMAGES=1; shift;;
             -a|--all) ALL=1; shift;;
-            *) ;;
+            *)
+                >&2 ERROR="$ERROR $i"
+                ;;
         esac
     done
+
+if [[ ! -z "$ERROR" ]]; then
+    echo
+    printf "\e[01;31mError: Unrecognized argument: %s\n\e[m" ${ERROR}
+    exit
+fi
 
 if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
     printf "Fetching latest version..."
