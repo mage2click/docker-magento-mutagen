@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -e
 
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
@@ -7,27 +7,35 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 for i in "$@"
     do
         case ${i} in
-            -v=*) VERSION="${i#*=}"; shift;;
-            --version=*) VERSION="${i#*=}"; shift;;
+            -v=*|--version=*) VERSION="${i#*=}"; shift;;
+            -i|--images) IMAGES=1; shift;;
+            -a|--all) ALL=1; shift;;
             *) ;;
         esac
     done
 
-VERSION=${VERSION:-master}
+if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
+    printf "Fetching latest version..."
+    VERSION=${VERSION:-master}
+    rm -rf tmp-mage2click
+    mkdir tmp-mage2click
+    cd tmp-mage2click
+    git init -qqq
+    git remote add origin https://github.com/mage2click/docker-magento-mutagen
+    git fetch origin -qqq
+    git checkout origin/${VERSION} -- compose/magento-2
+    rm -rf ../bin
+    cp -Rf compose/magento-2/bin ../
+    cd ../
+    rm -rf tmp-mage2click
+    printf " DONE!"
+fi
 
-echo
-printf "Fetching latest version..."
-rm -rf tmp-mage2click
-mkdir tmp-mage2click
-cd tmp-mage2click
-git init -qqq
-git remote add origin https://github.com/mage2click/docker-magento-mutagen
-git fetch origin -qqq
-git checkout origin/${VERSION} -- compose/magento-2
-rm -rf ../bin
-cp -Rf compose/magento-2/bin ../
-cd ../
-rm -rf tmp-mage2click
-printf " DONE!"
-echo
-echo
+if [[ ! -z "$ALL" ]] || [[ ! -z "$IMAGES" ]]; then
+    bin/mutagen stop || true
+    docker-compose down --rmi all
+    docker-compose up -d
+    bin/fixowns # Fix for Mutagen Error: create failed: unable to connect to beta: unable to connect to endpoint:
+                # unable to install agent: unable to invoke agent installation: exit status 1
+    bin/mutagen start
+fi
