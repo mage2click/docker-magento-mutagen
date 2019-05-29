@@ -145,7 +145,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/stop`: Stop all containers.
 - `bin/update`: Update the contents of the bin folder with the latest changes from the master branch.
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
-- `bin/xdebug`: Disable or enable Xdebug by removing/adding corresponding .so line from/to .ini file in the PHP-FPM container.  Accepts params `disable` or `enable`. Ex. `bin/xdebug disable`. Xdebug extension is enabled (.so loaded by default) but remote connections and autostart are disabled. You can specify any xdebug.* settings via .user.ini file inside the magento (src/) folder.
+- `bin/xdebug`: Disable or enable Xdebug by removing/adding corresponding .so line from/to .ini file in the PHP-FPM container.  Accepts params `disable` or `enable`. Ex. `bin/xdebug enable`. Xdebug extension is installed but disabled by default, as well as remote connections and autostart are disabled. Use our `bin/setup/xdebug` command get xdebug.* ini settings configured, or you can specify any xdebug.* settings via .user.ini file inside the magento project folder.
 
 ## Setup and Configuration CLI Commands
 
