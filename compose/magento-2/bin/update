@@ -34,6 +34,9 @@ if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
     git checkout origin/${VERSION} -- compose/magento-2
     rm -rf ../bin
     cp -Rf compose/magento-2/bin ../
+    if [[ ! -f "../env/_config" ]]; then
+        cp -Rf compose/magento-2/env/_config ../env/
+    fi
     cd ../
     rm -rf tmp-mage2click
     printf " DONE!"
