@@ -5,7 +5,11 @@ set -e
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/../.."
 
 ## Load per-project configuration variables
-source env/_config
+if [[ -f "env/_config" ]]; then
+    source env/_config
+fi
+
+CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
 
 function spinner()
 {
