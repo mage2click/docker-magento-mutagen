@@ -147,7 +147,7 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/grunt`: Run the grunt binary. Note that this runs the version from the node_modules directory for project version parity. Ex. `bin/grunt exec`
 - `bin/magento`: Run the Magento CLI. Ex: `bin/magento cache:flush`
 - `bin/mr`: Run [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) inside the php-fpm container.
-- `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush`. Ex. `bin/mutagen start`
+- `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush [html|vendor]`. If `flush` has extra param `html` or `vendor`, only corresponded session will be flushed. Ex. `bin/mutagen start`
 - `bin/node`: Run the node binary. Ex. `bin/node --version`
 - `bin/npm`: Run the npm binary. Ex. `bin/npm install`
 - `bin/redis`: Run a command from the redis container. Ex `bin/redis redis-cli monitor`
