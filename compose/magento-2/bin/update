@@ -48,7 +48,7 @@ fi
 if [[ ! -z "$ALL" ]] || [[ ! -z "$MUTAGEN" ]]; then
     MUTAGEN="$(mutagen version 2>/dev/null || true)"
 
-    if [[ "$MUTAGEN" == "$(printf '%s\n' "$MUTAGEN" "0.9.0" | sort -V | head -n 1)" ]]; then
+    if [[ "$MUTAGEN" == "$(printf "%s\n" "$MUTAGEN" "0.9.0" | sort -V | head -n 1)" ]]; then
         printf "\e[0;32mMutagen update is not required\e[m"
         echo
     else
