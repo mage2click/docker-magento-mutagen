@@ -7,6 +7,7 @@
   <a href="https://hub.docker.com/r/mage2click/magento-php-versions/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php-versions.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-elasticsearch/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-elasticsearch.svg?label=elasticsearch%20docker%20pulls" alt="Docker Hub Pulls - Elasticsearch" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-proxy/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-proxy.svg?label=proxy%20docker%20pulls" alt="Docker Hub Pulls - Proxy" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
   <a href="https://join.slack.com/t/magentocommeng/shared_invite/enQtNDUzMDg4Mzc4NTY3LWEyOThjMzY5Zjk2ZGVjZWZmNTU4ZjJkYmQzMWNjY2MwMzRlNDM0ODMyZTVmM2NjODIwOTNjZWQ4NTM2ZjU2YmE" target="_blank"><img src="https://img.shields.io/badge/chat-%23mutagen--sync%20in%20Slack-brightgreen.svg" alt="chat #mutagen-sync in Slack"/></a>
@@ -24,7 +25,6 @@
 - [Magento 2](#Magento2)
 - [Credits](#credits)
 - [License](#license)
-- [TBD](#tbd)
 
 ## Docker Hub
 
@@ -44,7 +44,25 @@ View Dockerfiles:
   - 7.0
       - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm-mailhog)
       - [`7.0-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm)
-
+  - 5.6
+      - [`5.6-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/5.6/official/fpm-mailhog)
+      - [`5.6-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/5.6/official/fpm)
+      
+- [mage2click/magento-elasticsearch (Docker Hub)](https://hub.docker.com/r/mage2click/magento-elasticsearch)
+  - 6.7.2
+      - [`latest`, `6.7.2`](https://github.com/mage2click/magento-elasticsearch/tree/master/6.7.2/official)
+  - 5.6
+      - [`5.6`](https://github.com/mage2click/magento-elasticsearch/tree/master/5.6/official)
+  - 2.4    
+      - [`2.4`](https://github.com/mage2click/magento-elasticsearch/tree/master/2.4/official)
+            
+- [mage2click/magento-varnish (Docker Hub)](https://hub.docker.com/r/mage2click/magento-varnish)
+  - 4.1
+    - [`latest`, `4.1`](https://github.com/mage2click/magento-varnish/)
+    
+- [mage2click/magento-proxy (Docker Hub) - based on Nginx, used for envs with Varnish](https://hub.docker.com/r/mage2click/magento-proxy)
+  - 1.13-0
+    - [`latest`, `1.13-0`](https://github.com/mage2click/magento-proxy/)  
 ## Usage
 
 This configuration is intended to be used as a Docker-based development environment for Magento 2.
@@ -55,7 +73,7 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition).](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition)](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
 
 This configuration has been tested on macOS.
 
@@ -75,7 +93,7 @@ brew install havoc-io/mutagen/mutagen
 
 ### Database
 
-The hostname of each service is the name of the service within the `docker-compose.yml` file. So for example, MySQL's (based on [MariaDB:10.2](https://mariadb.com/kb/en/library/changes-improvements-in-mariadb-102/) [Docker image](https://hub.docker.com/_/mariadb)) hostname is `db` (not `localhost`) when accessing it from within a Docker container. Elasticsearch's hostname is `elasticsearch`.
+The hostname of each service is the name of the service within the `docker-compose.yml` file. So for example, MySQL's (based on [MariaDB:10.3](https://mariadb.com/kb/en/library/changes-improvements-in-mariadb-103/) [Docker image](https://hub.docker.com/_/mariadb)) hostname is `db` (not `localhost`) when accessing it from within a Docker container. Elasticsearch's hostname is `elasticsearch`.
 
 Here's an example of how to connect to the MySQL cli tool of the Docker instance:
 
@@ -121,40 +139,7 @@ For more information about Redis usage with Magento, see the <a href="https://de
 
 
 ### Xdebug & PHPStorm
-
->not tested yet
-
-1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PHPStorm from the list and click Save.
-
-2.  Next, enable Xdebug in the PHP-FPM container by running: `bin/xdebug enable`, the restart the docker containers (CTRL+C then `bin/start`).
-
-3.  Then, open `PHPStorm > Preferences > Languages & Frameworks > PHP` and configure:
-
-    * `CLI Interpreter`
-        * Create a new interpreter and specify `From Docker`, and name it (for example `mage2click/magento-php-versions:7-2-fpm-mailhog`).
-        * Choose `Docker`, then select the `mage2click/magento-php-versions:7-2-fpm-mailhog` image name provided in example above, and set the `PHP Executable` to `php`.
-
-    * `Path mappings`
-        * Don't do anything here as the next `Docker container` step will automatically setup a path mapping from `/var/www/html` to `./src`.
-
-    * `Docker container`
-        * Remove any pre-existing volume bindings.
-        * Ensure a volume binding has been setup for Container path of `/var/www/html` mapped to the Host path of `./src`.
-
-4. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Debug` and set Debug Port to `9001`.
-
-5. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > DBGp Proxy` and set Port to `9001`.
-
-6. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Servers` and create a new server:
-
-    * Set Name and Host to your domain name (ex. `magento2.test`)
-    * Keep port set to `80`
-    * Check the Path Mappings box and map `src` to the absolute path of `/var/www/html`
-
-7. Go to `Run > Edit Configurations` and create a new `PHP Remote Debug` configuration by clicking the plus sign and selecting it. Set the Name to your domain (ex. `magento2.test`). Check the `Filter debug connection by IDE key` checkbox, select the server you just setup, and under IDE Key enter `PHPSTORM`. This IDE Key should match the IDE Key set by the Chrome Xdebug Helper. Then click OK to finish setting up the remote debugger in PHPStorm.
-
-8. Open up `src/pub/index.php`, and set a breakpoint near the end of the file. Go to `Run > Debug 'magento2.test'`, and open up a web browser. Ensure the Chrome Xdebug helper is enabled by clicking on it > Debug. Navigate to your Magento store URL, and Xdebug within PHPStorm should now trigger the debugger and pause at the toggled breakpoint.
-
+Please see the detailed instructions of how to configure and use it on our Wiki page [Xdebug & PHPStorm](https://github.com/mage2click/docker-magento-mutagen/wiki/Xdebug-&-PHPStorm)
 ## Credits
 
 ### Mark Shust
@@ -170,7 +155,7 @@ A special thanks goes out to <a href="https://www.nexcess.net/" target="_blank">
 Implemented Varnish support with https proxy <a href="https://github.com/wigman" target="_blank">Willem Wigman</a>
 
 ### Max Uroda
-<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1 Developer Plus)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
+<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1CDP+ / M2CAD)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
 <a href="https://twitter.com/u_maxx" target="_blank">@u_maxx</a>  
 <a href="https://maxuroda.pro" target="_blank">maxuroda.pro</a> 
 
@@ -183,5 +168,9 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 ## License
 
 [MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
-  
-feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
+
+## Maintainers
+
+* [Dmitry Shkoliar](https://github.com/shkoliar) 
+* [Max Uroda](https://github.com/u-maxx)
+* Feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
