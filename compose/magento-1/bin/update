@@ -33,7 +33,7 @@ if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
     git fetch origin -qqq
     git checkout origin/${VERSION} -- compose/magento-1
     rm -rf ../bin
-    cp -Rf compose/magento-2/bin ../
+    cp -Rf compose/magento-1/bin ../
     if [[ ! -f "../env/_config" ]]; then
         cp -Rf compose/magento-1/env/_config ../env/
     fi

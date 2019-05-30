@@ -1,33 +1,14 @@
 # Mage2click Docker Configuration for Magento 1 with Mutagen.io sync, Mailhog and Varnish (https://github.com/mage2click/docker-magento-mutagen)
 # Version 2.*
-
 version: "3"
 
 services:
 
-  proxy:
-    image: mage2click/magento-nginx:1.13
-    environment:
-      NGINX_TYPE: "proxy"
-    ports:
-      - "443:8443"
-    depends_on:
-      - varnish
-
-  varnish:
-    image: mage2click/magento-varnish:4.1
-    ports:
-      - "80:80"
-      - "6082:6082"
-    depends_on:
-      - app
-
   app:
     image: mage2click/magento-nginx:1.13
-    environment:
-      NGINX_TYPE: "under-proxy"
     ports:
-      - "8000:8000"
+      - "80:8000"
+      - "443:8443"
     depends_on:
       - db
       - phpfpm
@@ -35,12 +16,6 @@ services:
       - ~/.composer:/var/www/.composer:delegated
       - appdata:/var/www/html
       - sockdata:/sock
-
-  phpfpm:
-    image: mage2click/magento-php:5.6-fpm-tst
-    depends_on:
-      - db
-    volumes: *appvolumes
 
   db:
     image: percona:5.7
@@ -51,32 +26,27 @@ services:
       - dbdata:/var/lib/mysql
 
   redis:
-    image: redis:5.0
+    image: redis:5.0-alpine
 
   elasticsearch:
-    image: mage2click/magento-elasticsearch:6.7.2
+    image: mage2click/magento-elasticsearch:2.4
     ports:
       - "9200:9200"
       - "9300:9300"
+
+  phpfpm:
+    image: mage2click/magento-php-versions:5.6-fpm-mailhog
+    depends_on:
+      - db
+    ports:
+      - "9001:9001"
+    volumes: *appvolumes
 
   mailhog:
     image: mailhog/mailhog:v1.0.0
     ports:
       - "1025:1025"
       - "8025:8025"
-
-  rabbitmq:
-    image: rabbitmq:3.7.14-management-alpine
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-
-  cron:
-    image: mage2click/magento-php:5.6-fpm-tst
-    user: root
-    command: /usr/local/bin/cronstart
-    tty: true
-    volumes: *appvolumes
 
 volumes:
   appdata:
