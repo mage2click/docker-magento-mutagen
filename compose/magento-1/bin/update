@@ -24,7 +24,7 @@ fi
 
 if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
     printf "Fetching latest version..."
-    VERSION=${VERSION:-master}
+    VERSION=${VERSION:-feature/magento-1}
     rm -rf tmp-mage2click
     mkdir tmp-mage2click
     cd tmp-mage2click
