@@ -4,14 +4,30 @@ set -e
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
-[ -z "$1" ] && echo "Please specify a directory or file to copy to container (ex. vendor, --all)" && exit
+## Load per-project configuration variables
+if [[ -f "env/_config" ]]; then
+    source env/_config
+fi
 
-if [ "$1" == "--all" ]; then
-  docker cp src/./ $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/
-  echo "Completed copying all files from host to container"
+CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
+
+[[ -z "$1" ]] && echo "Please specify a directory or file to copy to container (ex. vendor, --all)" && exit
+
+if [[ "$1" == "--all" ]]; then
+    docker cp ${CONTAINER_SRC_SYNC_DIR}/./ $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/
+    echo "Completed copying all files from host to container"
 else
-  docker cp src/$1 $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/
-  echo "Completed copying $1 from host to container"
+    DEST=${1%%+(/)}
+    if [[ -d "$CONTAINER_SRC_SYNC_DIR/$DEST" ]]; then
+        docker cp ${CONTAINER_SRC_SYNC_DIR}/${DEST}/./ $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/${DEST}
+        echo "Completed copying $1 from host to container"
+    elif [[ -f "$CONTAINER_SRC_SYNC_DIR/$DEST" ]]; then
+        docker cp ${CONTAINER_SRC_SYNC_DIR}/${DEST} $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/$(dirname ${DEST})
+        echo "Completed copying $1 from host to container"
+    else
+        printf "\e[01;31mError: Specified path does not exist on host: %s\n\e[m" $1
+        exit
+    fi
 fi
 
 bin/fixowns

@@ -4,12 +4,28 @@ set -e
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
-[ -z "$1" ] && echo "Please specify a directory or file to copy from container (ex. vendor, --all)" && exit
+## Load per-project configuration variables
+if [[ -f "env/_config" ]]; then
+    source env/_config
+fi
 
-if [ "$1" == "--all" ]; then
-  docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/./ src/
-  echo "Completed copying all files from container to host"
+CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
+
+[[ -z "$1" ]] && echo "Please specify a directory or file to copy from container (ex. vendor, --all)" && exit
+
+if [[ "$1" == "--all" ]]; then
+    docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/./ ${CONTAINER_SRC_SYNC_DIR}/
+    echo "Completed copying all files from container to host"
 else
-  docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/$1 src/
-  echo "Completed copying $1 from container to host"
+    DEST=${1%%+(/)}
+    if bin/clinotty bash -c "[[ -d "/var/www/html/${DEST}" ]]"; then
+        docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/${DEST}/./ ${CONTAINER_SRC_SYNC_DIR}/${DEST}
+        echo "Completed copying $1 from container to host"
+    elif bin/clinotty bash -c "[[ -f "/var/www/html/${DEST}" ]]"; then
+        docker cp $(docker-compose ps -q phpfpm|awk '{print $1}'):/var/www/html/${DEST} ${CONTAINER_SRC_SYNC_DIR}/$(dirname ${DEST})
+        echo "Completed copying $1 from container to host"
+    else
+        printf "\e[01;31mError: Specified path does not exist on container: %s\n\e[m" $1
+        exit
+    fi
 fi
