@@ -9,6 +9,7 @@ for i in "$@"
         case ${i} in
             -v=*|--version=*) VERSION="${i#*=}"; shift;;
             -i|--images) IMAGES=1; shift;;
+            -m|--mutagen) MUTAGEN=1; shift;;
             -a|--all) ALL=1; shift;;
             *)
                 >&2 ERROR="$ERROR $i"
@@ -19,10 +20,11 @@ for i in "$@"
 if [[ ! -z "$ERROR" ]]; then
     echo
     printf "\e[01;31mError: Unrecognized argument: %s\n\e[m" ${ERROR}
+    echo
     exit
 fi
 
-if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
+if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]] && [[ -z "$MUTAGEN" ]]; then
     printf "Fetching latest version..."
     VERSION=${VERSION:-master}
     rm -rf tmp-mage2click
@@ -40,6 +42,18 @@ if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
     cd ../
     rm -rf tmp-mage2click
     printf " DONE!"
+    echo
+fi
+
+if [[ ! -z "$ALL" ]] || [[ ! -z "$MUTAGEN" ]]; then
+    MUTAGEN="$(mutagen version 2>/dev/null || true)"
+
+    if [[ "$MUTAGEN" == "$(printf '%s\n' "$MUTAGEN" "0.9.0" | sort -V | head -n 1)" ]]; then
+        printf "\e[0;32mMutagen update is not required\e[m"
+        echo
+    else
+        brew upgrade mutagen
+    fi
 fi
 
 if [[ ! -z "$ALL" ]] || [[ ! -z "$IMAGES" ]]; then
