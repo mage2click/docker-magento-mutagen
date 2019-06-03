@@ -1,0 +1,15 @@
+#!/bin/bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
+backup() {
+    docker run --rm --volumes-from $(docker-compose ps -q db|awk '{print $1}') -v $(pwd):/backup busybox \
+           tar cvf /backup/dbdata.tar var/lib/mysql
+}
+
+restore() {
+    docker run --rm --volumes-from $(docker-compose ps -q db|awk '{print $1}') -v $(pwd):/backup busybox \
+           ash -c "cd var && tar xvf /backup/dbdata.tar --strip 1"
+}
