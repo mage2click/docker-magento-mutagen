@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker run -v dbdata:/volume -v src:/backup --rm loomchild/volume-backup backup dbdata
