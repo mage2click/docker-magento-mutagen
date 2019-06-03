@@ -20,9 +20,22 @@ restore() {
            ash -c "rm -rf var/lib/mysql/* && cd var && tar xvf /backup/dbdata.tar --strip 1"
 }
 
+usage() {
+    echo "Usage:
+  bin/project <backup|restore|archive|up>
+
+Commands:
+  backup    Backup db container volume to dbdata.tar archive
+  restore   Restore db container volume from dbdata.tar archive
+  archive   Archive project (backups db container volume, removes project containers and volumes)
+  up        Restore project (Creates containers, volumes, restores db container volume)
+"
+}
+
 case "$@" in
     backup) backup && bin/start;;
     restore) restore && bin/start;;
     archive) backup && bin/remove -a;;
     up) restore && bin/start;;
+    *) usage && exit;;
 esac
