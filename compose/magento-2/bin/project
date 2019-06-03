@@ -14,7 +14,7 @@ restore() {
            ash -c "cd var && tar xvf /backup/dbdata.tar --strip 1"
 }
 
-bin/stop
+bin/stop 2> /dev/null || true
 
 case "$@" in
     backup) backup && bin/start;;
