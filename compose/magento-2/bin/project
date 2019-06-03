@@ -13,3 +13,12 @@ restore() {
     docker run --rm --volumes-from $(docker-compose ps -q db|awk '{print $1}') -v $(pwd):/backup busybox \
            ash -c "cd var && tar xvf /backup/dbdata.tar --strip 1"
 }
+
+bin/stop
+
+case "$@" in
+    backup) backup && bin/start;;
+    restore) restore && bin/start;;
+    archive) bin/stop && backup && bin/remove -a;;
+    up) restore && bin/start;;
+esac
