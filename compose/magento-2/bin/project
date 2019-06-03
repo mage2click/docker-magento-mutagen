@@ -17,7 +17,7 @@ backup() {
 restore() {
     stop && \
     docker run --rm --volumes-from $(docker-compose ps -q db|awk '{print $1}') -v $(pwd):/backup busybox \
-           ash -c "cd var && tar xvf /backup/dbdata.tar --strip 1"
+           ash -c "rm -rf var/lib/mysql/* && cd var && tar xvf /backup/dbdata.tar --strip 1"
 }
 
 case "$@" in
