@@ -4,21 +4,25 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
+stop() {
+    bin/stop 2> /dev/null || true
+}
+
 backup() {
+    stop && \
     docker run --rm --volumes-from $(docker-compose ps -q db|awk '{print $1}') -v $(pwd):/backup busybox \
            tar cvf /backup/dbdata.tar var/lib/mysql
 }
 
 restore() {
+    stop && \
     docker run --rm --volumes-from $(docker-compose ps -q db|awk '{print $1}') -v $(pwd):/backup busybox \
            ash -c "cd var && tar xvf /backup/dbdata.tar --strip 1"
 }
 
-bin/stop 2> /dev/null || true
-
 case "$@" in
     backup) backup && bin/start;;
     restore) restore && bin/start;;
-    archive) bin/stop && backup && bin/remove -a;;
+    archive) backup && bin/remove -a;;
     up) restore && bin/start;;
 esac
