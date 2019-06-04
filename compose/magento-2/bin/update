@@ -43,6 +43,7 @@ if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
 fi
 
 if [[ ! -z "$ALL" ]] || [[ ! -z "$IMAGES" ]]; then
+    bin/stop
     bash -c "$(docker-compose images | awk 'FNR > 2 {printf "docker pull "$2":"$3" && "}')true"
     docker-compose up --force-recreate -d
     bin/fixowns && bin/mutagen start
