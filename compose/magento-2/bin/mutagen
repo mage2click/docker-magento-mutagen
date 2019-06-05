@@ -45,12 +45,12 @@ elif [[ "$1" == "start" ]]; then
         ${CONTAINER_SRC_SYNC_DIR} docker://$(docker-compose ps -q phpfpm|awk '{print $1}')/var/www/html
 
     # sync vendor folder from local to docker immediately,
-    # but keeping no-watch for docker side, so only "mutagen flush --all" will get the newest changes from the docker side (see bin/composer)
+    # but keeping no-watch for docker side, so only "mutagen flush --label-selector=mage2click-sync=vendor"
+    # will get the newest changes from the docker side (see bin/composer)
     # please note that docker is alpha here,
     # so it will rewrite your unsynced files on flush command in case of any issues with sync from local to docker
     mutagen create \
         --label=mage2click-sync=vendor \
-        --scan-mode=accelerated \
         --default-file-mode-alpha=0644 \
         --default-directory-mode-alpha=0755 \
         --default-owner-alpha=app \
