@@ -43,10 +43,8 @@ if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]]; then
 fi
 
 if [[ ! -z "$ALL" ]] || [[ ! -z "$IMAGES" ]]; then
-    bin/mutagen stop || true
-    docker-compose down --rmi all
-    docker-compose up -d
-    bin/fixowns # Fix for Mutagen Error: create failed: unable to connect to beta: unable to connect to endpoint:
-                # unable to install agent: unable to invoke agent installation: exit status 1
-    bin/mutagen start
+    bin/stop
+    bash -c "$(docker-compose images | awk 'FNR > 2 {printf "docker pull "$2":"$3" && "}')true"
+    docker-compose up --force-recreate -d
+    bin/fixowns && bin/mutagen start
 fi
