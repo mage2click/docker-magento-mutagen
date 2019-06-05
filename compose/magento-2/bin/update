@@ -52,6 +52,7 @@ if [[ ! -z "$ALL" ]] || [[ ! -z "$MUTAGEN" ]]; then
         printf "\e[0;32mMutagen update is not required\e[m"
         echo
     else
+        echo "Updating Mutagen to the latest version (via Homebrew)..."
         brew upgrade mutagen
     fi
 fi

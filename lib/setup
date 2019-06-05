@@ -503,6 +503,10 @@ rm -rf tmp-mage2click parts docker-compose.yml.sample
 git init
 echo
 
+echo "Checking Mutagen version..."
+bin/update --mutagen
+echo
+
 if [[ ! -z "$ARCHIVE" ]]; then
     bin/setup/unzip ${ARCHIVE}
 elif [[ ! -z "$PROJECT" ]]; then
