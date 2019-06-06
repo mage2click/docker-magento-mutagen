@@ -4,6 +4,9 @@ set -eu
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
+## to terminate existing sessions for cases when bin/start twice or more
+bin/mutagen stop 2> /dev/null || true
+
 docker-compose up -d
 sleep 1 #Ensure containers are started...
 bin/mutagen start
