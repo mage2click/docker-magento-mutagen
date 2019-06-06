@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+
+## change into directory two level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/../.."
+
+## Load per-project configuration variables
+if [[ -f "env/_config" ]]; then
+    source env/_config
+fi
+
+CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
+
+cat bin/setup/templates/.user.ini.sample >> ${CONTAINER_SRC_SYNC_DIR}/pub/.user.ini #append new lines to .user.ini with xdebug configs from sample
+echo "Xdebug is now configured, see ${CONTAINER_SRC_SYNC_DIR}/pub/.user.ini for details"

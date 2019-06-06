@@ -4,9 +4,10 @@
   <p>Mage2click Docker Configuration for Magento with <a href="https://mutagen.io" target="_blank">mutagen.io</a> sync for files inspired by <a href="https://twitter.com/markshust" target="_blank">Mark Shust</a>'s <a href="https://github.com/markshust/docker-magento" target="_blank">markshust/docker-magento</a> project</p>
   <a href="https://github.com/magento/magento2" target="_blank"><img src="https://img.shields.io/badge/magento-2.X-brightgreen.svg?logo=magento&longCache=true" alt="Supported Magento Versions" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-nginx/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-nginx.svg?label=nginx%20docker%20pulls" alt="Docker Hub Pulls - Nginx" /></a>
-  <a href="https://hub.docker.com/r/mage2click/magento-php/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-php-versions/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-php-versions.svg?label=php%20docker%20pulls" alt="Docker Hub Pulls - PHP" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-varnish/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-varnish.svg?label=varnish%20docker%20pulls" alt="Docker Hub Pulls - Varnish" /></a>
   <a href="https://hub.docker.com/r/mage2click/magento-elasticsearch/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-elasticsearch.svg?label=elasticsearch%20docker%20pulls" alt="Docker Hub Pulls - Elasticsearch" /></a>
+  <a href="https://hub.docker.com/r/mage2click/magento-proxy/" target="_blank"><img src="https://img.shields.io/docker/pulls/mage2click/magento-proxy.svg?label=proxy%20docker%20pulls" alt="Docker Hub Pulls - Proxy" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/graphs/commit-activity" target="_blank"><img src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" alt="Maintained - Yes" /></a>
   <a href="https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
   <a href="https://join.slack.com/t/magentocommeng/shared_invite/enQtNDUzMDg4Mzc4NTY3LWEyOThjMzY5Zjk2ZGVjZWZmNTU4ZjJkYmQzMWNjY2MwMzRlNDM0ODMyZTVmM2NjODIwOTNjZWQ4NTM2ZjU2YmE" target="_blank"><img src="https://img.shields.io/badge/chat-%23mutagen--sync%20in%20Slack-brightgreen.svg" alt="chat #mutagen-sync in Slack"/></a>
@@ -24,26 +25,10 @@
 - [Misc Info](#misc-info)
 - [Credits](#credits)
 - [License](#license)
-- [TBD](#tbd)
 
 ## Docker Hub
 
-View Dockerfiles:
-
-- [mage2click/magento-nginx (Docker Hub)](https://hub.docker.com/r/mage2click/magento-nginx/)
-  - 1.13
-      - [`latest`, `1.13`](https://github.com/mage2click/magento-nginx/tree/1.13)
-
-- [mage2click/magento-php (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php//)
-  - 7.2
-      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.2-fpm-mailhog)
-      - [`7.2-fpm`](https://github.com/mage2click/magento-php/tree/7.2-fpm) 
-  - 7.1
-      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.1-fpm-mailhog)
-      - [`7.1-fpm`](https://github.com/mage2click/magento-php/tree/7.1-fpm)
-  - 7.0
-      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php/tree/7.0-fpm-mailhog)
-      - [`7.0-fpm`](https://github.com/mage2click/magento-php/tree/7.0-fpm)
+Please see available Dockerfiles on our [Docker Hub Wiki page](https://github.com/mage2click/docker-magento-mutagen/wiki/Docker-Hub)
 
 ## Usage
 
@@ -55,7 +40,7 @@ Folders:
 
 ## Prerequisites
 
-This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition).](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
+This setup assumes you are running Docker on a computer with at least 6GB of allocated RAM, a dual-core, and an SSD hard drive. [Download & Install Docker Desktop for Mac (Community Edition)](https://hub.docker.com/editions/community/docker-ce-desktop-mac).
 
 This configuration has been tested on macOS.
 
@@ -128,12 +113,14 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/fixperms`: This will fix filesystem permissions within the container.
 - `bin/grunt`: Run the grunt binary. Note that this runs the version from the node_modules directory for project version parity. Ex. `bin/grunt exec`
 - `bin/magento`: Run the Magento CLI. Ex: `bin/magento cache:flush`
-- `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush`. Ex. `bin/mutagen start`
+- `bin/mr`: Run [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) inside the php-fpm container.
+- `bin/mutagen`: Mutagen sync related commands. Accepts params `start`, `stop` or `flush [html|vendor]`. If `flush` has extra param `html` or `vendor`, only corresponded session will be flushed. Ex. `bin/mutagen start`
 - `bin/node`: Run the node binary. Ex. `bin/node --version`
 - `bin/npm`: Run the npm binary. Ex. `bin/npm install`
 - `bin/redis`: Run a command from the redis container. Ex `bin/redis redis-cli monitor`
 - `bin/remove`: Remove all stopped service containers. Accepts params `-v` or `--volumes` to remove volumes.
-- `bin/restart`: Stop and then start all containers.
+- `bin/restart`: Restarts all service containers. If one or more service names specified, only corresponded service containers will be restarted.
+- `bin/restart-nginx`: Restart the app container (nginx) to apply new changes to nginx.conf files (src/nginx.conf).
 - `bin/root`: Run any CLI command as root without going into the bash prompt. Ex `bin/root apt-get install nano`
 - `bin/rootnotty`: Run any CLI command as root with no TTY. Ex `bin/rootnotty chown -R app:app /var/www/html`
 - `bin/self-update`: Alias for bin/update.
@@ -141,10 +128,9 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 - `bin/start`: Start all containers, good practice to use this instead of `docker-compose up -d`, as it may contain additional helpers.
 - `bin/status`: Check the container status.
 - `bin/stop`: Stop all containers.
-- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch.
+- `bin/update`: Update the contents of the bin folder with the latest changes from the master branch and/or Docker images along with the rebuilding of corresponding containers and\or mutagen (only if needed). Accepts optional arguments `-v|--version=<version>` (to specify version tag or branch path to fetch from, default is `master`, affects only bin scripts), `-i|--images` updates only Docker images along with the rebuilding of corresponding containers, `-m|--mutagen` updates only mutagen (only if needed), `-a|--all` updates bin scripts, Docker images along with the rebuilding of corresponding containers and mutagen (if needed). 
 - `bin/varnish`: Run commands in the Varnish container. Ex `bin/varnish varnishlog -q 'ReqURL ~ "^/$"'` to monitor requests to homepage, or `bin/vanirsh varnishlog -g request -q 'ReqMethod eq "PURGE"'` to monitor PURGE requests.
-- `bin/xdebug`: Disable or enable Xdebug. Accepts params `disable` (default) or `enable`. Ex. `bin/xdebug enable`.
-- `bin/mr`: Run [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) inside the php-fpm container.
+- `bin/xdebug`: Disable or enable Xdebug by removing/adding corresponding .so line from/to .ini file in the PHP-FPM container.  Accepts params `disable` or `enable`. Ex. `bin/xdebug enable`. Xdebug extension is installed but disabled by default, as well as remote connections and autostart are disabled. Use our `bin/setup/xdebug` command to get xdebug.* ini settings configured, or you can specify any xdebug.* settings via `pub/.user.ini` file inside the magento project folder.
 
 ## Setup and Configuration CLI Commands
 
@@ -170,11 +156,15 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
         - `--copy-vcl`: Copy the specified file (or default.vcl if no argument specified) from the ./src/var/ folder to the varnish container. 
         - `--use-vcl`: Use the specified VCL (you should specify one of the names from the bin/setup/varnish --list-vcl output - for example "boot") as active config for varnish container.
 - `bin/setup/n98-magerun2`: Install [n98-magerun2.phar](https://github.com/netz98/n98-magerun2) to the /usr/local/bin/ folder inside the php-fpm container.
+- `bin/setup/xdebug`: Enable remote debugging via set of xdebug.* ini settings in .user.ini file. Please see the detailed instructions of how to configure and use it on our Wiki page [Xdebug & PHPStorm](https://github.com/mage2click/docker-magento-mutagen/wiki/Xdebug-&-PHPStorm) 
 ## Misc Info
+
+### Admin Panel
+The admin panel URL is auto-generated by the setup script. You can find the URL by using the `bin/magento info:admin` command. The default username is `john.smith` and the default password is `password123`.
 
 ### Database
 
-The hostname of each service is the name of the service within the `docker-compose.yml` file. So for example, MySQL's hostname is `db` (not `localhost`) when accessing it from within a Docker container. Elasticsearch's hostname is `elasticsearch`.
+The hostname of each service is the name of the service within the `docker-compose.yml` file. So for example, MySQL's (based on [MariaDB:10.3](https://mariadb.com/kb/en/library/changes-improvements-in-mariadb-103/) [Docker image](https://hub.docker.com/_/mariadb)) hostname is `db` (not `localhost`) when accessing it from within a Docker container. Elasticsearch's hostname is `elasticsearch`.
 
 Here's an example of how to connect to the MySQL cli tool of the Docker instance:
 
@@ -220,40 +210,7 @@ For more information about Redis usage with Magento, see the <a href="https://de
 
 
 ### Xdebug & PHPStorm
-
->not tested yet
-
-1.  First, install the [Chrome Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc). After installed, right click on the Chrome icon for it and go to Options. Under IDE Key, select PHPStorm from the list and click Save.
-
-2.  Next, enable Xdebug in the PHP-FPM container by running: `bin/xdebug enable`, the restart the docker containers (CTRL+C then `bin/start`).
-
-3.  Then, open `PHPStorm > Preferences > Languages & Frameworks > PHP` and configure:
-
-    * `CLI Interpreter`
-        * Create a new interpreter and specify `From Docker`, and name it `mage2click/magento-php:7-2-fpm-mailhog`.
-        * Choose `Docker`, then select the `mage2click/magento-php:7-2-fpm-mailhog` image name, and set the `PHP Executable` to `php`.
-
-    * `Path mappings`
-        * Don't do anything here as the next `Docker container` step will automatically setup a path mapping from `/var/www/html` to `./src`.
-
-    * `Docker container`
-        * Remove any pre-existing volume bindings.
-        * Ensure a volume binding has been setup for Container path of `/var/www/html` mapped to the Host path of `./src`.
-
-4. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Debug` and set Debug Port to `9001`.
-
-5. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > DBGp Proxy` and set Port to `9001`.
-
-6. Open `PHPStorm > Preferences > Languages & Frameworks > PHP > Servers` and create a new server:
-
-    * Set Name and Host to your domain name (ex. `magento2.test`)
-    * Keep port set to `80`
-    * Check the Path Mappings box and map `src` to the absolute path of `/var/www/html`
-
-7. Go to `Run > Edit Configurations` and create a new `PHP Remote Debug` configuration by clicking the plus sign and selecting it. Set the Name to your domain (ex. `magento2.test`). Check the `Filter debug connection by IDE key` checkbox, select the server you just setup, and under IDE Key enter `PHPSTORM`. This IDE Key should match the IDE Key set by the Chrome Xdebug Helper. Then click OK to finish setting up the remote debugger in PHPStorm.
-
-8. Open up `src/pub/index.php`, and set a breakpoint near the end of the file. Go to `Run > Debug 'magento2.test'`, and open up a web browser. Ensure the Chrome Xdebug helper is enabled by clicking on it > Debug. Navigate to your Magento store URL, and Xdebug within PHPStorm should now trigger the debugger and pause at the toggled breakpoint.
-
+Please see the detailed instructions of how to configure and use it on our Wiki page [Xdebug & PHPStorm](https://github.com/mage2click/docker-magento-mutagen/wiki/Xdebug-&-PHPStorm)
 ## Credits
 
 ### Mark Shust
@@ -269,7 +226,7 @@ A special thanks goes out to <a href="https://www.nexcess.net/" target="_blank">
 Implemented Varnish support with https proxy <a href="https://github.com/wigman" target="_blank">Willem Wigman</a>
 
 ### Max Uroda
-<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1 Developer Plus)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
+<a href="https://u.magento.com/certification/directory/dev/1122780/" target="_blank">Certified Magento Developer (M1CDP+ / M2CAD)</a>, WebDeveloper interested in Magento/Magento2, Docker, JS, Varnish, PWA  
 <a href="https://twitter.com/u_maxx" target="_blank">@u_maxx</a>  
 <a href="https://maxuroda.pro" target="_blank">maxuroda.pro</a> 
 
@@ -282,5 +239,9 @@ Implemented Varnish support with https proxy <a href="https://github.com/wigman"
 ## License
 
 [MIT](https://github.com/mage2click/docker-magento-mutagen/blob/master/LICENSE.md)
-  
-feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 
+
+## Maintainers
+
+* [Dmitry Shkoliar](https://github.com/shkoliar) 
+* [Max Uroda](https://github.com/u-maxx)
+* Feel free to create new GitHub issue with feature request or PR with feature/bugfix :) 

@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+## change into directory two level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/../.."
+
+## Load per-project configuration variables
+if [[ -f "env/_config" ]]; then
+    source env/_config
+fi
+
+CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
+
 function spinner()
 {
     local pid=$1
@@ -19,7 +29,7 @@ function spinner()
 if [[ ! -z "$1" ]] && [[ -d $1 ]]; then
     printf "Copying project files:"
 
-    (rm -r src && mkdir -p src && cp -R "$1/" src/) & spinner $!
+    (rm -r src && mkdir -p src && cp -R "$1/" ${CONTAINER_SRC_SYNC_DIR}/) & spinner $!
 
     printf " Done!"
     echo

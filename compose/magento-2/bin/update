@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -e
 
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
@@ -7,27 +7,59 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 for i in "$@"
     do
         case ${i} in
-            -v=*) VERSION="${i#*=}"; shift;;
-            --version=*) VERSION="${i#*=}"; shift;;
-            *) ;;
+            -v=*|--version=*) VERSION="${i#*=}"; shift;;
+            -i|--images) IMAGES=1; shift;;
+            -m|--mutagen) MUTAGEN=1; shift;;
+            -a|--all) ALL=1; shift;;
+            *)
+                >&2 ERROR="$ERROR $i"
+                ;;
         esac
     done
 
-VERSION=${VERSION:-master}
+if [[ ! -z "$ERROR" ]]; then
+    echo
+    printf "\e[01;31mError: Unrecognized argument: %s\n\e[m" ${ERROR}
+    echo
+    exit
+fi
 
-echo
-printf "Fetching latest version..."
-rm -rf tmp-mage2click
-mkdir tmp-mage2click
-cd tmp-mage2click
-git init -qqq
-git remote add origin https://github.com/mage2click/docker-magento-mutagen
-git fetch origin -qqq
-git checkout origin/${VERSION} -- compose/magento-2
-rm -rf ../bin
-cp -Rf compose/magento-2/bin ../
-cd ../
-rm -rf tmp-mage2click
-printf " DONE!"
-echo
-echo
+if [[ ! -z "$ALL" ]] || [[ -z "$IMAGES" ]] && [[ -z "$MUTAGEN" ]]; then
+    printf "Fetching latest version..."
+    VERSION=${VERSION:-master}
+    rm -rf tmp-mage2click
+    mkdir tmp-mage2click
+    cd tmp-mage2click
+    git init -qqq
+    git remote add origin https://github.com/mage2click/docker-magento-mutagen
+    git fetch origin -qqq
+    git checkout origin/${VERSION} -- compose/magento-2
+    rm -rf ../bin
+    cp -Rf compose/magento-2/bin ../
+    if [[ ! -f "../env/_config" ]]; then
+        cp -Rf compose/magento-2/env/_config ../env/
+    fi
+    cd ../
+    rm -rf tmp-mage2click
+    printf " DONE!"
+    echo
+fi
+
+if [[ ! -z "$ALL" ]] || [[ ! -z "$MUTAGEN" ]]; then
+    MUTAGEN="$(mutagen version 2>/dev/null || true)"
+
+    if [[ "$MUTAGEN" == "$(printf "%s\n" "$MUTAGEN" "0.9.0" | sort -V | head -n 1)" ]]; then
+        printf "\e[0;32mMutagen update is not required\e[m"
+        echo
+    else
+        echo "Updating Mutagen to the latest version (via Homebrew)..."
+        brew upgrade mutagen
+    fi
+fi
+
+if [[ ! -z "$ALL" ]] || [[ ! -z "$IMAGES" ]]; then
+    bin/stop
+    bash -c "$(docker-compose images | awk 'FNR > 2 {printf "docker pull "$2":"$3" && "}')true"
+    docker-compose up --force-recreate -d
+    bin/fixowns && bin/mutagen start
+fi
