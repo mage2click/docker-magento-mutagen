@@ -33,6 +33,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
 
   phpfpm:
     image: mage2click/magento-php-versions:5.6-fpm-mailhog
@@ -51,4 +53,5 @@ services:
 volumes:
   appdata:
   dbdata:
+  esdata:
   sockdata:
