@@ -1,0 +1,6 @@
+
+volumes:
+  appdata:
+  dbdata:
+  esdata:
+  sockdata:

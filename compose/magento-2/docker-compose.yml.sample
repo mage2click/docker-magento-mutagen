@@ -58,6 +58,8 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
 
   mailhog:
     image: mailhog/mailhog:v1.0.0
@@ -81,4 +83,5 @@ services:
 volumes:
   appdata:
   dbdata:
+  esdata:
   sockdata:

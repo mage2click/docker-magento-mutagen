@@ -28,41 +28,8 @@
 
 ## Docker Hub
 
-View Dockerfiles:
+Please see available Dockerfiles on our [Docker Hub Wiki page](https://github.com/mage2click/docker-magento-mutagen/wiki/Docker-Hub)
 
-- [mage2click/magento-nginx (Docker Hub)](https://hub.docker.com/r/mage2click/magento-nginx/)
-  - 1.13
-      - [`latest`, `1.13`](https://github.com/mage2click/magento-nginx/tree/1.13)
-
-- [mage2click/magento-php-versions (Docker Hub)](https://hub.docker.com/r/mage2click/magento-php-versions/)
-  - 7.2
-      - [`latest`, `7.2-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.2/official/fpm-mailhog)
-      - [`7.2-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.2/official/fpm) 
-  - 7.1
-      - [`7.1-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.1/official/fpm-mailhog)
-      - [`7.1-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.1/official/fpm)
-  - 7.0
-      - [`7.0-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm-mailhog)
-      - [`7.0-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/7.0/official/fpm)
-  - 5.6
-      - [`5.6-fpm-mailhog`](https://github.com/mage2click/magento-php-versions/tree/master/5.6/official/fpm-mailhog)
-      - [`5.6-fpm`](https://github.com/mage2click/magento-php-versions/tree/master/5.6/official/fpm)
-      
-- [mage2click/magento-elasticsearch (Docker Hub)](https://hub.docker.com/r/mage2click/magento-elasticsearch)
-  - 6.7.2
-      - [`latest`, `6.7.2`](https://github.com/mage2click/magento-elasticsearch/tree/master/6.7.2/official)
-  - 5.6
-      - [`5.6`](https://github.com/mage2click/magento-elasticsearch/tree/master/5.6/official)
-  - 2.4    
-      - [`2.4`](https://github.com/mage2click/magento-elasticsearch/tree/master/2.4/official)
-            
-- [mage2click/magento-varnish (Docker Hub)](https://hub.docker.com/r/mage2click/magento-varnish)
-  - 4.1
-    - [`latest`, `4.1`](https://github.com/mage2click/magento-varnish/)
-    
-- [mage2click/magento-proxy (Docker Hub) - based on Nginx, used for envs with Varnish](https://hub.docker.com/r/mage2click/magento-proxy)
-  - 1.13-0
-    - [`latest`, `1.13-0`](https://github.com/mage2click/magento-proxy/)  
 ## Usage
 
 This configuration is intended to be used as a Docker-based development environment for Magento 2.

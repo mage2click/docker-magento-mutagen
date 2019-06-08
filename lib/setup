@@ -495,12 +495,21 @@ if [[ ! -z "$CRON" ]]; then
     CONCAT="$CONCAT parts/cron/$PHP_VER.yml"
 fi
 
-CMD=("$CONCAT parts/volumes.yml")
+if [[ -z "$ELASTICSEARCH" ]]; then
+    CMD=("$CONCAT parts/volumes/default.yml")
+else
+    CMD=("$CONCAT parts/volumes/elasticsearch.yml")
+fi
+
 
 ${CMD[@]} > docker-compose.yml
 
 rm -rf tmp-mage2click parts docker-compose.yml.sample
 git init
+echo
+
+echo "Checking Mutagen version..."
+bin/update --mutagen
 echo
 
 if [[ ! -z "$ARCHIVE" ]]; then
