@@ -1,12 +1,3 @@
 #!/bin/bash
 set -e
-#
-#bin/clinotty bin/magento setup:config:set --no-interaction --cache-backend=redis \
-#                --cache-backend-redis-server=redis --cache-backend-redis-db=0 > /dev/null
-#
-#bin/clinotty bin/magento setup:config:set --no-interaction  --page-cache=redis \
-#                --page-cache-redis-server=redis --page-cache-redis-db=1 > /dev/null
-#
-#bin/clinotty bin/magento setup:config:set --no-interaction --session-save=redis \
-#                --session-save-redis-host=redis --session-save-redis-log-level=4 \
-#                --session-save-redis-db=2 > /dev/null
+echo "Configuration depends on version of M1 which you are using. Please see Cm_Cache_Backend_Redis for cache (https://github.com/colinmollenhour/Cm_Cache_Backend_Redis#installation-magento) and Cm_RedisSession for sessions (https://github.com/colinmollenhour/Cm_RedisSession#installation).Also the official Magento documentation can help in some cases https://devdocs.magento.com/guides/m1x/ce18-ee113/using_redis.html"

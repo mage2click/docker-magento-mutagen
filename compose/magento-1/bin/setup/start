@@ -147,23 +147,21 @@ else
 #    bin/clinotty bin/magento config:set web/unsecure/base_url "https://$DOMAIN/" > /dev/null
 fi
 
-#echo "Turning on developer mode..."
-#bin/clinotty bin/magento deploy:mode:set developer
 
 if [[ ! -z "$ELASTICSEARCH" ]]; then
-    echo "TBD Enabling Elasticsearch as Search Engine..."
-    #bin/setup/elasticsearch ${ELASTICSEARCH_VER}
+    echo "Elasticsearch as Search Engine..."
+    bin/setup/elasticsearch
 fi
 
 #echo "Forcing deploy of static content to speed up initial requests..."
 #bin/clinotty bin/magento setup:static-content:deploy -f
 
-echo "TBD: Enabling Redis for Backend Cache, Page Cache, and Session..."
-#bin/setup/redis
+echo "Redis for Backend Cache and Sessions..."
+bin/setup/redis
 
 if [[ ! -z "$VARNISH" ]]; then
-    echo "TBD: Enabling Varnish as Caching Application for Full Page Cache..."
-#    bin/setup/varnish --configure --generate-vcl --apply-vcl
+    echo "Varnish as Caching Application (analog of Full Page Cache)..."
+    bin/setup/varnish
 fi
 
 #echo "Clearing the cache for good measure..."
