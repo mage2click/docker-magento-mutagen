@@ -55,6 +55,11 @@ echo "Copying all files from host to the container..."
 bin/copytocontainer --all
 bin/fixperms
 
+#installing n98-magerun to be able to use it instead in m1 as analog of bin/magento in m2
+echo "Installing n98-magerun..."
+bin/setup/n98-magerun
+
+
 #if hash composer 2>/dev/null; then
 #    PUBLIC_KEY="$(composer config -ng http-basic.repo.magento.com.username 2>/dev/null || true)"
 #    PRIVATE_KEY="$(composer config -ng http-basic.repo.magento.com.password 2>/dev/null || true)"
@@ -143,8 +148,8 @@ else
         | mysql -hdb -umagento -pmagento magento' < "$DB"
 
     # Set base URLs to local environment URL:
-#    bin/clinotty bin/magento config:set web/secure/base_url "https://$DOMAIN/" > /dev/null
-#    bin/clinotty bin/magento config:set web/unsecure/base_url "https://$DOMAIN/" > /dev/null
+    bin/mr config:set web/unsecure/base_url https://${DOMAIN}/ > /dev/null
+    bin/mr config:set web/secure/base_url https://${DOMAIN}/ > /dev/null
 fi
 
 
@@ -164,8 +169,8 @@ if [[ ! -z "$VARNISH" ]]; then
     bin/setup/varnish
 fi
 
-#echo "Clearing the cache for good measure..."
-#bin/clinotty bin/magento cache:flush
+echo "Clearing the cache for good measure..."
+bin/mr cache:flush
 
 #echo "Copying files from container to host after install..."
 #bin/copyfromcontainer app
