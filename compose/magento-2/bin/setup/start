@@ -49,8 +49,6 @@ docker-compose up -d
 
 sleep 1 #Ensure containers are started...
 
-cp ${CONTAINER_SRC_SYNC_DIR}/nginx.conf.sample ${CONTAINER_SRC_SYNC_DIR}/nginx.conf #create nginx.conf from sample
-
 echo "Copying all files from host to the container..."
 bin/copytocontainer --all
 bin/fixperms
@@ -119,6 +117,8 @@ if [[ ! -z "$COMPOSER" ]]; then
     echo "Forcing reinstall of composer deps to ensure perms & reqs..."
     bin/clinotty composer install
 fi
+
+cp ${CONTAINER_SRC_SYNC_DIR}/nginx.conf.sample ${CONTAINER_SRC_SYNC_DIR}/nginx.conf #create nginx.conf from sample
 
 if [[ -z "$DB" ]]; then
     bin/clinotty bin/magento setup:install \
