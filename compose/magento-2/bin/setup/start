@@ -121,8 +121,6 @@ if [[ ! -z "$COMPOSER" ]]; then
     bin/clinotty composer install
 fi
 
-cp ${CONTAINER_SRC_SYNC_DIR}/nginx.conf.sample ${CONTAINER_SRC_SYNC_DIR}/nginx.conf #create nginx.conf from sample
-
 if [[ -z "$DB" ]]; then
     bin/clinotty bin/magento setup:install \
                     --db-host=db \
@@ -177,6 +175,8 @@ bin/copyfromcontainer vendor
 
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen start
+
+cp ${CONTAINER_SRC_SYNC_DIR}/nginx.conf.sample ${CONTAINER_SRC_SYNC_DIR}/nginx.conf #create nginx.conf from sample
 
 bin/restart-nginx
 
