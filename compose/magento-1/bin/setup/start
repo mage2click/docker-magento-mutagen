@@ -170,7 +170,7 @@ if [[ ! -z "$VARNISH" ]]; then
 fi
 
 echo "Clearing the cache for good measure..."
-bin/mr cache:flush
+bin/clinotty n98-magerun.phar cache:flush
 
 #echo "Copying files from container to host after install..."
 #bin/copyfromcontainer app
