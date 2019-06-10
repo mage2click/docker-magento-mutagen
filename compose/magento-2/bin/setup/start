@@ -169,14 +169,21 @@ fi
 echo "Clearing the cache for good measure..."
 bin/clinotty bin/magento cache:flush
 
-echo "Copying files from container to host after install..."
-bin/copyfromcontainer app
-bin/copyfromcontainer vendor
+#create nginx.conf from sample
+bin/clinotty cp nginx.conf.sample nginx.conf
+
+if [[ ! -z "$COMPOSER" ]]; then
+    echo "Copying files from container to host after composer & Magento install..."
+    bin/copyfromcontainer --all
+else
+    echo "Copying files from container to host after Magento install..."
+    bin/copyfromcontainer app
+    bin/copyfromcontainer vendor
+    bin/copyfromcontainer nginx.conf
+fi
 
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen start
-
-bin/clinotty cp nginx.conf.sample nginx.conf #create nginx.conf from sample
 
 bin/restart-nginx
 
