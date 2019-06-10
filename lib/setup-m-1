@@ -386,10 +386,6 @@ while [[ ! -z "$PORTS" ]]; do
         PORTS="$PORTS 3306,"
     fi
 
-    if lsof -PiTCP:9001 -sTCP:LISTEN -t >/dev/null; then
-        PORTS="$PORTS 9001,"
-    fi
-
     if [[ ! -z "$ELASTICSEARCH" ]]; then
         if lsof -PiTCP:9200 -sTCP:LISTEN -t >/dev/null; then
             PORTS="$PORTS 9200,"
@@ -489,12 +485,21 @@ if [[ ! -z "$CRON" ]]; then
     CONCAT="$CONCAT parts/cron/$PHP_VER.yml"
 fi
 
-CMD=("$CONCAT parts/volumes.yml")
+if [[ -z "$ELASTICSEARCH" ]]; then
+    CMD=("$CONCAT parts/volumes/default.yml")
+else
+    CMD=("$CONCAT parts/volumes/elasticsearch.yml")
+fi
+
 
 ${CMD[@]} > docker-compose.yml
 
 rm -rf tmp-mage2click parts docker-compose.yml.sample
 git init
+echo
+
+echo "Checking Mutagen version..."
+bin/update --mutagen
 echo
 
 if [[ ! -z "$ARCHIVE" ]]; then
