@@ -51,7 +51,10 @@ sleep 1 #Ensure containers are started...
 
 echo "Copying all files from host to the container..."
 bin/copytocontainer --all
-bin/fixperms
+
+# suppress errors if folders var, pub, app does not exist yet in cases when we have only composer.json && composer.lock
+# for example, install of the vanilla https://github.com/magento/magento-cloud
+bin/fixperms 2>/dev/null || true
 
 if hash composer 2>/dev/null; then
     PUBLIC_KEY="$(composer config -ng http-basic.repo.magento.com.username 2>/dev/null || true)"
