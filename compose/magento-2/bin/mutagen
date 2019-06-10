@@ -27,8 +27,8 @@ elif [[ "$1" == "start" ]]; then
     # local is alpha here, so it will rewrite all your changes made on the docker side
     mutagen create \
         --label=mage2click-sync=html \
-        --default-file-mode-beta=0644 \
-        --default-directory-mode-beta=0755 \
+        --default-file-mode=0644 \
+        --default-directory-mode=0755 \
         --default-owner-beta=app \
         --default-group-beta=app \
         --sync-mode=two-way-resolved \
@@ -50,8 +50,8 @@ elif [[ "$1" == "start" ]]; then
     # so it will rewrite your unsynced files on flush command in case of any issues with sync from local to docker
     mutagen create \
         --label=mage2click-sync=vendor \
-        --default-file-mode-alpha=0644 \
-        --default-directory-mode-alpha=0755 \
+        --default-file-mode=0644 \
+        --default-directory-mode=0755 \
         --default-owner-alpha=app \
         --default-group-alpha=app \
         --sync-mode=two-way-resolved \
