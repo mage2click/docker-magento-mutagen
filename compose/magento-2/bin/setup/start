@@ -176,7 +176,7 @@ bin/copyfromcontainer vendor
 echo "Starting mutagen sync for files from host to container..."
 bin/mutagen start
 
-cp ${CONTAINER_SRC_SYNC_DIR}/nginx.conf.sample ${CONTAINER_SRC_SYNC_DIR}/nginx.conf #create nginx.conf from sample
+bin/clinotty cp nginx.conf.sample nginx.conf #create nginx.conf from sample
 
 bin/restart-nginx
 
