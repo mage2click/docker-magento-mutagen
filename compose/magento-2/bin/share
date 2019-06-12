@@ -15,5 +15,8 @@ CONTAINER=$(docker inspect -f '{{.Name}}' ${CONTAINER} | cut -c2-)
 
 NETWORK=$(docker inspect ${CONTAINER} -f "{{json .NetworkSettings.Networks }}" | awk -F '"' '{print $2}')
 
+## Docker busybox based image with installed ngrok is used to create ngrok session
+## More information - https://github.com/shkoliar/docker-ngrok
+
 docker run --rm -it --link ${CONTAINER} --net ${NETWORK} \
             shkoliar/ngrok ngrok http -region=${REGION} -bind-tls=true ${CONTAINER}:8081

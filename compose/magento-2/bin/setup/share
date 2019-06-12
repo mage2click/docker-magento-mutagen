@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eu
+
+## change into directory two level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/../.."
+
+## Magento 2 Ngrok module is required for proper work of Magento with ngrok.io service
+## More information - https://github.com/shkoliar/magento-ngrok
+
+echo "Installing Magento 2 Ngrok module..."
+
+bin/composer require --dev shkoliar/magento-ngrok
+
+bin/magento module:enable Shkoliar_Ngrok
+bin/magento setup:upgrade
+
+echo
+printf "\e[0;32mDone! Use 'bin/share' command to start sharing session.\e[m"
+echo
