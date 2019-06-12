@@ -148,8 +148,8 @@ else
         | mysql -hdb -umagento -pmagento magento' < "$DB"
 
     # Set base URLs to local environment URL:
-    bin/mr config:set web/unsecure/base_url https://${DOMAIN}/ > /dev/null
-    bin/mr config:set web/secure/base_url https://${DOMAIN}/ > /dev/null
+    bin/clinotty n98-magerun.phar config:set web/unsecure/base_url https://${DOMAIN}/ > /dev/null
+    bin/clinotty n98-magerun.phar config:set web/secure/base_url https://${DOMAIN}/ > /dev/null
 fi
 
 
