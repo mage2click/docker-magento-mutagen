@@ -1,0 +1,19 @@
+#!/bin/bash
+set -eu
+
+## change into directory one level above where this script is located allowing it to be run from anywhere
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
+
+REGION=us
+
+## if varnish proxy is used, use proxy container
+CONTAINER=$(docker-compose ps -q proxy 2>/dev/null|awk '{print $1}')
+## if no varnish proxy, use app container
+CONTAINER=${CONTAINER:-$(docker-compose ps -q app|awk '{print $1}')}
+
+CONTAINER=$(docker inspect -f '{{.Name}}' ${CONTAINER} | cut -c2-)
+
+NETWORK=$(docker inspect ${CONTAINER} -f "{{json .NetworkSettings.Networks }}" | awk -F '"' '{print $2}')
+
+docker run --rm -it --link ${CONTAINER} --net ${NETWORK} \
+            shkoliar/ngrok ngrok http -region=${REGION} -bind-tls=true ${CONTAINER}:8081
