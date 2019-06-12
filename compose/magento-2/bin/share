@@ -1,10 +1,17 @@
 #!/bin/bash
-set -eu
+set -e
 
 ## change into directory one level above where this script is located allowing it to be run from anywhere
 cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )/.."
 
-REGION=us
+if [[ -n "$1" ]]; then
+    [[ "$1" == "us" ]] || [[ "$1" == "eu" ]] || \
+    [[ "$1" == "ap" ]] || [[ "$1" == "au" ]] || \
+    [[ "$1" == "sa" ]] || [[ "$1" == "jp" ]] || \
+    [[ "$1" == "in" ]] && REGION="$1"
+fi
+
+REGION=${REGION:-us}
 
 ## if varnish proxy is used, use proxy container
 CONTAINER=$(docker-compose ps -q proxy 2>/dev/null|awk '{print $1}')
