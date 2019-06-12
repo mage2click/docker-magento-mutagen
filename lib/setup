@@ -447,7 +447,7 @@ while [[ ! -z "$PORTS" ]]; do
         echo "If any other host services or active Docker containers are using these ports, stop them respectively."
 
         echo
-        read -n 1 -s -r -p "Press any key to continue setup..." </dev/tty
+        read -n 1 -s -r -p "Press any key to continue setup..." </dev/tty && echo
     fi
 done
 
