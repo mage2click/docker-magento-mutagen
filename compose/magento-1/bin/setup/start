@@ -144,7 +144,7 @@ if [[ -z "$DB" ]]; then
 #                    --use-rewrites=1
 else
     echo "Importing database..."
-    cat ${DB} | bin/dbimport
+    cat ${DB} | bin/dbimport || true
 
     # Set base URLs to local environment URL:
     bin/clinotty n98-magerun.phar config:set web/unsecure/base_url https://${DOMAIN}/ > /dev/null
