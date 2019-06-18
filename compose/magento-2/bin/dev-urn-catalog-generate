@@ -11,6 +11,7 @@ fi
 
 CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
 
+bin/clinotty rm misc.xml 2>/dev/null
 bin/magento dev:urn-catalog:generate misc.xml
 bin/copyfromcontainer misc.xml
 
