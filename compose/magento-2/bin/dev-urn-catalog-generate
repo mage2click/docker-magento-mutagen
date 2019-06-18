@@ -14,7 +14,7 @@ CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
 bin/magento dev:urn-catalog:generate misc.xml
 bin/copyfromcontainer misc.xml
 
-sed -i .bak 's?/var/www/html?'`pwd`/src'?' ${CONTAINER_SRC_SYNC_DIR}/misc.xml
+sed -i .bak 's?/var/www/html?'$(pwd)/src'?' ${CONTAINER_SRC_SYNC_DIR}/misc.xml
 rm ${CONTAINER_SRC_SYNC_DIR}/misc.xml.bak
 mkdir -p ../.idea
 mv ${CONTAINER_SRC_SYNC_DIR}/misc.xml ../.idea/misc.xml
