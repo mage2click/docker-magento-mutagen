@@ -21,4 +21,8 @@ rm ${CONTAINER_SRC_SYNC_DIR}/misc.xml.bak
 mkdir -p .idea
 mv ${CONTAINER_SRC_SYNC_DIR}/misc.xml .idea/misc.xml
 
+if [[ -d "${CONTAINER_SRC_SYNC_DIR}/.idea" ]]; then
+    cp .idea/misc.xml ${CONTAINER_SRC_SYNC_DIR}/.idea/
+fi
+
 echo "URN's have been generated, you may now restart PHPStorm"
