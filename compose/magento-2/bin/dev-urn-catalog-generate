@@ -11,12 +11,18 @@ fi
 
 CONTAINER_SRC_SYNC_DIR=${CONTAINER_SRC_SYNC_DIR:-src}
 
+bin/clinotty rm misc.xml 2>/dev/null
 bin/magento dev:urn-catalog:generate misc.xml
 bin/copyfromcontainer misc.xml
 
-sed -i .bak 's?/var/www/html?'`pwd`/src'?' ${CONTAINER_SRC_SYNC_DIR}/misc.xml
+sed -i .bak 's?/var/www/html?'$(pwd)/${CONTAINER_SRC_SYNC_DIR}'?' ${CONTAINER_SRC_SYNC_DIR}/misc.xml
+
 rm ${CONTAINER_SRC_SYNC_DIR}/misc.xml.bak
-mkdir -p ../.idea
-mv ${CONTAINER_SRC_SYNC_DIR}/misc.xml ../.idea/misc.xml
+mkdir -p .idea
+mv ${CONTAINER_SRC_SYNC_DIR}/misc.xml .idea/misc.xml
+
+if [[ -d "${CONTAINER_SRC_SYNC_DIR}/.idea" ]]; then
+    cp .idea/misc.xml ${CONTAINER_SRC_SYNC_DIR}/.idea/
+fi
 
 echo "URN's have been generated, you may now restart PHPStorm"

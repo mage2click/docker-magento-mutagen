@@ -3,7 +3,7 @@ version: "3"
 services:
 
   app:
-    image: mage2click/magento-nginx:1.13
+    image: mage2click/magento-nginx:1.15-alpine
     ports:
       - "80:8000"
       - "443:8443"
