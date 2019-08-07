@@ -21,7 +21,6 @@ services:
     environment:
       NGINX_TYPE: "proxy"
     ports:
-      - "80:8000"
       - "443:8443"
     depends_on:
       - varnish
