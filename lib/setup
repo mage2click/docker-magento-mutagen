@@ -101,7 +101,7 @@ Parameters:
                                     If specified, --magento-db parameter is required as well.
   --magento-db=<path>               Full path to .sql file with database dump to use in setup (optional).
                                     If specified, --magento-project parameter is required as well.
-  --magento-version=<version>       Magento version to download from the official repository, default is 2.3.1.
+  --magento-version=<version>       Magento version to download from the official repository, default is 2.3.2.
                                     If --magento-archive parameter is specified, this will be skipped.
 
 Flags:
@@ -224,8 +224,8 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
             read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
         done
     else
-        read -p "Magento version to download? [2.3.1]: " VERSION </dev/tty
-        VERSION=${VERSION:-2.3.1}
+        read -p "Magento version to download? [2.3.2]: " VERSION </dev/tty
+        VERSION=${VERSION:-2.3.2}
         echo ${VERSION}
     fi
 
@@ -351,7 +351,7 @@ else
         exit
     fi
 
-    VERSION=${VERSION:-2.3.1}
+    VERSION=${VERSION:-2.3.2}
     PHP_VER=${PHP_VER:-7.2}
     ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
 

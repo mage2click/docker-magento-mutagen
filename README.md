@@ -80,7 +80,7 @@ Parameters:
 - `--magento-archive=<path>` Full path to downloaded Magento zip-archive to use in setup (optional).
 - `--magento-project=<path>` Full path to the existing Magento project to use in setup (optional).
 - `--magento-db=<path>` Full path to sql-file with database dump to use in setup (optional).
-- `--magento-version=<version>` Magento version to download from the official repository, default is `2.3.1`. If `--magento-archive` parameter is specified, this will be skipped.
+- `--magento-version=<version>` Magento version to download from the official repository, default is `2.3.2`. If `--magento-archive` parameter is specified, this will be skipped.
 
 Flags:
 - `--composer` Use \`composer install\` command during the setup process.
@@ -135,13 +135,13 @@ The `-h` flag above (shorthand of `--help`) defines that setup script must only 
 
 ## Setup and Configuration CLI Commands
 
-- `bin/setup/elasticsearch`: Enable Elasticsearch as Search Engine (6.7.2 by default, see [Magento 2.3.1 Supported versions](https://devdocs.magento.com/guides/v2.3/config-guide/elasticsearch/es-overview.html#es-spt-versions) for more info).
+- `bin/setup/elasticsearch`: Enable Elasticsearch as Search Engine (6.7.2 by default, see [Magento 2.3.2 Supported versions](https://devdocs.magento.com/guides/v2.3/config-guide/elasticsearch/es-overview.html#es-spt-versions) for more info).
     #### Flags:
     - `2.4`: enable Elasticsearch 2.4
     - `5.6`: enable Elasticsearch 5.6
     - `6.7.2` or no flag: enable Elasticsearch 6.7.2
     
-- `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.1`
+- `bin/setup/download`: Download & extract specific Magento version to the `src` directory. Ex. `bin/setup/download 2.3.2`
 - `bin/setup/import`: Copy files of existing Magento project to the `src` directory. Ex. `bin/setup/import /path/to/magento/project`
 - `bin/setup/redis`: Enable Redis for Backend Cache, Page Cache and Session.
 - `bin/setup/share`: Install [Magento 2 Ngrok module](https://github.com/shkoliar/magento-ngrok) for proper work of Magento with ngrok.io service. **Important: on existing setups, make sure you have using `magento-nginx:1.15-alpine` docker images in your `docker-compose.yml` file!**
