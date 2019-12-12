@@ -92,8 +92,8 @@ Usage:
 Parameters:
 
   --domain=<domain>                 Domain to use for the project, default is magento2.test
-  --php-version=<version>           PHP version to use for the project, default is 7.2
-                                    Currently supported PHP versions: 7.0, 7.1 and 7.2
+  --php-version=<version>           PHP version to use for the project, default is 7.3
+                                    Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3
   --elasticsearch-version=<version> Elasticsearch version to use for the project, default is 6.7.2
                                     Currently supported Elasticsearch versions: 2.4, 5.6 and 6.7.2
   --magento-archive=<path>          Full path to downloaded Magento zip-archive to use in setup (optional).
@@ -101,7 +101,7 @@ Parameters:
                                     If specified, --magento-db parameter is required as well.
   --magento-db=<path>               Full path to .sql file with database dump to use in setup (optional).
                                     If specified, --magento-project parameter is required as well.
-  --magento-version=<version>       Magento version to download from the official repository, default is 2.3.2.
+  --magento-version=<version>       Magento version to download from the official repository, default is 2.3.3.
                                     If --magento-archive parameter is specified, this will be skipped.
 
 Flags:
@@ -224,8 +224,8 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
             read -p "Full path to downloaded Magento zip-archive: " ARCHIVE </dev/tty
         done
     else
-        read -p "Magento version to download? [2.3.2]: " VERSION </dev/tty
-        VERSION=${VERSION:-2.3.2}
+        read -p "Magento version to download? [2.3.3]: " VERSION </dev/tty
+        VERSION=${VERSION:-2.3.3}
         echo ${VERSION}
     fi
 
@@ -293,15 +293,16 @@ elif [[ "$INTERACTIVE" == "1" ]]; then
 
     echo
     echo "What PHP version to use?"
-    select OPTS in "7.0" "7.1" "7.2"; do
+    select OPTS in "7.0" "7.1" "7.2" "7.3"; do
         case ${OPTS} in
             "7.0" ) PHP_VER='7.0'; break;;
             "7.1" ) PHP_VER='7.1'; break;;
             "7.2" ) PHP_VER='7.2'; break;;
+            "7.3" ) PHP_VER='7.3'; break;;
         esac
     done </dev/tty
 
-    PHP_VER=${PHP_VER:-7.2}
+    PHP_VER=${PHP_VER:-7.3}
 
     echo
     echo "Use \`composer install\` command during the setup process?"
@@ -351,15 +352,15 @@ else
         exit
     fi
 
-    VERSION=${VERSION:-2.3.2}
-    PHP_VER=${PHP_VER:-7.2}
+    VERSION=${VERSION:-2.3.3}
+    PHP_VER=${PHP_VER:-7.3}
     ELASTICSEARCH_VER=${ELASTICSEARCH_VER:-6.7.2}
 
-    VERSIONS=("7.0" "7.1" "7.2")
+    VERSIONS=("7.0" "7.1" "7.2" "7.3")
     if in_array VERSIONS "$PHP_VER"; then
         echo
         echo "$(tput bold)$(tput setaf 1)Specified PHP version ($PHP_VER) does not supported!"
-        echo "Currently supported PHP versions: 7.0, 7.1 and 7.2"
+        echo "Currently supported PHP versions: 7.0, 7.1, 7.2 and 7.3"
         tput sgr 0
         exit
     fi
