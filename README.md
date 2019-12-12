@@ -48,7 +48,7 @@ This setup assumes you are running Docker on a computer with at least 6GB of all
 This configuration has been tested on macOS.
 
 ## Mutagen
-This version of Docker-based development environment with mutagen sync is working fine even if it still under development, it requires the <a href="https://mutagen.io/" target="_blank">mutagen.io</a> to be installed on your system. See the <a href="https://mutagen.io/documentation/installation/" target="_blank">mutagen.io/documentation/installation</a> or use  <a href="https://brew.sh/" target="_blank">Homebrew</a> to install it on macOS
+This version of Docker-based development environment with mutagen sync is working fine even if it still under development, it requires the <a href="https://mutagen.io/" target="_blank">mutagen.io</a> to be installed on your system. See the <a href="https://mutagen.io/documentation/introduction/installation" target="_blank">mutagen.io/documentation/introduction/installation</a> or use  <a href="https://brew.sh/" target="_blank">Homebrew</a> to install it on macOS
 
 ```bash
 brew install havoc-io/mutagen/mutagen
